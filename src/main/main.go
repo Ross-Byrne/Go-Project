@@ -6,18 +6,31 @@ package main
 
 import (
 	"net/http"
+    "github.com/gorilla/mux"
 )
 
 func main(){
-    http.HandleFunc("/", serveHome)
-    http.HandleFunc("/contact", serveContact)
+    serveWeb()
+}
+
+func serveWeb(){
+    
+    gorillaRoute:= mux.NewRouter()
+    
+    gorillaRoute.HandleFunc("/", serveContact)
+    gorillaRoute.HandleFunc("/{page_alias}", serveContact)
+    
+    http.Handle("/", gorillaRoute)
     http.ListenAndServe(":8080",nil)
 }
 
-func serveHome(w http.ResponseWriter, r *http.Request){
-    w.Write([]byte("HELLO WORLD!"))
-}
-
 func serveContact(w http.ResponseWriter, r *http.Request){
-    w.Write([]byte("HELLO WORLD! this is a contact page"))
+    urlParams := mux.Vars(r)
+    page_alias := urlParams["page_alias"]
+    
+    if(page_alias == ""){
+        page_alias = "home"
+    }
+    
+    w.Write([]byte("HELLO WORLD! "+ page_alias ))
 }
