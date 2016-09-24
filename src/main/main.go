@@ -41,13 +41,13 @@ func serveContact(w http.ResponseWriter, r *http.Request){
     urlParams := mux.Vars(r)
     page_alias := urlParams["page_alias"]
     
-    if(page_alias == ""){
+    if page_alias == "" {
         page_alias = "home"
     }
     
     staticPage := staticPages.Lookup(page_alias+".html")
     if staticPage==nil{
-        staticPages.Lookup("404.html")
+        staticPage = staticPages.Lookup("404.html")
         w.WriteHeader(404)
     }
     staticPage.Execute(w,nil)
