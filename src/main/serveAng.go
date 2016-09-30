@@ -3,12 +3,14 @@
 package main
 
 import (
- "log"
+ //"log"
+ "fmt"
  "net/http"
- "github.com/gorilla/mux"
+ "strings"
+ //"github.com/gorilla/mux"
 )
 
-func main() {
+/*func main() {
   r := mux.NewRouter()
   r.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("angular/"))))
 
@@ -17,4 +19,26 @@ func main() {
   log.Println("Listening at port 3000")
   http.ListenAndServe(":3000", nil)
 
+}*/
+
+
+
+var chttp = http.NewServeMux()
+
+func main() {
+
+    fmt.Println("Listening on port 8080")
+    chttp.Handle("/", http.FileServer(http.Dir("./angular")))
+
+    http.HandleFunc("/", HomeHandler) // homepage
+    http.ListenAndServe(":8080", nil)
+}
+
+func HomeHandler(w http.ResponseWriter, r *http.Request) {
+
+    if (strings.Contains(r.URL.Path, ".")) {
+        chttp.ServeHTTP(w, r)
+    } else {
+        http.ServeFile(w, r, "angular/index.html")
+    }
 }
