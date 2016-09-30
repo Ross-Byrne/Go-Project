@@ -27,18 +27,22 @@ var chttp = http.NewServeMux()
 
 func main() {
 
-    fmt.Println("Listening on port 8080")
     chttp.Handle("/", http.FileServer(http.Dir("./angular")))
 
     http.HandleFunc("/", HomeHandler) // homepage
+
+    fmt.Println("Listening on port 8080")
+
     http.ListenAndServe(":8080", nil)
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
     if (strings.Contains(r.URL.Path, ".")) {
+        fmt.Println("Say what now?")
         chttp.ServeHTTP(w, r)
     } else {
         http.ServeFile(w, r, "angular/index.html")
+        fmt.Println("Serve index.html")
     }
 }
