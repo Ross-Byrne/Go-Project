@@ -21,6 +21,7 @@ var login_component_1 = require('./login.component/login.component');
 var sign_up_component_1 = require('./sign-up.component/sign-up.component');
 var settings_component_1 = require('./settings.component/settings.component');
 var post_partial_component_1 = require('./post-partial.component/post-partial.component');
+var fourm_page_component_1 = require('./fourm-page.component/fourm-page.component');
 // services
 var hero_service_1 = require('./hero.service/hero.service');
 var app_routing_1 = require('./app.routing/app.routing');
@@ -44,6 +45,7 @@ var AppModule = (function () {
                 sign_up_component_1.SignUpComponent,
                 settings_component_1.SettingsComponent,
                 post_partial_component_1.PostPartialComponent,
+                fourm_page_component_1.FourmPageComponent,
             ],
             providers: [
                 hero_service_1.HeroService,
