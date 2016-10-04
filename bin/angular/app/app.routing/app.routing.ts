@@ -10,6 +10,10 @@ import { HeroDetailComponent }      from '../hero-detail.component/hero-detail.c
 import { LoginComponent }           from '../login.component/login.component';
 import { SignUpComponent }          from '../sign-up.component/sign-up.component';
 import { SettingsComponent }        from '../settings.component/settings.component';
+import { CodePanelComponent }       from '../code-panel.component/code-panel.component';
+import { CodeSnippetsComponent }    from '../code-snippets.component/code-snippets.component';
+import { ThreadPageComponent }      from '../thread-page.component/thread-page.component';
+import { FourmPageComponent }       from '../fourm-page.component/fourm-page.component';            // just for tests
 
 
 const appRoutes: Routes = [
@@ -45,6 +49,22 @@ const appRoutes: Routes = [
     {
         path: 'settings',
         component: SettingsComponent
+    },
+    {
+        path: 'codepanel',
+        component: CodePanelComponent
+    },
+    {
+        path: 'snippets',
+        component: CodeSnippetsComponent
+    },
+    {
+        path: 'threads',
+        component: ThreadPageComponent
+    },
+    {
+        path: 'posts',
+        component: FourmPageComponent       // just for tests
     }
 ];
 

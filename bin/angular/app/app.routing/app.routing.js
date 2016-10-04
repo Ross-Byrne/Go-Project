@@ -7,6 +7,10 @@ var hero_detail_component_1 = require('../hero-detail.component/hero-detail.comp
 var login_component_1 = require('../login.component/login.component');
 var sign_up_component_1 = require('../sign-up.component/sign-up.component');
 var settings_component_1 = require('../settings.component/settings.component');
+var code_panel_component_1 = require('../code-panel.component/code-panel.component');
+var code_snippets_component_1 = require('../code-snippets.component/code-snippets.component');
+var thread_page_component_1 = require('../thread-page.component/thread-page.component');
+var fourm_page_component_1 = require('../fourm-page.component/fourm-page.component'); // just for tests
 var appRoutes = [
     {
         path: '',
@@ -40,6 +44,22 @@ var appRoutes = [
     {
         path: 'settings',
         component: settings_component_1.SettingsComponent
+    },
+    {
+        path: 'codepanel',
+        component: code_panel_component_1.CodePanelComponent
+    },
+    {
+        path: 'snippets',
+        component: code_snippets_component_1.CodeSnippetsComponent
+    },
+    {
+        path: 'threads',
+        component: thread_page_component_1.ThreadPageComponent
+    },
+    {
+        path: 'posts',
+        component: fourm_page_component_1.FourmPageComponent // just for tests
     }
 ];
 exports.routing = router_1.RouterModule.forRoot(appRoutes);

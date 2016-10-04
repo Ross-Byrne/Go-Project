@@ -22,6 +22,10 @@ var sign_up_component_1 = require('./sign-up.component/sign-up.component');
 var settings_component_1 = require('./settings.component/settings.component');
 var post_partial_component_1 = require('./post-partial.component/post-partial.component');
 var fourm_page_component_1 = require('./fourm-page.component/fourm-page.component');
+var code_panel_component_1 = require('./code-panel.component/code-panel.component');
+var code_snippets_component_1 = require('./code-snippets.component/code-snippets.component');
+var thread_page_component_1 = require('./thread-page.component/thread-page.component');
+var thread_partial_component_1 = require('./thread-partial.component/thread-partial.component');
 // services
 var hero_service_1 = require('./hero.service/hero.service');
 var app_routing_1 = require('./app.routing/app.routing');
@@ -46,6 +50,10 @@ var AppModule = (function () {
                 settings_component_1.SettingsComponent,
                 post_partial_component_1.PostPartialComponent,
                 fourm_page_component_1.FourmPageComponent,
+                code_panel_component_1.CodePanelComponent,
+                code_snippets_component_1.CodeSnippetsComponent,
+                thread_page_component_1.ThreadPageComponent,
+                thread_partial_component_1.ThreadPartialComponent,
             ],
             providers: [
                 hero_service_1.HeroService,
