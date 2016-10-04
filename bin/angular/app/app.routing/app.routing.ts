@@ -13,7 +13,7 @@ import { SettingsComponent }        from '../settings.component/settings.compone
 import { CodePanelComponent }       from '../code-panel.component/code-panel.component';
 import { CodeSnippetsComponent }    from '../code-snippets.component/code-snippets.component';
 import { ThreadPageComponent }      from '../thread-page.component/thread-page.component';
-import { FourmPageComponent }       from '../fourm-page.component/fourm-page.component';            // just for tests
+import { ForumPageComponent }       from '../forum-page.component/forum-page.component';            // just for tests
 
 
 const appRoutes: Routes = [
@@ -64,7 +64,7 @@ const appRoutes: Routes = [
     },
     {
         path: 'posts',
-        component: FourmPageComponent       // just for tests
+        component: ForumPageComponent       // just for tests
     }
 ];
 

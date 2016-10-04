@@ -10,19 +10,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 // System imports
 var core_1 = require('@angular/core');
-var FourmPageComponent = (function () {
-    function FourmPageComponent() {
-        this.title = "Fourm Page";
+var ForumPageComponent = (function () {
+    function ForumPageComponent() {
+        this.title = "Forum Page";
     }
-    FourmPageComponent = __decorate([
+    ForumPageComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
-            selector: 'fourm-page',
-            templateUrl: 'fourm-page.component.html'
+            selector: 'forum-page',
+            templateUrl: 'forum-page.component.html'
         }), 
         __metadata('design:paramtypes', [])
-    ], FourmPageComponent);
-    return FourmPageComponent;
+    ], ForumPageComponent);
+    return ForumPageComponent;
 }());
-exports.FourmPageComponent = FourmPageComponent;
-//# sourceMappingURL=fourm-page.component.js.map
+exports.ForumPageComponent = ForumPageComponent;
+//# sourceMappingURL=forum-page.component.js.map

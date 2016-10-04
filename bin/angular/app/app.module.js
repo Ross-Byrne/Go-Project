@@ -21,7 +21,7 @@ var login_component_1 = require('./login.component/login.component');
 var sign_up_component_1 = require('./sign-up.component/sign-up.component');
 var settings_component_1 = require('./settings.component/settings.component');
 var post_partial_component_1 = require('./post-partial.component/post-partial.component');
-var fourm_page_component_1 = require('./fourm-page.component/fourm-page.component');
+var forum_page_component_1 = require('./forum-page.component/forum-page.component');
 var code_panel_component_1 = require('./code-panel.component/code-panel.component');
 var code_snippets_component_1 = require('./code-snippets.component/code-snippets.component');
 var thread_page_component_1 = require('./thread-page.component/thread-page.component');
@@ -49,7 +49,7 @@ var AppModule = (function () {
                 sign_up_component_1.SignUpComponent,
                 settings_component_1.SettingsComponent,
                 post_partial_component_1.PostPartialComponent,
-                fourm_page_component_1.FourmPageComponent,
+                forum_page_component_1.ForumPageComponent,
                 code_panel_component_1.CodePanelComponent,
                 code_snippets_component_1.CodeSnippetsComponent,
                 thread_page_component_1.ThreadPageComponent,

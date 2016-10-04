@@ -10,7 +10,7 @@ var settings_component_1 = require('../settings.component/settings.component');
 var code_panel_component_1 = require('../code-panel.component/code-panel.component');
 var code_snippets_component_1 = require('../code-snippets.component/code-snippets.component');
 var thread_page_component_1 = require('../thread-page.component/thread-page.component');
-var fourm_page_component_1 = require('../fourm-page.component/fourm-page.component'); // just for tests
+var forum_page_component_1 = require('../forum-page.component/forum-page.component'); // just for tests
 var appRoutes = [
     {
         path: '',
@@ -59,7 +59,7 @@ var appRoutes = [
     },
     {
         path: 'posts',
-        component: fourm_page_component_1.FourmPageComponent // just for tests
+        component: forum_page_component_1.ForumPageComponent // just for tests
     }
 ];
 exports.routing = router_1.RouterModule.forRoot(appRoutes);

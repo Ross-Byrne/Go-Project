@@ -14,7 +14,7 @@ import { LoginComponent }           from './login.component/login.component';
 import { SignUpComponent }          from './sign-up.component/sign-up.component';
 import { SettingsComponent }        from './settings.component/settings.component';
 import { PostPartialComponent }     from './post-partial.component/post-partial.component';
-import { FourmPageComponent }       from './fourm-page.component/fourm-page.component';
+import { ForumPageComponent }       from './forum-page.component/forum-page.component';
 import { CodePanelComponent }       from './code-panel.component/code-panel.component';
 import { CodeSnippetsComponent }       from './code-snippets.component/code-snippets.component';
 import { ThreadPageComponent }       from './thread-page.component/thread-page.component';
@@ -41,7 +41,7 @@ import { routing }          from './app.routing/app.routing';
         SignUpComponent,
         SettingsComponent,
         PostPartialComponent,
-        FourmPageComponent,
+        ForumPageComponent,
         CodePanelComponent,
         CodeSnippetsComponent,
         ThreadPageComponent,

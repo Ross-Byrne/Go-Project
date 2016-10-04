@@ -6,11 +6,11 @@ import { Router }       from '@angular/router';
 
 @Component({
   moduleId: module.id,
-  selector: 'fourm-page',
-  templateUrl: 'fourm-page.component.html'
+  selector: 'forum-page',
+  templateUrl: 'forum-page.component.html'
 })
 
-export class FourmPageComponent {
+export class ForumPageComponent {
 
-    title = "Fourm Page";
+    title = "Forum Page";
 }
