@@ -8,6 +8,7 @@ import { DashboardComponent }       from '../dashboard.component/dashboard.compo
 import { HeroesComponent }          from '../heroes.component/heroes.component';
 import { HeroDetailComponent }      from '../hero-detail.component/hero-detail.component';
 import { LoginComponent }           from '../login.component/login.component';
+import { SignUpComponent }          from '../sign-up.component/sign-up.component';
 
 
 const appRoutes: Routes = [
@@ -35,6 +36,10 @@ const appRoutes: Routes = [
     {
         path: 'login',
         component: LoginComponent
+    },
+    {
+        path: 'signup',
+        component: SignUpComponent
     }
 ];
 

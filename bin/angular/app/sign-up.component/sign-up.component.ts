@@ -6,11 +6,11 @@ import { Router }       from '@angular/router';
 
 @Component({
   moduleId: module.id,
-  selector: 'login-page',
-  templateUrl: 'login.component.html'
+  selector: 'sign-up-page',
+  templateUrl: 'sign-up.component.html'
 })
 
-export class LoginComponent {
+export class SignUpComponent {
 
-    title = "Login Page";
+    title = "Sign Up Page";
 }
