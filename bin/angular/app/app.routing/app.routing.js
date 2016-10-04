@@ -6,6 +6,7 @@ var heroes_component_1 = require('../heroes.component/heroes.component');
 var hero_detail_component_1 = require('../hero-detail.component/hero-detail.component');
 var login_component_1 = require('../login.component/login.component');
 var sign_up_component_1 = require('../sign-up.component/sign-up.component');
+var settings_component_1 = require('../settings.component/settings.component');
 var appRoutes = [
     {
         path: '',
@@ -35,6 +36,10 @@ var appRoutes = [
     {
         path: 'signup',
         component: sign_up_component_1.SignUpComponent
+    },
+    {
+        path: 'settings',
+        component: settings_component_1.SettingsComponent
     }
 ];
 exports.routing = router_1.RouterModule.forRoot(appRoutes);

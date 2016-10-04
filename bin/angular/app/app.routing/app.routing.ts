@@ -9,6 +9,7 @@ import { HeroesComponent }          from '../heroes.component/heroes.component';
 import { HeroDetailComponent }      from '../hero-detail.component/hero-detail.component';
 import { LoginComponent }           from '../login.component/login.component';
 import { SignUpComponent }          from '../sign-up.component/sign-up.component';
+import { SettingsComponent }        from '../settings.component/settings.component';
 
 
 const appRoutes: Routes = [
@@ -40,6 +41,10 @@ const appRoutes: Routes = [
     {
         path: 'signup',
         component: SignUpComponent
+    },
+    {
+        path: 'settings',
+        component: SettingsComponent
     }
 ];
 
