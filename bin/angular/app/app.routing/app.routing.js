@@ -1,8 +1,10 @@
 "use strict";
 var router_1 = require('@angular/router');
+// page imports
 var dashboard_component_1 = require('../dashboard.component/dashboard.component');
 var heroes_component_1 = require('../heroes.component/heroes.component');
 var hero_detail_component_1 = require('../hero-detail.component/hero-detail.component');
+var login_component_1 = require('../login.component/login.component');
 var appRoutes = [
     {
         path: '',
@@ -24,6 +26,10 @@ var appRoutes = [
     {
         path: 'detail/:id',
         component: hero_detail_component_1.HeroDetailComponent
+    },
+    {
+        path: 'login',
+        component: login_component_1.LoginComponent
     }
 ];
 exports.routing = router_1.RouterModule.forRoot(appRoutes);

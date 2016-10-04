@@ -10,6 +10,7 @@ import { AppComponent }         from './app.component';
 import { DashboardComponent }   from './dashboard.component/dashboard.component';
 import { HeroesComponent }      from './heroes.component/heroes.component';
 import { HeroDetailComponent }  from './hero-detail.component/hero-detail.component';
+import { LoginComponent }       from './login.component/login.component';
 
 // services
 
@@ -28,6 +29,7 @@ import { routing }              from './app.routing/app.routing';
         DashboardComponent,
         HeroDetailComponent,
         HeroesComponent,
+        LoginComponent,
     ],
     providers: [
         HeroService,

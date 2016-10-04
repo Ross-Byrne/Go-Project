@@ -1,10 +1,14 @@
 
-import { ModuleWithProviders } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+// System imports
+import { ModuleWithProviders }      from '@angular/core';
+import { Routes, RouterModule }     from '@angular/router';
 
-import { DashboardComponent } from '../dashboard.component/dashboard.component';
-import { HeroesComponent } from '../heroes.component/heroes.component';
-import { HeroDetailComponent } from '../hero-detail.component/hero-detail.component';
+// page imports
+import { DashboardComponent }       from '../dashboard.component/dashboard.component';
+import { HeroesComponent }          from '../heroes.component/heroes.component';
+import { HeroDetailComponent }      from '../hero-detail.component/hero-detail.component';
+import { LoginComponent }           from '../login.component/login.component';
+
 
 const appRoutes: Routes = [
     {
@@ -27,6 +31,10 @@ const appRoutes: Routes = [
     {
         path: 'detail/:id',
         component: HeroDetailComponent
+    },
+    {
+        path: 'login',
+        component: LoginComponent
     }
 ];
 
