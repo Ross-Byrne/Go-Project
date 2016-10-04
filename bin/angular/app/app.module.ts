@@ -13,6 +13,7 @@ import { HeroDetailComponent }  from './hero-detail.component/hero-detail.compon
 import { LoginComponent }       from './login.component/login.component';
 import { SignUpComponent }      from './sign-up.component/sign-up.component';
 import { SettingsComponent }    from './settings.component/settings.component';
+import { PostPartialComponent } from './post-partial.component/post-partial.component';
 
 // services
 
@@ -34,6 +35,7 @@ import { routing }              from './app.routing/app.routing';
         LoginComponent,
         SignUpComponent,
         SettingsComponent,
+        PostPartialComponent,
     ],
     providers: [
         HeroService,
