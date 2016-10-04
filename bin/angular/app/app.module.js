@@ -12,10 +12,12 @@ var core_1 = require('@angular/core');
 var platform_browser_1 = require('@angular/platform-browser');
 var forms_1 = require('@angular/forms');
 var http_1 = require('@angular/http');
+// pages
 var app_component_1 = require('./app.component');
 var dashboard_component_1 = require('./dashboard.component/dashboard.component');
 var heroes_component_1 = require('./heroes.component/heroes.component');
 var hero_detail_component_1 = require('./hero-detail.component/hero-detail.component');
+// services
 var hero_service_1 = require('./hero.service/hero.service');
 var app_routing_1 = require('./app.routing/app.routing');
 var AppModule = (function () {
