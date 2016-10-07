@@ -15,8 +15,8 @@
     left: 0;
     background-color: #EEE;
     margin: .5em;
-    padding: .3em 0;
     height: 1.6em;
+    padding: .3em;
     border-radius: 4px;
 }
 .heroes li.selected:hover {
@@ -36,7 +36,8 @@
     display: inline-block;
     font-size: small;
     color: white;
-    padding: 0.8em 0.7em 0 0.7em;
+    padding-bottom: 0.3em;
+    padding-top: 0.4em;
     background-color: #607D8B;
     line-height: 1em;
     position: relative;
