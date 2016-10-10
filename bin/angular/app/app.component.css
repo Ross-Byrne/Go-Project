@@ -2,7 +2,7 @@
 nav a {
   padding: 5px 10px;
   text-decoration: none;
-  margin-top: 10px;
+  margin: 5px;
   display: inline-block;
 }
 
@@ -17,5 +17,6 @@ nav a.active {
 }
 
 .nav-links {
-  padding: 0vw 0.8vh;
+  margin: 0.8vh;
 }
+
