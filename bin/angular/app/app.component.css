@@ -4,14 +4,18 @@ nav a {
   text-decoration: none;
   margin-top: 10px;
   display: inline-block;
-  /*background-color: #eee;
-  border-radius: 4px;*/
 }
+
 nav a:hover {
   color: #039be5;
   background-color: #CFD8DC;
   border-radius: 4px;
 }
+
 nav a.active {
   color: #039be5;
+}
+
+.nav-links {
+  padding: 0vw 0.8vh;
 }
