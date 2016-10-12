@@ -10,17 +10,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 // System imports
 var core_1 = require('@angular/core');
+var thread_service_1 = require('./thread.service');
 var ThreadPartialComponent = (function () {
-    function ThreadPartialComponent() {
-        this.title = "Thread Partial";
+    function ThreadPartialComponent(threadService) {
+        this.title = "Title Of thread";
+        this.body = "Hello, I need help with my GO Code";
+        this.author = "Username";
+        this.tags = ["Go", "HTML", "angular 2"];
+        this.threads = threadService.getThreads();
     }
     ThreadPartialComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
             selector: 'thread-partial',
-            templateUrl: 'thread-partial.component.html'
+            templateUrl: 'thread-partial.component.html',
+            providers: [thread_service_1.ThreadService]
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [thread_service_1.ThreadService])
     ], ThreadPartialComponent);
     return ThreadPartialComponent;
 }());
