@@ -10,17 +10,36 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 // System imports
 var core_1 = require('@angular/core');
+var router_1 = require('@angular/router');
+var common_1 = require('@angular/common');
+var forum_posts_service_1 = require('../forum-posts.service/forum-posts.service');
 var ForumPageComponent = (function () {
-    function ForumPageComponent() {
-        this.title = "Forum Page";
+    function ForumPageComponent(forumPostsService, route, location) {
+        this.forumPostsService = forumPostsService;
+        this.route = route;
+        this.location = location;
     }
+    ForumPageComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        // for each parameter in the route url
+        this.route.params.forEach(function (params) {
+            // get the param id
+            var id = +params['id'];
+            // get the posts from the thread with the id from the url
+            _this.forumPostsService.getPostsByThreadId(id)
+                .then(function (posts) { return _this.posts = posts; }); // save the posts in a local array
+        });
+    };
+    ForumPageComponent.prototype.goBack = function () {
+        this.location.back();
+    };
     ForumPageComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
             selector: 'forum-page',
             templateUrl: 'forum-page.component.html'
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [forum_posts_service_1.ForumPostsService, router_1.ActivatedRoute, common_1.Location])
     ], ForumPageComponent);
     return ForumPageComponent;
 }());

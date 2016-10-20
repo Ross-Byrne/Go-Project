@@ -9,9 +9,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var posts_test_1 = require('../test-data/posts-test');
 var ForumPostsService = (function () {
     function ForumPostsService() {
     }
+    // uses a Promise to return posts asynchronously onces they are ready
+    ForumPostsService.prototype.getPostsByThreadId = function (id) {
+        return Promise.resolve(posts_test_1.POSTS).then(function (posts) { return posts.filter(function (post) { return post.threadId === id; }); });
+    }; // getPostsByThreadId()
     ForumPostsService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [])

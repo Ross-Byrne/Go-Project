@@ -30,10 +30,6 @@ var appRoutes = [
         component: hero_detail_component_1.HeroDetailComponent
     },
     {
-        path: 'detail/:id',
-        component: hero_detail_component_1.HeroDetailComponent
-    },
-    {
         path: 'login',
         component: login_component_1.LoginComponent
     },
@@ -58,8 +54,8 @@ var appRoutes = [
         component: thread_page_component_1.ThreadPageComponent
     },
     {
-        path: 'posts',
-        component: forum_page_component_1.ForumPageComponent // just for tests
+        path: 'threads/:id',
+        component: forum_page_component_1.ForumPageComponent // show the posts for the thread with id = id in address url
     }
 ];
 exports.routing = router_1.RouterModule.forRoot(appRoutes);

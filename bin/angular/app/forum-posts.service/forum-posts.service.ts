@@ -2,18 +2,19 @@
 import { Injectable } from '@angular/core';
 
 import { Post } from '../classes/post/post';
-import { HEROES } from '../mock-heroes';
+import { POSTS } from '../test-data/posts-test';
 
 @Injectable()
 export class ForumPostsService {
 
-    // uses a Promise to return heroes asynchronously onces they are ready
-  /*  getHeroes(): Promise<Hero[]> {
+    // uses a Promise to return posts asynchronously onces they are ready
+    getPostsByThreadId(id: number): Promise<Post[]> {
 
-        return Promise.resolve(HEROES);
-    }
+        return Promise.resolve(POSTS).then(posts => posts.filter(post => post.threadId === id));
+        
+    } // getPostsByThreadId()
 
-    getHero(id: number): Promise<Hero> {
+   /* getHero(id: number): Promise<Hero> {
         
         return this.getHeroes()
                     .then(heroes => heroes.find(hero => hero.id === id));
