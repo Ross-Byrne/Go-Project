@@ -18,6 +18,9 @@ var ForumPageComponent = (function () {
         this.forumPostsService = forumPostsService;
         this.route = route;
         this.location = location;
+        this.title = "Thread Name"; // thread name
+        this.startIndex = 0; // starting index of displayed posts
+        this.postsPerPage = 8;
     }
     ForumPageComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -29,7 +32,17 @@ var ForumPageComponent = (function () {
             _this.forumPostsService.getPostsByThreadId(id)
                 .then(function (posts) { return _this.posts = posts; }); // save the posts in a local array
         });
-    };
+    }; // ngOnInit()
+    ForumPageComponent.prototype.nextPage = function () {
+        if (this.j < this.posts.length - 10) {
+            this.j++;
+        } // if;
+    }; // nextPage()
+    ForumPageComponent.prototype.previousPage = function () {
+        if (this.j > 0) {
+            this.j--;
+        } // if
+    }; // previousPage()
     ForumPageComponent.prototype.goBack = function () {
         this.location.back();
     };

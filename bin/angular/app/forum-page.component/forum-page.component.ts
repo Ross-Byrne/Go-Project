@@ -15,8 +15,12 @@ import { ForumPostsService } from '../forum-posts.service/forum-posts.service';
 
 export class ForumPageComponent {
 
+    title: string = "Thread Name"; // thread name
     //thread: Thread;
     posts: Post[];
+
+    startIndex: number = 0; // starting index of displayed posts
+    postsPerPage: number = 8;
 
     constructor(
       private forumPostsService: ForumPostsService,
@@ -36,7 +40,27 @@ export class ForumPageComponent {
         this.forumPostsService.getPostsByThreadId(id)
           .then(posts => this.posts = posts);         // save the posts in a local array
       });
-    }
+    } // ngOnInit()
+
+    nextPage(): void {
+
+      if(this.j < this.posts.length - 10){
+
+        this.j++;
+
+      } // if;
+
+    } // nextPage()
+
+    previousPage(): void {
+      
+      if(this.j > 0){
+
+        this.j--;
+
+      } // if
+
+    } // previousPage()
 
     goBack(): void {
       this.location.back();

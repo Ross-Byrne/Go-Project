@@ -5,9 +5,23 @@
 -->
 <h1>{{title}}</h1>
 
-<!-- Display the post partial as example -->
-<post-partial></post-partial>
+<!-- Display the post partial as example --> 
 
-<div *ngFor="let post of posts" >
-    <div>{{post.author}}</div>
+<div *ngFor="let post of posts; let i = index" >
+    <!-- 
+        show the post if: index is less then the number of posts
+        allowed per page, plus the starting index AND
+        show a post if the index is greater or equal to the starting index
+        Causes a paging effect
+     -->
+    <div *ngIf="i < startIndex + postsPerPage && i >= startIndex">
+        <post-partial [post]="post"></post-partial>
+    </div>
 </div>
+
+<nav class="pull-right">
+  <ul class="pager">
+    <li><button (click)="previousPage()">Previous</button></li>
+    <li><button (click)="nextPage()">Next</button></li>
+  </ul>
+</nav>

@@ -8,26 +8,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-// System imports
 var core_1 = require('@angular/core');
-var post_1 = require('../classes/post/post');
-var PostPartialComponent = (function () {
-    function PostPartialComponent() {
-        this.title = "This is the post partial";
+var mock_threads_1 = require('../mock-threads');
+var ThreadService = (function () {
+    function ThreadService() {
     }
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', post_1.Post)
-    ], PostPartialComponent.prototype, "post", void 0);
-    PostPartialComponent = __decorate([
-        core_1.Component({
-            moduleId: module.id,
-            selector: 'post-partial',
-            templateUrl: 'post-partial.component.html'
-        }), 
+    // uses a Promise to return threads asynchronously onces they are ready
+    ThreadService.prototype.getThreads = function () {
+        return Promise.resolve(mock_threads_1.THREADS);
+    };
+    ThreadService.prototype.getThread = function (id) {
+        return this.getThreads()
+            .then(function (threads) { return threads.find(function (thread) { return thread.id === id; }); });
+    };
+    ThreadService = __decorate([
+        core_1.Injectable(), 
         __metadata('design:paramtypes', [])
-    ], PostPartialComponent);
-    return PostPartialComponent;
+    ], ThreadService);
+    return ThreadService;
 }());
-exports.PostPartialComponent = PostPartialComponent;
-//# sourceMappingURL=post-partial.component.js.map
+exports.ThreadService = ThreadService;
+//# sourceMappingURL=thread.service.js.map
