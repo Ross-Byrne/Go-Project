@@ -1,14 +1,13 @@
 
 // System imports
-import { Component }    from '@angular/core';
+import { Component,Input }    from '@angular/core';
 import { Router }       from '@angular/router';
-import { ThreadService }    from './thread.service';
+
 
 @Component({
   moduleId: module.id,
   selector: 'thread-partial',
-  templateUrl: 'thread-partial.component.html',
-  providers:[ThreadService]
+  templateUrl: 'thread-partial.component.html'
 })
 
 export class ThreadPartialComponent {
@@ -18,9 +17,10 @@ export class ThreadPartialComponent {
     author = "Username";
     tags = ["Go","HTML","angular 2"];
 
+    @Input()
     threads: string[];
 
-    constructor(threadService: ThreadService){
+    /*constructor(threadService: ThreadService){
         this.threads=threadService.getThreads();
-    }
+    }*/
 }

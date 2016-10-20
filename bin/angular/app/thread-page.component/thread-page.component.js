@@ -10,17 +10,31 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 // System imports
 var core_1 = require('@angular/core');
+var router_1 = require('@angular/router');
+var thread_service_1 = require('./thread.service');
 var ThreadPageComponent = (function () {
-    function ThreadPageComponent() {
-        this.title = "Threads";
+    function ThreadPageComponent(router, threadService) {
+        this.router = router;
+        this.threadService = threadService;
+        //title = "Threads";
+        this.threads = [];
     }
+    ThreadPageComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.threadService.getThreads()
+            .then(function (threads) { return _this.threads = threads.slice(1, 5); });
+    };
+    ThreadPageComponent.prototype.gotoDetail = function (thread) {
+        var link = ['/thread', thread.id];
+        this.router.navigate(link);
+    };
     ThreadPageComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
             selector: 'thread-page',
             templateUrl: 'thread-page.component.html'
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [router_1.Router, thread_service_1.ThreadService])
     ], ThreadPageComponent);
     return ThreadPageComponent;
 }());

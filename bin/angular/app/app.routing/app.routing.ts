@@ -13,6 +13,7 @@ import { SettingsComponent }        from '../settings.component/settings.compone
 import { CodePanelComponent }       from '../code-panel.component/code-panel.component';
 import { CodeSnippetsComponent }    from '../code-snippets.component/code-snippets.component';
 import { ThreadPageComponent }      from '../thread-page.component/thread-page.component';
+import { ThreadDetailComponent }      from '../thread-detail.component/thread-detail.component';
 import { ForumPageComponent }       from '../forum-page.component/forum-page.component';            // just for tests
 
 
@@ -61,6 +62,10 @@ const appRoutes: Routes = [
     {
         path: 'threads',
         component: ThreadPageComponent
+    },
+    {
+        path: 'thread/:id',
+        component: ThreadDetailComponent
     },
     {
         path: 'posts',

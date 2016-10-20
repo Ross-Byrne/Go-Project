@@ -19,9 +19,11 @@ import { CodePanelComponent }       from './code-panel.component/code-panel.comp
 import { CodeSnippetsComponent }       from './code-snippets.component/code-snippets.component';
 import { ThreadPageComponent }       from './thread-page.component/thread-page.component';
 import { ThreadPartialComponent }       from './thread-partial.component/thread-partial.component';
+import { ThreadDetailComponent }       from './thread-detail.component/thread-detail.component';
+
 
 // services
-
+import { ThreadService }    from './thread-page.component/thread.service';
 import { HeroService }      from './hero.service/hero.service';
 import { routing }          from './app.routing/app.routing';
 
@@ -46,9 +48,11 @@ import { routing }          from './app.routing/app.routing';
         CodeSnippetsComponent,
         ThreadPageComponent,
         ThreadPartialComponent,
+        ThreadDetailComponent,
     ],
     providers: [
         HeroService,
+        ThreadService,
     ],
     bootstrap: [ AppComponent ]
 })

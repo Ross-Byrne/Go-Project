@@ -10,6 +10,7 @@ var settings_component_1 = require('../settings.component/settings.component');
 var code_panel_component_1 = require('../code-panel.component/code-panel.component');
 var code_snippets_component_1 = require('../code-snippets.component/code-snippets.component');
 var thread_page_component_1 = require('../thread-page.component/thread-page.component');
+var thread_detail_component_1 = require('../thread-detail.component/thread-detail.component');
 var forum_page_component_1 = require('../forum-page.component/forum-page.component'); // just for tests
 var appRoutes = [
     {
@@ -56,6 +57,10 @@ var appRoutes = [
     {
         path: 'threads',
         component: thread_page_component_1.ThreadPageComponent
+    },
+    {
+        path: 'thread/:id',
+        component: thread_detail_component_1.ThreadDetailComponent
     },
     {
         path: 'posts',

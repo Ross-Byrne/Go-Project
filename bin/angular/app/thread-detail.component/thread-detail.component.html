@@ -1,0 +1,21 @@
+<div *ngIf="thread">
+    <h2>{{thread?.title}}</h2>
+    <div>
+    <label>id: </label>{{thread?.id}}</div>
+    <div>
+    <label>author: </label>{{thread?.author}}</div>
+    </div>
+    <div>
+    <!--<label>posts: </label>{{thread?.posts}}</div>-->
+    <ul>
+        <li *ngFor="let post of thread?.posts">
+            {{ post }}
+        </li>
+    </ul>
+    <div>
+    <div>
+    <label>tags: </label>{{thread?.tags}}</div>
+    <div>
+    <button (click)="goBack()">Back</button>
+</div>
+
