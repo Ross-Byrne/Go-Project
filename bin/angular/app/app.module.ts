@@ -16,14 +16,15 @@ import { SettingsComponent }        from './settings.component/settings.componen
 import { PostPartialComponent }     from './post-partial.component/post-partial.component';
 import { ForumPageComponent }       from './forum-page.component/forum-page.component';
 import { CodePanelComponent }       from './code-panel.component/code-panel.component';
-import { CodeSnippetsComponent }       from './code-snippets.component/code-snippets.component';
-import { ThreadPageComponent }       from './thread-page.component/thread-page.component';
-import { ThreadPartialComponent }       from './thread-partial.component/thread-partial.component';
+import { CodeSnippetsComponent }    from './code-snippets.component/code-snippets.component';
+import { ThreadPageComponent }      from './thread-page.component/thread-page.component';
+import { ThreadPartialComponent }   from './thread-partial.component/thread-partial.component';
 
 // services
 
-import { HeroService }      from './hero.service/hero.service';
-import { routing }          from './app.routing/app.routing';
+import { HeroService }          from './hero.service/hero.service';
+import { routing }              from './app.routing/app.routing';
+import { ForumPostsService }    from './forum-posts.service/forum-posts.service';
 
 @NgModule({
     imports: [
@@ -49,6 +50,7 @@ import { routing }          from './app.routing/app.routing';
     ],
     providers: [
         HeroService,
+        ForumPostsService,
     ],
     bootstrap: [ AppComponent ]
 })

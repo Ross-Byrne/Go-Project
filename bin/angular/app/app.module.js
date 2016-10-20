@@ -29,6 +29,7 @@ var thread_partial_component_1 = require('./thread-partial.component/thread-part
 // services
 var hero_service_1 = require('./hero.service/hero.service');
 var app_routing_1 = require('./app.routing/app.routing');
+var forum_posts_service_1 = require('./forum-posts.service/forum-posts.service');
 var AppModule = (function () {
     function AppModule() {
     }
@@ -57,6 +58,7 @@ var AppModule = (function () {
             ],
             providers: [
                 hero_service_1.HeroService,
+                forum_posts_service_1.ForumPostsService,
             ],
             bootstrap: [app_component_1.AppComponent]
         }), 
