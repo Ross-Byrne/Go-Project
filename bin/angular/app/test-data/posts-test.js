@@ -27,6 +27,6 @@ exports.POSTS = [
     { id: 25, threadId: 4, body: "This is the post text. This is the post text. This is the post text. This is the post text. This is the post text. This is the post text.", author: 'Tornado' },
     { id: 26, threadId: 4, body: "This is the post text. This is the post text. This is the post text. This is the post text. This is the post text. This is the post text.", author: 'Tornado' },
     { id: 27, threadId: 4, body: "This is the post text. This is the post text. This is the post text. This is the post text. This is the post text. This is the post text.", author: 'Tornado' },
-    { id: 10, threadId: 4, body: "This is the post text. This is the post text. This is the post text. This is the post text. This is the post text. This is the post text.", author: 'Tornado' }
+    { id: 28, threadId: 4, body: "This is the post text. This is the post text. This is the post text. This is the post text. This is the post text. This is the post text.", author: 'Tornado' }
 ];
 //# sourceMappingURL=posts-test.js.map

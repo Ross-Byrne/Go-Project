@@ -34,13 +34,13 @@ var ForumPageComponent = (function () {
         });
     }; // ngOnInit()
     ForumPageComponent.prototype.nextPage = function () {
-        if (this.j < this.posts.length - 10) {
-            this.j++;
+        if (this.startIndex < this.posts.length - this.postsPerPage) {
+            this.startIndex++;
         } // if;
     }; // nextPage()
     ForumPageComponent.prototype.previousPage = function () {
-        if (this.j > 0) {
-            this.j--;
+        if (this.startIndex > 0) {
+            this.startIndex--;
         } // if
     }; // previousPage()
     ForumPageComponent.prototype.goBack = function () {

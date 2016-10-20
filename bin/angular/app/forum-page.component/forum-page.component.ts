@@ -44,9 +44,9 @@ export class ForumPageComponent {
 
     nextPage(): void {
 
-      if(this.j < this.posts.length - 10){
+      if(this.startIndex < this.posts.length - this.postsPerPage){
 
-        this.j++;
+        this.startIndex++;
 
       } // if;
 
@@ -54,9 +54,9 @@ export class ForumPageComponent {
 
     previousPage(): void {
       
-      if(this.j > 0){
+      if(this.startIndex > 0){
 
-        this.j--;
+        this.startIndex--;
 
       } // if
 

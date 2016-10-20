@@ -17,6 +17,6 @@ export class PostPartialComponent {
     @Input()    // value passed into partial from forum-page
     post: Post;
 
-    title = "This is the post partial";
+    title: string = "This is the post partial";
 
 }
