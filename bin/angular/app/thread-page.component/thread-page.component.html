@@ -12,10 +12,15 @@
 -->
 <h3>Threads</h3>
 
-<div class="grid grid-pad">
-  <div *ngFor="let thread of threads" (click)="gotoDetail(thread)" class="col-1-4">
-    <div class="module thread">
-      <h4>{{thread.title}}</h4>
-    </div>
-  </div>
-</div>
+<div *ngFor="let thread of threads">
+  <div class="media">
+        <div class="media-left">
+            <a href="">
+              <img class="media-object" src="/assets/img/profile.png" alt="Profile Image" style="width: 5em;">
+            </a>
+            {{thread.author}}
+        </div>
+        <div class="media-body" (click)="gotoDetail(thread)">
+            {{thread.title}}
+        </div>
+  </div>  

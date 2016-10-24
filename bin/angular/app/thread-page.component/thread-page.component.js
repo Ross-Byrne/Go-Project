@@ -22,7 +22,7 @@ var ThreadPageComponent = (function () {
     ThreadPageComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.threadService.getThreads()
-            .then(function (threads) { return _this.threads = threads.slice(1, 5); });
+            .then(function (threads) { return _this.threads = threads.slice(0, 10); });
     };
     ThreadPageComponent.prototype.gotoDetail = function (thread) {
         var link = ['/thread', thread.id];

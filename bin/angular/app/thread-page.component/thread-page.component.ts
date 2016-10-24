@@ -26,7 +26,7 @@ export class ThreadPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.threadService.getThreads()
-      .then(threads => this.threads = threads.slice(1, 5));
+      .then(threads => this.threads = threads.slice(0, 10));
   }
 
     gotoDetail(thread: Thread): void {
