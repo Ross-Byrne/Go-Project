@@ -3,6 +3,7 @@
     The posts will be injected into this page using the post-partial
     to hold post data.
 -->
+<div>
 <h1>{{title}}</h1>
 
 <!-- Display the post partial as example --> 
@@ -19,9 +20,35 @@
     </div>
 </div>
 
-<nav class="pull-right">
-  <ul class="pager">
-    <li><button class="btn btn-primary" type="button" (click)="previousPage()">Previous</button></li>
-    <li><button class="btn btn-primary" type="button" (click)="nextPage()">Next</button></li>
-  </ul>
-</nav>
+
+
+<!-- Text box to make a post in -->
+
+<div class="row">
+  <div class="col-lg-7 col-md-offset-2">
+
+     <div class="form-group">
+        <label for="post">Make a Post:</label>
+        <textarea class="form-control" rows="4" id="post"></textarea>
+    </div>  
+    
+  </div><!-- /.col-lg-6 -->
+<div class="col-lg-1">
+    <br>
+    <button style="font-size: 2.4em;"class="btn btn-primary btn-lg" role="button">Post</button>
+   </div> 
+
+</div><!-- /.row -->
+
+
+<!-- Pager -->
+    <div>
+        <nav class="pull-right">
+            <ul class="pager">
+                <li><button class="btn btn-primary" type="button" (click)="previousPage()">Previous</button></li>
+                <li><button class="btn btn-primary" type="button" (click)="nextPage()">Next</button></li>
+            </ul>
+        </nav>
+    </div>
+
+</div>
