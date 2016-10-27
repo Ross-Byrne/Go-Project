@@ -79,13 +79,27 @@ export class ForumPageComponent {
 
       this.forumPostsService.addPostByThreadId(this.threadPosts.threadId, post) // add the post to DB
       .then(threadPosts => this.threadPosts = threadPosts) // update posts on screen
-      .then(() => {window.setTimeout( function () { document.getElementById('bottomOfPage').scrollIntoView(); }, 10 );}) // scroll to bottom of page
+      .then(() => {this.goToBottomOfPage(10);}) // scroll to bottom of page
       .then(() => {this.nextPage();}) // try go to next page just incase your post ends up on there
 
       // clear the post textarea
       this.postText = "";
       
     } // savePost
+
+    goToBottomOfPage(timeout: number): void {
+
+      // wait a selected amount of time before scrolling to bottom of page
+      window.setTimeout( function () { document.getElementById('bottomOfPage').scrollIntoView(); }, timeout );
+
+    } // goToBottomOfPage()
+
+    goToTopOfPage(timeout: number): void {
+
+      // wait a selected amount of time before scrolling to bottom of page
+      window.setTimeout( function () { document.getElementById('topOfPage').scrollIntoView(); }, timeout );
+
+    } // goToTopOfPage()
 
     goBack(): void {
       this.location.back();

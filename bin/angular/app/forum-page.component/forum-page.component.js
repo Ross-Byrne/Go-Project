@@ -59,11 +59,19 @@ var ForumPageComponent = (function () {
         post.id = this.threadPosts.posts.length + 1;
         this.forumPostsService.addPostByThreadId(this.threadPosts.threadId, post) // add the post to DB
             .then(function (threadPosts) { return _this.threadPosts = threadPosts; }) // update posts on screen
-            .then(function () { window.setTimeout(function () { document.getElementById('bottomOfPage').scrollIntoView(); }, 10); }) // scroll to bottom of page
+            .then(function () { _this.goToBottomOfPage(10); }) // scroll to bottom of page
             .then(function () { _this.nextPage(); }); // try go to next page just incase your post ends up on there
         // clear the post textarea
         this.postText = "";
     }; // savePost
+    ForumPageComponent.prototype.goToBottomOfPage = function (timeout) {
+        // wait a selected amount of time before scrolling to bottom of page
+        window.setTimeout(function () { document.getElementById('bottomOfPage').scrollIntoView(); }, timeout);
+    }; // goToBottomOfPage()
+    ForumPageComponent.prototype.goToTopOfPage = function (timeout) {
+        // wait a selected amount of time before scrolling to bottom of page
+        window.setTimeout(function () { document.getElementById('topOfPage').scrollIntoView(); }, timeout);
+    }; // goToTopOfPage()
     ForumPageComponent.prototype.goBack = function () {
         this.location.back();
     };
