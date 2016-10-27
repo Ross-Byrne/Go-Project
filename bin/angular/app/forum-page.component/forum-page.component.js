@@ -12,6 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var common_1 = require('@angular/common');
+var post_1 = require('../classes/post/post');
 var thread_posts_1 = require('../classes/thread-posts/thread-posts');
 var forum_posts_service_1 = require('../forum-posts.service/forum-posts.service');
 var ForumPageComponent = (function () {
@@ -22,6 +23,8 @@ var ForumPageComponent = (function () {
         this.title = "Thread Name"; // thread name
         //thread: Thread;
         this.threadPosts = new thread_posts_1.ThreadPosts(); // initialise object
+        // text for post
+        this.postText = "";
         this.startIndex = 0; // starting index of displayed posts
         this.postsPerPage = 8;
     }
@@ -46,6 +49,21 @@ var ForumPageComponent = (function () {
             this.startIndex--;
         } // if
     }; // previousPage()
+    ForumPageComponent.prototype.savePost = function (postBody) {
+        var _this = this;
+        var post = new post_1.Post();
+        post.authorId = "ross";
+        post.authorName = "Ross";
+        post.body = postBody;
+        post.threadId = this.threadPosts.threadId;
+        post.id = this.threadPosts.posts.length + 1;
+        this.forumPostsService.addPostByThreadId(this.threadPosts.threadId, post) // add the post to DB
+            .then(function (threadPosts) { return _this.threadPosts = threadPosts; }) // update posts on screen
+            .then(function () { window.setTimeout(function () { document.getElementById('bottomOfPage').scrollIntoView(); }, 10); }) // scroll to bottom of page
+            .then(function () { _this.nextPage(); }); // try go to next page just incase your post ends up on there
+        // clear the post textarea
+        this.postText = "";
+    }; // savePost
     ForumPageComponent.prototype.goBack = function () {
         this.location.back();
     };

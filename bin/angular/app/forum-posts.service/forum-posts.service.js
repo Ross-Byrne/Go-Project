@@ -17,6 +17,10 @@ var ForumPostsService = (function () {
     ForumPostsService.prototype.getPostsByThreadId = function (id) {
         return Promise.resolve(posts_test_1.POSTS).then(function (posts) { return posts.find(function (posts) { return posts.threadId === id; }); });
     }; // getPostsByThreadId()
+    ForumPostsService.prototype.addPostByThreadId = function (id, post) {
+        Promise.resolve(posts_test_1.POSTS).then(function (posts) { return posts.find(function (posts) { return posts.threadId === id; }).posts.push(post); });
+        return this.getPostsByThreadId(id);
+    }; // addPostByThreadId()
     ForumPostsService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [])

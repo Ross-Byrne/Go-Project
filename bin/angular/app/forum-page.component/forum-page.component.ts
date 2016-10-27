@@ -20,6 +20,9 @@ export class ForumPageComponent {
     //thread: Thread;
     threadPosts: ThreadPosts = new ThreadPosts(); // initialise object
 
+    // text for post
+    postText: string = "";
+
     startIndex: number = 0; // starting index of displayed posts
     postsPerPage: number = 8;
 
@@ -63,6 +66,26 @@ export class ForumPageComponent {
       } // if
 
     } // previousPage()
+
+    savePost(postBody: string): void {
+
+      var post: Post = new Post();
+
+      post.authorId = "ross";
+      post.authorName = "Ross";
+      post.body = postBody;
+      post.threadId = this.threadPosts.threadId;
+      post.id = this.threadPosts.posts.length + 1;
+
+      this.forumPostsService.addPostByThreadId(this.threadPosts.threadId, post) // add the post to DB
+      .then(threadPosts => this.threadPosts = threadPosts) // update posts on screen
+      .then(() => {window.setTimeout( function () { document.getElementById('bottomOfPage').scrollIntoView(); }, 10 );}) // scroll to bottom of page
+      .then(() => {this.nextPage();}) // try go to next page just incase your post ends up on there
+
+      // clear the post textarea
+      this.postText = "";
+      
+    } // savePost
 
     goBack(): void {
       this.location.back();

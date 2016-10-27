@@ -15,6 +15,14 @@ export class ForumPostsService {
         
     } // getPostsByThreadId()
 
+    addPostByThreadId(id: number, post: Post): Promise<ThreadPosts>{
+
+        Promise.resolve(POSTS).then(posts => posts.find(posts => posts.threadId === id).posts.push(post));
+
+        return this.getPostsByThreadId(id);
+
+    } // addPostByThreadId()
+
    /* getHero(id: number): Promise<Hero> {
         
         return this.getHeroes()
