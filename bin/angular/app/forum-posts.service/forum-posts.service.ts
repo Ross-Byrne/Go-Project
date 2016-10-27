@@ -2,15 +2,16 @@
 import { Injectable } from '@angular/core';
 
 import { Post } from '../classes/post/post';
+import { ThreadPosts } from '../classes/thread-posts/thread-posts';
 import { POSTS } from '../test-data/posts-test';
 
 @Injectable()
 export class ForumPostsService {
 
     // uses a Promise to return posts asynchronously onces they are ready
-    getPostsByThreadId(id: number): Promise<Post[]> {
+    getPostsByThreadId(id: number): Promise<ThreadPosts> {
 
-        return Promise.resolve(POSTS).then(posts => posts.filter(post => post.threadId === id));
+        return Promise.resolve(POSTS).then(posts => posts.find(posts => posts.threadId === id));
         
     } // getPostsByThreadId()
 

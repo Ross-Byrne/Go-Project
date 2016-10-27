@@ -5,6 +5,7 @@ import { ActivatedRoute, Params }   from '@angular/router';
 import { Location }                 from '@angular/common';
 
 import { Post } from '../classes/post/post';
+import { ThreadPosts } from '../classes/thread-posts/thread-posts';
 import { ForumPostsService } from '../forum-posts.service/forum-posts.service';
 
 @Component({
@@ -17,7 +18,7 @@ export class ForumPageComponent {
 
     title: string = "Thread Name"; // thread name
     //thread: Thread;
-    posts: Post[];
+    threadPosts: ThreadPosts = new ThreadPosts(); // initialise object
 
     startIndex: number = 0; // starting index of displayed posts
     postsPerPage: number = 8;
@@ -37,14 +38,15 @@ export class ForumPageComponent {
         let id = +params['id'];
 
         // get the posts from the thread with the id from the url
-        this.forumPostsService.getPostsByThreadId(id)
-          .then(posts => this.posts = posts);         // save the posts in a local array
+         this.forumPostsService.getPostsByThreadId(id)
+           .then(threadPosts => this.threadPosts = threadPosts);         // save the posts object
+
       });
     } // ngOnInit()
 
     nextPage(): void {
 
-      if(this.startIndex < this.posts.length - this.postsPerPage){
+      if(this.startIndex < this.threadPosts.posts.length - this.postsPerPage){
 
         this.startIndex++;
 

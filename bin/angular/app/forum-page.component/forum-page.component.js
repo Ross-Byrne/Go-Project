@@ -12,6 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var common_1 = require('@angular/common');
+var thread_posts_1 = require('../classes/thread-posts/thread-posts');
 var forum_posts_service_1 = require('../forum-posts.service/forum-posts.service');
 var ForumPageComponent = (function () {
     function ForumPageComponent(forumPostsService, route, location) {
@@ -19,6 +20,8 @@ var ForumPageComponent = (function () {
         this.route = route;
         this.location = location;
         this.title = "Thread Name"; // thread name
+        //thread: Thread;
+        this.threadPosts = new thread_posts_1.ThreadPosts(); // initialise object
         this.startIndex = 0; // starting index of displayed posts
         this.postsPerPage = 8;
     }
@@ -30,11 +33,11 @@ var ForumPageComponent = (function () {
             var id = +params['id'];
             // get the posts from the thread with the id from the url
             _this.forumPostsService.getPostsByThreadId(id)
-                .then(function (posts) { return _this.posts = posts; }); // save the posts in a local array
+                .then(function (threadPosts) { return _this.threadPosts = threadPosts; }); // save the posts object
         });
     }; // ngOnInit()
     ForumPageComponent.prototype.nextPage = function () {
-        if (this.startIndex < this.posts.length - this.postsPerPage) {
+        if (this.startIndex < this.threadPosts.posts.length - this.postsPerPage) {
             this.startIndex++;
         } // if;
     }; // nextPage()

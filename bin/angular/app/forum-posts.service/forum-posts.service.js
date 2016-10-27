@@ -15,7 +15,7 @@ var ForumPostsService = (function () {
     }
     // uses a Promise to return posts asynchronously onces they are ready
     ForumPostsService.prototype.getPostsByThreadId = function (id) {
-        return Promise.resolve(posts_test_1.POSTS).then(function (posts) { return posts.filter(function (post) { return post.threadId === id; }); });
+        return Promise.resolve(posts_test_1.POSTS).then(function (posts) { return posts.find(function (posts) { return posts.threadId === id; }); });
     }; // getPostsByThreadId()
     ForumPostsService = __decorate([
         core_1.Injectable(), 
