@@ -23,8 +23,16 @@ type TestDocument struct {
     Note string
 }
 
+type ThreadDocument struct {
+    Title string
+    Author string
+}
+
 func main(){
     serveWeb()
+    log.Println("Posting to couch")
+    remoteCouchdbSave()
+    
 }
 
 var themeName = getThemeName()
@@ -149,4 +157,29 @@ func newUUID() (string, error) {
 	// version 4 (pseudo-random); see section 4.1.3
 	uuid[6] = uuid[6]&^0xf0 | 0x40
 	return fmt.Sprintf("%x-%x-%x-%x-%x", uuid[0:4], uuid[4:6], uuid[6:8], uuid[8:10], uuid[10:]), nil
+}
+
+func remoteCouchdbSave(){
+    var timeout = time.Duration(500 * 100000000)
+    conn, err := couchdb.NewConnection("couchdb-e195fb.smileupps.com",6984 ,timeout)
+    auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016" }
+    db := conn.SelectDB("threads", &auth)
+
+    theDoc := ThreadDocument{
+        Title: "My Thread from go",
+        Author: "Martin",
+    }
+
+    theId, err :=newUUID() //use whatever method you like to generate a uuid
+    //The third argument here would be a revision, if you were updating an existing document
+    if err != nil {
+		fmt.Printf("error: %v\n", err)
+	}
+    rev, err := db.Save(theDoc, theId, "")  
+    //If all is well, rev should contain the revision of the newly created
+    //or updated Document
+    
+    log.Println(rev)
+    log.Println(err)
+    
 }
