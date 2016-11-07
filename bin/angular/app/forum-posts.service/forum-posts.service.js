@@ -46,7 +46,7 @@ var ForumPostsService = (function () {
     }; // addPostByThreadId()
     ForumPostsService.prototype.createPost = function (message) {
         // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
-        var headers = new http_1.Headers({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': 'http://localhost:8080', 'isTrusted': 'true' });
+        var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         var options = new http_1.RequestOptions({ headers: headers });
         return this.http.post(this.savePostURL, '{"message":"' + message + '"}', options)
             .toPromise()

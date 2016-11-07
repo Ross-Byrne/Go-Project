@@ -55,7 +55,7 @@ export class ForumPostsService {
     createPost(message: string): Promise<Post> {
         // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
 
-        let headers = new Headers({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': 'http://localhost:8080', 'isTrusted': 'true' });
+        let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         return this.http.post(this.savePostURL, '{"message":"' + message + '"}', options)
                     .toPromise()
