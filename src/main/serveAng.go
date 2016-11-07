@@ -78,7 +78,7 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println(dat)
 
-		num := dat["num"].(float64)
+		num := dat["message"]
 		fmt.Println(num)
 
 } // homeHandler()
