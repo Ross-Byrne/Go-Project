@@ -13,11 +13,7 @@ import (
 	"strings"
 )
 
-type message_Struct struct {
-	message string
-}
-
-type post struct {
+type Post struct {
 	Id int
 	ThreadId int
 	Body string
@@ -25,9 +21,9 @@ type post struct {
 	AuthorName string
 }
 
-type threadPosts struct {
+type ThreadPosts struct {
 	ThreadId int
-	Posts []post
+	Posts []Post
 }
 
 /*
@@ -111,15 +107,22 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 
 	body, err := ioutil.ReadAll(r.Body)
 
-	var dat map[string]interface{}
+	fmt.Println("JSON: " + string(body))
+	//var dat map[string]interface{}
+	var post Post
 
-	if err = json.Unmarshal(body, &dat); err != nil {
+	if err = json.Unmarshal(body, &post); err != nil {
 		panic(err)
 	}
-	fmt.Println(dat)
-
-		num := dat["message"]
-		fmt.Println(num)
+	fmt.Println("Post Id:", post.Id)
+	fmt.Println("Post ThreadId:", post.ThreadId)
+	fmt.Println("Post Body:", post.Body)
+	fmt.Println("Post AuthorId:", post.AuthorId)
+	fmt.Println("Post AuthorName:", post.AuthorName)
+	// fmt.Println(dat)
+	//
+	// 	num := dat["message"]
+	// 	fmt.Println(num)
 
 } // savePostHandler()
 

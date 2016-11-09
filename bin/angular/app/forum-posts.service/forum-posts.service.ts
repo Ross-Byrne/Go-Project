@@ -52,12 +52,12 @@ export class ForumPostsService {
 
     } // addPostByThreadId()
 
-    createPost(message: string): Promise<Post> {
+    createPost(id: number, post: Post): Promise<Post> {
         // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
 
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-        return this.http.post(this.savePostURL, '{"message":"' + message + '"}', options)
+        return this.http.post(this.savePostURL, JSON.stringify(post), options)
                     .toPromise()
                     .then()
                     .catch(this.handleError);

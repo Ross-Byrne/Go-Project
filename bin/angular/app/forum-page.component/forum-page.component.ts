@@ -83,13 +83,12 @@ export class ForumPageComponent {
       .then(threadPosts => this.threadPosts = threadPosts) // update posts on screen
       .then(() => {this.goToBottomOfPage(10);}) // scroll to bottom of page
       .then(() => {this.nextPage();}) // try go to next page just incase your post ends up on there
-      this.forumPostsService.createPost(postBody);
+
+      this.forumPostsService.createPost(this.threadPosts.threadId, post);
 
       // clear the post textarea
       this.postText = "";
 
-      
-      
     } // savePost
 
     goToBottomOfPage(timeout: number): void {

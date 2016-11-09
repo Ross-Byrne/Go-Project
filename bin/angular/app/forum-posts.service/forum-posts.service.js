@@ -44,11 +44,11 @@ var ForumPostsService = (function () {
         Promise.resolve(posts_test_1.POSTS).then(function (posts) { return posts.find(function (posts) { return posts.threadId === id; }).posts.push(post); });
         return this.getPostsByThreadId(id);
     }; // addPostByThreadId()
-    ForumPostsService.prototype.createPost = function (message) {
+    ForumPostsService.prototype.createPost = function (id, post) {
         // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
         var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         var options = new http_1.RequestOptions({ headers: headers });
-        return this.http.post(this.savePostURL, '{"message":"' + message + '"}', options)
+        return this.http.post(this.savePostURL, JSON.stringify(post), options)
             .toPromise()
             .then()
             .catch(this.handleError);
