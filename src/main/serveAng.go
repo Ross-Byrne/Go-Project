@@ -105,24 +105,29 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 // handler for saving posts to couchDB
 func savePostHandler(w http.ResponseWriter, r *http.Request) {
 
+	// read all of the bytes from the request body into a byte array
 	body, err := ioutil.ReadAll(r.Body)
 
+	// print out JSON
 	fmt.Println("JSON: " + string(body))
-	//var dat map[string]interface{}
+
+	// make post struct
 	var post Post
 
+	// Unmarshal the JSON into the struct
 	if err = json.Unmarshal(body, &post); err != nil {
 		panic(err)
 	}
+
+	// print out details
 	fmt.Println("Post Id:", post.Id)
 	fmt.Println("Post ThreadId:", post.ThreadId)
 	fmt.Println("Post Body:", post.Body)
 	fmt.Println("Post AuthorId:", post.AuthorId)
 	fmt.Println("Post AuthorName:", post.AuthorName)
-	// fmt.Println(dat)
-	//
-	// 	num := dat["message"]
-	// 	fmt.Println(num)
+
+	// save the post to couchDB
+	saveDocumentToCouch(post, "posts")
 
 } // savePostHandler()
 
@@ -183,3 +188,43 @@ func saveThread(t Thread) {
 	log.Println("Error: ", err)
 
 }
+
+// generic function to save a document to couchDB
+// parameters are, the doc, (eg struct made for documents) and the name of DB as a string
+func saveDocumentToCouch(doc interface{}, dbName string){
+
+	// set timeout
+	var timeout = time.Duration(500 * 100000000)
+
+	// create the connect to couchDB
+	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
+
+	// set authentication
+	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
+
+	// select the DB to save to
+	db := conn.SelectDB(dbName, &auth)
+
+	// set the document
+	theDoc := doc
+
+	// create an ID
+	theId, err := newUUID() //use whatever method you like to generate a uuid
+
+	//The third argument here would be a revision, if you were updating an existing document
+	if err != nil {
+		fmt.Printf("error: %v\n", err)
+	}
+
+	log.Println("Saving to", dbName)
+
+	// save the document
+	rev, err := db.Save(theDoc, theId, "")
+	//If all is well, rev should contain the revision of the newly created
+	//or updated Document
+
+	// log details
+	log.Println("revision: " + rev)
+	log.Println("Error: ", err)
+
+} // saveDocumentToCouch()

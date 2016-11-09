@@ -44,13 +44,13 @@ export class ForumPostsService {
         
     } // getPostsByThreadId()
 
-    addPostByThreadId(id: number, post: Post): Promise<ThreadPosts>{
+    // addPostByThreadId(id: number, post: Post): Promise<ThreadPosts>{
 
-        Promise.resolve(POSTS).then(posts => posts.find(posts => posts.threadId === id).posts.push(post));
+    //     Promise.resolve(POSTS).then(posts => posts.find(posts => posts.threadId === id).posts.push(post));
 
-        return this.getPostsByThreadId(id);
+    //     return this.getPostsByThreadId(id);
 
-    } // addPostByThreadId()
+    // } // addPostByThreadId()
 
     createPost(id: number, post: Post): Promise<Post> {
         // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update

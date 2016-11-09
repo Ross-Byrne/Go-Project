@@ -40,10 +40,10 @@ var ForumPostsService = (function () {
     ForumPostsService.prototype.getPostsByThreadId = function (id) {
         return Promise.resolve(posts_test_1.POSTS).then(function (posts) { return posts.find(function (posts) { return posts.threadId === id; }); });
     }; // getPostsByThreadId()
-    ForumPostsService.prototype.addPostByThreadId = function (id, post) {
-        Promise.resolve(posts_test_1.POSTS).then(function (posts) { return posts.find(function (posts) { return posts.threadId === id; }).posts.push(post); });
-        return this.getPostsByThreadId(id);
-    }; // addPostByThreadId()
+    // addPostByThreadId(id: number, post: Post): Promise<ThreadPosts>{
+    //     Promise.resolve(POSTS).then(posts => posts.find(posts => posts.threadId === id).posts.push(post));
+    //     return this.getPostsByThreadId(id);
+    // } // addPostByThreadId()
     ForumPostsService.prototype.createPost = function (id, post) {
         // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
         var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
