@@ -5,7 +5,6 @@ import { FormsModule }   from '@angular/forms';
 import { HttpModule }    from '@angular/http';
 
 // pages
-
 import { AppComponent }             from './app.component';
 import { DashboardComponent }       from './dashboard.component/dashboard.component';
 import { HeroesComponent }          from './heroes.component/heroes.component';
@@ -19,11 +18,12 @@ import { CodePanelComponent }       from './code-panel.component/code-panel.comp
 import { CodeSnippetsComponent }    from './code-snippets.component/code-snippets.component';
 import { ThreadPageComponent }      from './thread-page.component/thread-page.component';
 import { ThreadPartialComponent }   from './thread-partial.component/thread-partial.component';
+import { ThreadDetailComponent }    from './thread-detail.component/thread-detail.component';
 
 // services
-
-import { HeroService }          from './hero.service/hero.service';
-import { routing }              from './app.routing/app.routing';
+import { ThreadService }    from './thread-page.component/thread.service';
+import { HeroService }      from './hero.service/hero.service';
+import { routing }          from './app.routing/app.routing';
 import { ForumPostsService }    from './forum-posts.service/forum-posts.service';
 
 @NgModule({
@@ -47,9 +47,11 @@ import { ForumPostsService }    from './forum-posts.service/forum-posts.service'
         CodeSnippetsComponent,
         ThreadPageComponent,
         ThreadPartialComponent,
+        ThreadDetailComponent,
     ],
     providers: [
         HeroService,
+        ThreadService,
         ForumPostsService,
     ],
     bootstrap: [ AppComponent ]

@@ -26,7 +26,9 @@ var code_panel_component_1 = require('./code-panel.component/code-panel.componen
 var code_snippets_component_1 = require('./code-snippets.component/code-snippets.component');
 var thread_page_component_1 = require('./thread-page.component/thread-page.component');
 var thread_partial_component_1 = require('./thread-partial.component/thread-partial.component');
+var thread_detail_component_1 = require('./thread-detail.component/thread-detail.component');
 // services
+var thread_service_1 = require('./thread-page.component/thread.service');
 var hero_service_1 = require('./hero.service/hero.service');
 var app_routing_1 = require('./app.routing/app.routing');
 var forum_posts_service_1 = require('./forum-posts.service/forum-posts.service');
@@ -55,9 +57,11 @@ var AppModule = (function () {
                 code_snippets_component_1.CodeSnippetsComponent,
                 thread_page_component_1.ThreadPageComponent,
                 thread_partial_component_1.ThreadPartialComponent,
+                thread_detail_component_1.ThreadDetailComponent,
             ],
             providers: [
                 hero_service_1.HeroService,
+                thread_service_1.ThreadService,
                 forum_posts_service_1.ForumPostsService,
             ],
             bootstrap: [app_component_1.AppComponent]

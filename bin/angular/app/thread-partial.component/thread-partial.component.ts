@@ -1,6 +1,6 @@
 
 // System imports
-import { Component }    from '@angular/core';
+import { Component,Input }    from '@angular/core';
 import { Router }       from '@angular/router';
 
 
@@ -12,5 +12,15 @@ import { Router }       from '@angular/router';
 
 export class ThreadPartialComponent {
 
-    title = "Thread Partial";
+    title = "Title Of thread";
+    body = "Hello, I need help with my GO Code";
+    author = "Username";
+    tags = ["Go","HTML","angular 2"];
+
+    @Input()
+    threads: string[];
+
+    /*constructor(threadService: ThreadService){
+        this.threads=threadService.getThreads();
+    }*/
 }

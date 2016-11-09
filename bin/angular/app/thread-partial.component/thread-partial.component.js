@@ -12,8 +12,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var ThreadPartialComponent = (function () {
     function ThreadPartialComponent() {
-        this.title = "Thread Partial";
+        this.title = "Title Of thread";
+        this.body = "Hello, I need help with my GO Code";
+        this.author = "Username";
+        this.tags = ["Go", "HTML", "angular 2"];
     }
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Array)
+    ], ThreadPartialComponent.prototype, "threads", void 0);
     ThreadPartialComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
