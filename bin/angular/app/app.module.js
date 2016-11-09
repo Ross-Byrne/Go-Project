@@ -61,11 +61,8 @@ var AppModule = (function () {
             ],
             providers: [
                 hero_service_1.HeroService,
-<<<<<<< HEAD
                 thread_service_1.ThreadService,
-=======
                 forum_posts_service_1.ForumPostsService,
->>>>>>> develop
             ],
             bootstrap: [app_component_1.AppComponent]
         }), 

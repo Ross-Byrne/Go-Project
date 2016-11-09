@@ -55,17 +55,12 @@ var appRoutes = [
         component: thread_page_component_1.ThreadPageComponent
     },
     {
-<<<<<<< HEAD
         path: 'thread/:id',
         component: thread_detail_component_1.ThreadDetailComponent
     },
     {
-        path: 'posts',
-        component: forum_page_component_1.ForumPageComponent // just for tests
-=======
         path: 'threads/:id',
         component: forum_page_component_1.ForumPageComponent // show the posts for the thread with id = id in address url
->>>>>>> develop
     }
 ];
 exports.routing = router_1.RouterModule.forRoot(appRoutes);
