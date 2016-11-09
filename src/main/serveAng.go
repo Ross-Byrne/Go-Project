@@ -12,6 +12,19 @@ type message_Struct struct {
 	message string
 }
 
+type post struct {
+	Id int
+	ThreadId int
+	Body string
+	AuthorId string
+	AuthorName string
+}
+
+type threadPosts struct {
+	ThreadId int
+	Posts []post
+}
+
 /*
    To get routing to work in the angular app, the index.html file needs to be served
    everytime a route is entered into the address bar. This lets angular 2 handle the routing
