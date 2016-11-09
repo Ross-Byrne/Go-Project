@@ -25,7 +25,7 @@ var ThreadPageComponent = (function () {
             .then(function (threads) { return _this.threads = threads.slice(0, 10); });
     };
     ThreadPageComponent.prototype.gotoDetail = function (thread) {
-        var link = ['/thread', thread.id];
+        var link = ['/threads', thread.id];
         this.router.navigate(link);
     };
     ThreadPageComponent = __decorate([

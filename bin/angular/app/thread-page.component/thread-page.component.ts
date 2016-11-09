@@ -30,7 +30,7 @@ export class ThreadPageComponent implements OnInit {
   }
 
     gotoDetail(thread: Thread): void {
-        let link = ['/thread', thread.id];
+        let link = ['/threads', thread.id];
         this.router.navigate(link);
     }
 }
