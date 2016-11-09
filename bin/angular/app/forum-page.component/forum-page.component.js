@@ -61,6 +61,7 @@ var ForumPageComponent = (function () {
             .then(function (threadPosts) { return _this.threadPosts = threadPosts; }) // update posts on screen
             .then(function () { _this.goToBottomOfPage(10); }) // scroll to bottom of page
             .then(function () { _this.nextPage(); }); // try go to next page just incase your post ends up on there
+        this.forumPostsService.createPost(postBody);
         // clear the post textarea
         this.postText = "";
     }; // savePost

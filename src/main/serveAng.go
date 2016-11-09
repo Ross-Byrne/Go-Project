@@ -6,11 +6,29 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"strings"
 	"time"
-
-	couchdb "github.com/rhinoman/couchdb-go"
+	"github.com/rhinoman/couchdb-go"
+	"encoding/json"
+	"io/ioutil"
+	"strings"
 )
+
+type message_Struct struct {
+	message string
+}
+
+type post struct {
+	Id int
+	ThreadId int
+	Body string
+	AuthorId string
+	AuthorName string
+}
+
+type threadPosts struct {
+	ThreadId int
+	Posts []post
+}
 
 /*
    To get routing to work in the angular app, the index.html file needs to be served
@@ -34,7 +52,7 @@ type Thread struct {
 func main() {
 
 	//testing thread stuff
-	testThread := Thread{Id: "1", Title: "Title", Author: "Martin", Body: "my thread body", Tags: []string{"tag1", "tag2"}}
+/*	testThread := Thread{Id: "1", Title: "Title", Author: "Martin", Body: "my thread body", Tags: []string{"tag1", "tag2"}}
 
 	log.Println("Doc sent to G0")
 	log.Println(testThread.Title)
@@ -44,22 +62,23 @@ func main() {
 	log.Println(testThread.Tags)
 	log.Println()
 
-	saveThread(testThread)
+	saveThread(testThread)*/
 	//end thread testing
-	
-	/*
 
-		// handle for serving resource
-		chttp.Handle("/", http.FileServer(http.Dir("./angular")))
+	// handle for serving resource
+	chttp.Handle("/", http.FileServer(http.Dir("./angular")))
 
-		// handle serving index.html at root
-		http.HandleFunc("/", homeHandler)
+	// handle serving index.html at root
+	http.HandleFunc("/", homeHandler)
 
-		// give the user feedback
-		fmt.Println("Listening on port 8080")
+	// handler for saving posts made by user to couchDB
+	http.HandleFunc("/api/savePost", savePostHandler)
 
-		// listen on port and handle connections
-		http.ListenAndServe(":8080", nil)*/
+	// give the user feedback
+	fmt.Println("Listening on port 8080")
+
+	// listen on port and handle connections
+	http.ListenAndServe(":8080", nil)
 
 } // main()
 
@@ -86,6 +105,23 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	} // if
 
 } // homeHandler()
+
+// handler for saving posts to couchDB
+func savePostHandler(w http.ResponseWriter, r *http.Request) {
+
+	body, err := ioutil.ReadAll(r.Body)
+
+	var dat map[string]interface{}
+
+	if err = json.Unmarshal(body, &dat); err != nil {
+		panic(err)
+	}
+	fmt.Println(dat)
+
+		num := dat["message"]
+		fmt.Println(num)
+
+} // savePostHandler()
 
 // newUUID generates a random UUID according to RFC 4122
 func newUUID() (string, error) {
