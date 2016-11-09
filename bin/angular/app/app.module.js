@@ -31,6 +31,7 @@ var thread_detail_component_1 = require('./thread-detail.component/thread-detail
 var thread_service_1 = require('./thread-page.component/thread.service');
 var hero_service_1 = require('./hero.service/hero.service');
 var app_routing_1 = require('./app.routing/app.routing');
+var forum_posts_service_1 = require('./forum-posts.service/forum-posts.service');
 var AppModule = (function () {
     function AppModule() {
     }
@@ -60,7 +61,11 @@ var AppModule = (function () {
             ],
             providers: [
                 hero_service_1.HeroService,
+<<<<<<< HEAD
                 thread_service_1.ThreadService,
+=======
+                forum_posts_service_1.ForumPostsService,
+>>>>>>> develop
             ],
             bootstrap: [app_component_1.AppComponent]
         }), 

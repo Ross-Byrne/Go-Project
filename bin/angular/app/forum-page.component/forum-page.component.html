@@ -3,7 +3,53 @@
     The posts will be injected into this page using the post-partial
     to hold post data.
 -->
+<div id="topOfPage"></div>
 <h1>{{title}}</h1>
 
-<!-- Display the post partial as example -->
-<post-partial></post-partial>
+<!-- Display the post partial as example --> 
+
+<div *ngFor="let post of threadPosts.posts; let i = index" >
+    <!-- 
+        show the post if: index is less then the number of posts
+        allowed per page, plus the starting index AND
+        show a post if the index is greater or equal to the starting index
+        Causes a paging effect
+     -->
+    <div *ngIf="i < startIndex + postsPerPage && i >= startIndex">
+        <post-partial [post]="post"></post-partial>
+    </div>
+</div>
+
+
+
+<!-- Text box to make a post in -->
+
+<div class="row">
+  <div class="col-lg-7 col-md-offset-2">
+
+     <div class="form-group">
+        <label for="post">Make a Post:</label>
+        <textarea placeholder="Enter your awesome post here..." [(ngModel)]="postText" class="form-control" style="resize: none;" rows="4" id="post"></textarea>
+    </div>  
+    
+  </div><!-- /.col-lg-6 -->
+<div class="col-lg-1" style="align-items: center;">
+    
+    <button style="font-size: 2.4em; height: 2.6em; width: 4em; margin-top: 1em;" class="btn btn-primary btn-lg" role="button" (click)="savePost(postText)">Post</button>
+   </div> 
+
+</div><!-- /.row -->
+
+
+<!-- Pager -->
+    <div>
+        <nav class="pull-right">
+            <ul class="pager">
+                <li><button class="btn btn-primary" type="button" (click)="previousPage()">Previous</button></li>
+                <li><button class="btn btn-primary" type="button" (click)="nextPage()">Next</button></li>
+            </ul>
+        </nav>
+    </div>
+
+<div id="bottomOfPage"></div>
+

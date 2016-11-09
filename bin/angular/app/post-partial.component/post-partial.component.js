@@ -10,10 +10,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 // System imports
 var core_1 = require('@angular/core');
+var post_1 = require('../classes/post/post');
 var PostPartialComponent = (function () {
     function PostPartialComponent() {
         this.title = "This is the post partial";
     }
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', post_1.Post)
+    ], PostPartialComponent.prototype, "post", void 0);
     PostPartialComponent = __decorate([
         core_1.Component({
             moduleId: module.id,

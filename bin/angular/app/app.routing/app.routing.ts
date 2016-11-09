@@ -36,10 +36,6 @@ const appRoutes: Routes = [
         component: HeroDetailComponent
     },
     {
-        path: 'detail/:id',
-        component: HeroDetailComponent
-    },
-    {
         path: 'login',
         component: LoginComponent
     },
@@ -68,8 +64,8 @@ const appRoutes: Routes = [
         component: ThreadDetailComponent
     },
     {
-        path: 'posts',
-        component: ForumPageComponent       // just for tests
+        path: 'threads/:id',
+        component: ForumPageComponent       // show the posts for the thread with id = id in address url
     }
 ];
 

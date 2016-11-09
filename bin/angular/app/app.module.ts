@@ -24,6 +24,7 @@ import { ThreadDetailComponent }    from './thread-detail.component/thread-detai
 import { ThreadService }    from './thread-page.component/thread.service';
 import { HeroService }      from './hero.service/hero.service';
 import { routing }          from './app.routing/app.routing';
+import { ForumPostsService }    from './forum-posts.service/forum-posts.service';
 
 @NgModule({
     imports: [
@@ -51,6 +52,7 @@ import { routing }          from './app.routing/app.routing';
     providers: [
         HeroService,
         ThreadService,
+        ForumPostsService,
     ],
     bootstrap: [ AppComponent ]
 })
