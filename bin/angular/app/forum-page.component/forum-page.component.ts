@@ -94,7 +94,11 @@ export class ForumPageComponent {
       // .then(() => {this.nextPage();}) // try go to next page just incase your post ends up on there
 
       // save the post in couchDB
-      this.forumPostsService.createPost(this.threadPosts.threadId, post);
+      var t: ThreadPosts = new ThreadPosts();
+      t.threadId = this.threadPosts.threadId;
+      t.posts.push(post);
+
+      this.forumPostsService.createPost(this.threadPosts.threadId, t);
 
       // clear the post textarea
       this.postText = "";

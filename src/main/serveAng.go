@@ -11,6 +11,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"strings"
+	"bytes"
 )
 
 type Post struct {
@@ -19,6 +20,10 @@ type Post struct {
 	Body string
 	AuthorId string
 	AuthorName string
+}
+
+type Posts struct{
+	Posts []Post
 }
 
 type ThreadPosts struct {
@@ -46,6 +51,44 @@ type Thread struct {
 }
 
 func main() {
+
+	var t Post
+
+	t.Id = 1234
+	t.ThreadId = 1
+	t.Body = "This is the first proper test. Please work thank you, have a nice day."
+	t.AuthorId = "123"
+	t.AuthorName = "Me"
+
+	url := "https://couchdb-e195fb.smileupps.com/posts/_design/post/_update/addPost/a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b"
+    fmt.Println("URL:>", url)
+
+		var j []byte
+		j, err := json.Marshal(t)
+
+		if err != nil {
+			panic(err)
+		}
+
+    var jsonStr = j
+    req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+    req.Header.Set("Content-Type", "application/json")
+		req.SetBasicAuth("admin", "Balloon2016")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        panic(err)
+    }
+    defer resp.Body.Close()
+
+    fmt.Println("response Status:", resp.Status)
+    fmt.Println("response Headers:", resp.Header)
+    body, _ := ioutil.ReadAll(resp.Body)
+    fmt.Println("response Body:", string(body))
+		fmt.Println("Done.")
+
+	//updateDocumentInCouch("a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b", t, "posts/_design/post/_update/addPost/")
 
 	//testing thread stuff
 /*	testThread := Thread{Id: "1", Title: "Title", Author: "Martin", Body: "my thread body", Tags: []string{"tag1", "tag2"}}
@@ -75,6 +118,7 @@ func main() {
 
 	// listen on port and handle connections
 	http.ListenAndServe(":8080", nil)
+
 
 } // main()
 
@@ -112,24 +156,62 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("JSON: " + string(body))
 
 	// make post struct
-	var post Post
+	//var post Post
+	var threadPosts ThreadPosts
 
 	// Unmarshal the JSON into the struct
-	if err = json.Unmarshal(body, &post); err != nil {
+	if err = json.Unmarshal(body, &threadPosts); err != nil {
 		panic(err)
 	}
 
 	// print out details
-	fmt.Println("Post Id:", post.Id)
-	fmt.Println("Post ThreadId:", post.ThreadId)
-	fmt.Println("Post Body:", post.Body)
-	fmt.Println("Post AuthorId:", post.AuthorId)
-	fmt.Println("Post AuthorName:", post.AuthorName)
+	// fmt.Println("Post Id:", post.Id)
+	// fmt.Println("Post ThreadId:", post.ThreadId)
+	// fmt.Println("Post Body:", post.Body)
+	// fmt.Println("Post AuthorId:", post.AuthorId)
+	// fmt.Println("Post AuthorName:", post.AuthorName)
 
 	// save the post to couchDB
-	saveDocumentToCouch(post, "posts")
+	saveDocumentToCouch(threadPosts, "posts")
 
 } // savePostHandler()
+
+func readPost() {
+
+	var timeout = time.Duration(500 * 100000000)
+	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
+	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
+	db := conn.SelectDB("posts", &auth)
+
+	var posts interface{}
+
+	_, err = db.Read("_all_docs", &posts, nil)
+
+	log.Println("Error: ", err)
+
+	fmt.Println(posts)
+
+
+} // readPost()
+
+func addPost() {
+
+	var timeout = time.Duration(500 * 100000000)
+	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
+	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
+	db := conn.SelectDB("posts", &auth)
+
+	var posts ThreadPosts
+	//posts.post
+
+	_, err = db.Read("a7d82b06-1e9e-4316-978b-cc399552106a", &posts, nil)
+
+	log.Println("Error: ", err)
+
+	fmt.Println(posts)
+
+
+} // addPost()
 
 // newUUID generates a random UUID according to RFC 4122
 func newUUID() (string, error) {
@@ -228,3 +310,59 @@ func saveDocumentToCouch(doc interface{}, dbName string){
 	log.Println("Error: ", err)
 
 } // saveDocumentToCouch()
+
+// generic function to save a document to couchDB
+// parameters are, the doc, (eg struct made for documents) and the name of DB as a string
+func updateDocumentInCouch(id string, doc interface{}, dbName string){
+
+	// set timeout
+	var timeout = time.Duration(500 * 100000000)
+
+	// create the connect to couchDB
+	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
+
+	// set authentication
+	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
+
+	// select the DB to save to
+	db := conn.SelectDB(dbName, &auth)
+
+	var dat map[string]interface{}
+
+	_, err = db.Read(id, &dat, nil)
+
+	var revNo = dat["_rev"].(string)
+	var theId = dat["_id"].(string)
+
+	fmt.Println(revNo)
+
+	// set the document
+	theDoc := doc
+
+	// create an ID
+	//theId, err := newUUID() //use whatever method you like to generate a uuid
+
+	//The third argument here would be a revision, if you were updating an existing document
+	if err != nil {
+		fmt.Printf("error: %v\n", err)
+	}
+
+	log.Println("Saving to", dbName)
+
+	// save the document
+	rev, err := db.Save(theDoc, theId, revNo)
+	//If all is well, rev should contain the revision of the newly created
+	//or updated Document
+
+	// log details
+	log.Println("revision: " + rev)
+	log.Println("Error: ", err)
+
+} // saveDocumentToCouch()
+
+func savePost(){
+
+
+
+
+}

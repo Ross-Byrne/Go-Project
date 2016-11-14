@@ -67,7 +67,10 @@ var ForumPageComponent = (function () {
         // .then(() => {this.goToBottomOfPage(10);}) // scroll to bottom of page
         // .then(() => {this.nextPage();}) // try go to next page just incase your post ends up on there
         // save the post in couchDB
-        this.forumPostsService.createPost(this.threadPosts.threadId, post);
+        var t = new thread_posts_1.ThreadPosts();
+        t.threadId = this.threadPosts.threadId;
+        t.posts.push(post);
+        this.forumPostsService.createPost(this.threadPosts.threadId, t);
         // clear the post textarea
         this.postText = "";
     }; // savePost

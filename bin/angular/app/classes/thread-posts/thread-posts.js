@@ -3,6 +3,7 @@
 "use strict";
 var ThreadPosts = (function () {
     function ThreadPosts() {
+        this.posts = []; // the array of posts that are in the thread
     }
     return ThreadPosts;
 }());

@@ -52,7 +52,7 @@ export class ForumPostsService {
 
     // } // addPostByThreadId()
 
-    createPost(id: number, post: Post): Promise<Post> {
+    createPost(id: number, post: ThreadPosts): Promise<Post> {
         // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
 
         let headers = new Headers({ 'Content-Type': 'application/json' });
