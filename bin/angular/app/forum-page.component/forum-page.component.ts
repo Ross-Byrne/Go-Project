@@ -76,10 +76,10 @@ export class ForumPageComponent {
       post.authorId = "ross";
       post.authorName = "Ross";
       post.body = postBody;
-      post.threadId = this.threadPosts.threadId;
-      post.id = this.threadPosts.posts.length + 1;
+      post.threadId = this.threadPosts.threadId; // this will equal thread._id (from couchDB)
+      post.id = 0; // this will be set by couch later
 
-      // add the post to the thread posts object
+      // add the post to the thread posts object (this is temp)
       this.threadPosts.posts.push(post);
 
       // scroll to the bottom of the page (so post can be seen)
@@ -94,11 +94,7 @@ export class ForumPageComponent {
       // .then(() => {this.nextPage();}) // try go to next page just incase your post ends up on there
 
       // save the post in couchDB
-      var t: ThreadPosts = new ThreadPosts();
-      t.threadId = this.threadPosts.threadId;
-      t.posts.push(post);
-
-      this.forumPostsService.createPost(this.threadPosts.threadId, t);
+      this.forumPostsService.createPost(post);
 
       // clear the post textarea
       this.postText = "";

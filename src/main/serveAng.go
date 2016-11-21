@@ -52,29 +52,6 @@ type Thread struct {
 
 func main() {
 
-	// test POST Request
-	var t Post
-
-	t.Id = 1234
-	t.ThreadId = 1
-	t.Body = "This is the first proper test. Please work thank you, have a nice day."
-	t.AuthorId = "123"
-	t.AuthorName = "Me"
-
-	//"https://couchdb-e195fb.smileupps.com/posts/_design/post/_update/addPost/a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b"
-
-	// send the Post request to couch, get the response and then close the response body
-	resp := sendPostRequestToCouch("https://couchdb-e195fb.smileupps.com/posts/_design/post/_update/addPost/a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b", t)
-	defer resp.Body.Close()
-
-	fmt.Println("response Status:", resp.Status)
-	fmt.Println("response Headers:", resp.Header)
-
-	// read the bytes from the response body of POST request
-	body, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println("response Body:", string(body))
-	fmt.Println("Done.")
-
 	//testing thread stuff
 	/*	testThread := Thread{Id: "1", Title: "Title", Author: "Martin", Body: "my thread body", Tags: []string{"tag1", "tag2"}}
 
@@ -148,15 +125,32 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	// print out details
-	// fmt.Println("Post Id:", post.Id)
-	// fmt.Println("Post ThreadId:", post.ThreadId)
-	// fmt.Println("Post Body:", post.Body)
-	// fmt.Println("Post AuthorId:", post.AuthorId)
-	// fmt.Println("Post AuthorName:", post.AuthorName)
-
+	fmt.Println(post.Body)
 	// save the post to couchDB
 	//saveDocumentToCouch(threadPosts, "posts")
+
+
+	//"https://couchdb-e195fb.smileupps.com/posts/_design/post/_update/addPost/a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b"
+
+	// URL vars
+	domainUrl := "https://couchdb-e195fb.smileupps.com/"
+	updatePostUrl := "posts/_design/post/_update/addPost/"
+	threadPostsID := "a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b"
+
+	theUrl := domainUrl + updatePostUrl + threadPostsID
+
+	// send the Post request to couch, get the response and then close the response body
+	resp := sendPostRequestToCouch(theUrl, post)
+	defer resp.Body.Close()
+
+	//fmt.Println("response Status:", resp.Status)
+	//fmt.Println("response Headers:", resp.Header)
+
+	// read the bytes from the response body of POST request
+	body, _ = ioutil.ReadAll(resp.Body)
+
+	fmt.Println("response Body:", string(body))
+	//fmt.Println("Done.")
 
 } // savePostHandler()
 
@@ -177,24 +171,9 @@ func readPost() {
 
 } // readPost()
 
-func addPost() {
-
-	var timeout = time.Duration(500 * 100000000)
-	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
-	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
-	db := conn.SelectDB("posts", &auth)
-
-	var posts ThreadPosts
-	//posts.post
-
-	_, err = db.Read("a7d82b06-1e9e-4316-978b-cc399552106a", &posts, nil)
-
-	log.Println("Error: ", err)
-
-	fmt.Println(posts)
-
-} // addPost()
-
+// theUrl must be full URL including Domain name.
+// doc must be the struct with data being posted in the body
+// MUST close the response body after it is returned! EG. "defer resp.Body.Close()"
 func sendPostRequestToCouch(theUrl string, doc interface{}) (*http.Response) {
 
 	// adapted from the answer on this stackoverflow question:
@@ -336,56 +315,3 @@ func saveDocumentToCouch(doc interface{}, dbName string) {
 	log.Println("Error: ", err)
 
 } // saveDocumentToCouch()
-
-// generic function to save a document to couchDB
-// parameters are, the doc, (eg struct made for documents) and the name of DB as a string
-func updateDocumentInCouch(id string, doc interface{}, dbName string) {
-
-	// set timeout
-	var timeout = time.Duration(500 * 100000000)
-
-	// create the connect to couchDB
-	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
-
-	// set authentication
-	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
-
-	// select the DB to save to
-	db := conn.SelectDB(dbName, &auth)
-
-	var dat map[string]interface{}
-
-	_, err = db.Read(id, &dat, nil)
-
-	var revNo = dat["_rev"].(string)
-	var theId = dat["_id"].(string)
-
-	fmt.Println(revNo)
-
-	// set the document
-	theDoc := doc
-
-	// create an ID
-	//theId, err := newUUID() //use whatever method you like to generate a uuid
-
-	//The third argument here would be a revision, if you were updating an existing document
-	if err != nil {
-		fmt.Printf("error: %v\n", err)
-	}
-
-	log.Println("Saving to", dbName)
-
-	// save the document
-	rev, err := db.Save(theDoc, theId, revNo)
-	//If all is well, rev should contain the revision of the newly created
-	//or updated Document
-
-	// log details
-	log.Println("revision: " + rev)
-	log.Println("Error: ", err)
-
-} // saveDocumentToCouch()
-
-func savePost() {
-
-}

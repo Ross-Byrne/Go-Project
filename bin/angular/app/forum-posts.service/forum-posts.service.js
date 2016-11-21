@@ -44,7 +44,7 @@ var ForumPostsService = (function () {
     //     Promise.resolve(POSTS).then(posts => posts.find(posts => posts.threadId === id).posts.push(post));
     //     return this.getPostsByThreadId(id);
     // } // addPostByThreadId()
-    ForumPostsService.prototype.createPost = function (id, post) {
+    ForumPostsService.prototype.createPost = function (post) {
         // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
         var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         var options = new http_1.RequestOptions({ headers: headers });
