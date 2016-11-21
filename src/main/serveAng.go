@@ -52,6 +52,7 @@ type Thread struct {
 
 func main() {
 
+	// test POST Request
 	var t Post
 
 	t.Id = 1234
@@ -60,6 +61,8 @@ func main() {
 	t.AuthorId = "123"
 	t.AuthorName = "Me"
 
+	// adapted from the answer on this stackoverflow question:
+	// http://stackoverflow.com/questions/24455147/how-do-i-send-a-json-string-in-a-post-request-in-go
 	url := "https://couchdb-e195fb.smileupps.com/posts/_design/post/_update/addPost/a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b"
     fmt.Println("URL:>", url)
 
