@@ -18,4 +18,13 @@ export class ThreadService {
                     .then(threads => threads.find(thread => thread.id === id));
     }
 
+    saveThread(thread: Thread){
+        //create Thread
+        console.log(thread.title);
+        console.log(thread.author);
+        console.log(thread.body);
+        console.log(thread.tags);
+        console.log(thread.id);
+    }
+
 }

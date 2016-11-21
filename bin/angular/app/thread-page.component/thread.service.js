@@ -21,6 +21,14 @@ var ThreadService = (function () {
         return this.getThreads()
             .then(function (threads) { return threads.find(function (thread) { return thread.id === id; }); });
     };
+    ThreadService.prototype.saveThread = function (thread) {
+        //create Thread
+        console.log(thread.title);
+        console.log(thread.author);
+        console.log(thread.body);
+        console.log(thread.tags);
+        console.log(thread.id);
+    };
     ThreadService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [])
