@@ -17,6 +17,7 @@ var ThreadService = (function () {
     function ThreadService(http) {
         this.http = http;
         this.saveThreadURL = 'http://localhost:8080/api/saveThread'; // URL to web api
+        this.getThreadURL = 'http://localhost:8080/api/getThreads';
     }
     ThreadService.prototype.handleError = function (error) {
         // In a real world app, we might use a remote logging infrastructure
@@ -32,9 +33,23 @@ var ThreadService = (function () {
         console.error(errMsg);
         return Promise.reject(errMsg);
     };
+    ThreadService.prototype.extractData = function (res) {
+        var body = res.json();
+        console.log(body);
+        return body || {};
+    };
     // uses a Promise to return threads asynchronously onces they are ready
     ThreadService.prototype.getThreads = function () {
         return Promise.resolve(mock_threads_1.THREADS);
+    };
+    ThreadService.prototype.getThreadsFromCouch = function (thread) {
+        var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+        var options = new http_1.RequestOptions({ headers: headers });
+        return this.http.get(this.getThreadURL, options)
+            .toPromise()
+            .then(this.extractData)
+            .catch(this.handleError);
+        //return Promise.resolve(THREADS);
     };
     ThreadService.prototype.getThread = function (id) {
         return this.getThreads()

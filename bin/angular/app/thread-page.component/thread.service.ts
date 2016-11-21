@@ -11,6 +11,7 @@ export class ThreadService {
     constructor(private http: Http) { }
 
     private saveThreadURL = 'http://localhost:8080/api/saveThread';  // URL to web api
+    private getThreadURL = 'http://localhost:8080/api/getThreads';
 
     private handleError (error: Response | any) {
         // In a real world app, we might use a remote logging infrastructure
@@ -26,11 +27,30 @@ export class ThreadService {
         return Promise.reject(errMsg);
     }
 
+    private extractData(res: Response) {
+        let body = res.json();
+        console.log(body);
+        return body || { };
+}
+
     // uses a Promise to return threads asynchronously onces they are ready
     getThreads(): Promise<Thread[]> {
 
         return Promise.resolve(THREADS);
     }
+
+    getThreadsFromCouch(thread :Thread): Promise<Thread[]> {
+
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+        return this.http.get(this.getThreadURL, options)
+                    .toPromise()
+                    .then(this.extractData)
+                    .catch(this.handleError);
+
+        //return Promise.resolve(THREADS);
+    }
+
 
     getThread(id: number): Promise<Thread> {
         
