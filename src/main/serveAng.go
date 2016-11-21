@@ -1,34 +1,34 @@
 package main
 
 import (
+	"bytes"
 	"crypto/rand"
+	"encoding/json"
 	"fmt"
+	"github.com/rhinoman/couchdb-go"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
-	"time"
-	"github.com/rhinoman/couchdb-go"
-	"encoding/json"
-	"io/ioutil"
 	"strings"
-	"bytes"
+	"time"
 )
 
 type Post struct {
-	Id int
-	ThreadId int
-	Body string
-	AuthorId string
+	Id         int
+	ThreadId   int
+	Body       string
+	AuthorId   string
 	AuthorName string
 }
 
-type Posts struct{
+type Posts struct {
 	Posts []Post
 }
 
 type ThreadPosts struct {
 	ThreadId int
-	Posts []Post
+	Posts    []Post
 }
 
 /*
@@ -61,50 +61,32 @@ func main() {
 	t.AuthorId = "123"
 	t.AuthorName = "Me"
 
-	// adapted from the answer on this stackoverflow question:
-	// http://stackoverflow.com/questions/24455147/how-do-i-send-a-json-string-in-a-post-request-in-go
-	url := "https://couchdb-e195fb.smileupps.com/posts/_design/post/_update/addPost/a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b"
-    fmt.Println("URL:>", url)
+	//"https://couchdb-e195fb.smileupps.com/posts/_design/post/_update/addPost/a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b"
 
-		var j []byte
-		j, err := json.Marshal(t)
+	// send the Post request to couch, get the response and then close the response body
+	resp := sendPostRequestToCouch("https://couchdb-e195fb.smileupps.com/posts/_design/post/_update/addPost/a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b", t)
+	defer resp.Body.Close()
 
-		if err != nil {
-			panic(err)
-		}
+	fmt.Println("response Status:", resp.Status)
+	fmt.Println("response Headers:", resp.Header)
 
-    var jsonStr = j
-    req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
-    req.Header.Set("Content-Type", "application/json")
-		req.SetBasicAuth("admin", "Balloon2016")
-
-    client := &http.Client{}
-    resp, err := client.Do(req)
-    if err != nil {
-        panic(err)
-    }
-    defer resp.Body.Close()
-
-    fmt.Println("response Status:", resp.Status)
-    fmt.Println("response Headers:", resp.Header)
-    body, _ := ioutil.ReadAll(resp.Body)
-    fmt.Println("response Body:", string(body))
-		fmt.Println("Done.")
-
-	//updateDocumentInCouch("a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b", t, "posts/_design/post/_update/addPost/")
+	// read the bytes from the response body of POST request
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println("response Body:", string(body))
+	fmt.Println("Done.")
 
 	//testing thread stuff
-/*	testThread := Thread{Id: "1", Title: "Title", Author: "Martin", Body: "my thread body", Tags: []string{"tag1", "tag2"}}
+	/*	testThread := Thread{Id: "1", Title: "Title", Author: "Martin", Body: "my thread body", Tags: []string{"tag1", "tag2"}}
 
-	log.Println("Doc sent to G0")
-	log.Println(testThread.Title)
-	log.Println(testThread.Author)
-	log.Println(testThread.Body)
-	log.Println(testThread.Id)
-	log.Println(testThread.Tags)
-	log.Println()
+		log.Println("Doc sent to G0")
+		log.Println(testThread.Title)
+		log.Println(testThread.Author)
+		log.Println(testThread.Body)
+		log.Println(testThread.Id)
+		log.Println(testThread.Tags)
+		log.Println()
 
-	saveThread(testThread)*/
+		saveThread(testThread)*/
 	//end thread testing
 
 	// handle for serving resource
@@ -121,7 +103,6 @@ func main() {
 
 	// listen on port and handle connections
 	http.ListenAndServe(":8080", nil)
-
 
 } // main()
 
@@ -160,10 +141,10 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 
 	// make post struct
 	//var post Post
-	var threadPosts ThreadPosts
+	var post Post
 
 	// Unmarshal the JSON into the struct
-	if err = json.Unmarshal(body, &threadPosts); err != nil {
+	if err = json.Unmarshal(body, &post); err != nil {
 		panic(err)
 	}
 
@@ -175,7 +156,7 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 	// fmt.Println("Post AuthorName:", post.AuthorName)
 
 	// save the post to couchDB
-	saveDocumentToCouch(threadPosts, "posts")
+	//saveDocumentToCouch(threadPosts, "posts")
 
 } // savePostHandler()
 
@@ -193,7 +174,6 @@ func readPost() {
 	log.Println("Error: ", err)
 
 	fmt.Println(posts)
-
 
 } // readPost()
 
@@ -213,8 +193,51 @@ func addPost() {
 
 	fmt.Println(posts)
 
-
 } // addPost()
+
+func sendPostRequestToCouch(theUrl string, doc interface{}) (*http.Response) {
+
+	// adapted from the answer on this stackoverflow question:
+	// http://stackoverflow.com/questions/24455147/how-do-i-send-a-json-string-in-a-post-request-in-go
+
+	// set the url
+	url := theUrl
+	fmt.Println("URL:>", url)
+
+	var jsonBytes []byte
+
+	// marshal the struct into json byte array
+	jsonBytes, err := json.Marshal(doc)
+
+	// error checks
+	if err != nil {
+		panic(err)
+	}
+
+	// make POST request, send the struct (as JSON) in the body of post
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBytes))
+
+	// set the Header
+	req.Header.Set("Content-Type", "application/json")
+
+	// set the authentication
+	req.SetBasicAuth("admin", "Balloon2016")
+
+	// create a client
+	client := &http.Client{}
+
+	// send the POST request and get the response
+	resp, err := client.Do(req)
+
+	// check for errors
+	if err != nil {
+		panic(err)
+	}
+
+	// return the resp
+	return resp
+
+} // sendPostRequestToCouch()
 
 // newUUID generates a random UUID according to RFC 4122
 func newUUID() (string, error) {
@@ -276,7 +299,7 @@ func saveThread(t Thread) {
 
 // generic function to save a document to couchDB
 // parameters are, the doc, (eg struct made for documents) and the name of DB as a string
-func saveDocumentToCouch(doc interface{}, dbName string){
+func saveDocumentToCouch(doc interface{}, dbName string) {
 
 	// set timeout
 	var timeout = time.Duration(500 * 100000000)
@@ -316,7 +339,7 @@ func saveDocumentToCouch(doc interface{}, dbName string){
 
 // generic function to save a document to couchDB
 // parameters are, the doc, (eg struct made for documents) and the name of DB as a string
-func updateDocumentInCouch(id string, doc interface{}, dbName string){
+func updateDocumentInCouch(id string, doc interface{}, dbName string) {
 
 	// set timeout
 	var timeout = time.Duration(500 * 100000000)
@@ -363,9 +386,6 @@ func updateDocumentInCouch(id string, doc interface{}, dbName string){
 
 } // saveDocumentToCouch()
 
-func savePost(){
-
-
-
+func savePost() {
 
 }
