@@ -44,6 +44,8 @@ export class ForumPageComponent {
          this.forumPostsService.getPostsByThreadId(id)
            .then(threadPosts => this.threadPosts = threadPosts);         // save the posts object
 
+           
+
       });
     } // ngOnInit()
 
@@ -77,14 +79,26 @@ export class ForumPageComponent {
       post.threadId = this.threadPosts.threadId;
       post.id = this.threadPosts.posts.length + 1;
 
-      this.forumPostsService.addPostByThreadId(this.threadPosts.threadId, post) // add the post to DB
-      .then(threadPosts => this.threadPosts = threadPosts) // update posts on screen
-      .then(() => {this.goToBottomOfPage(10);}) // scroll to bottom of page
-      .then(() => {this.nextPage();}) // try go to next page just incase your post ends up on there
+      // add the post to the thread posts object
+      this.threadPosts.posts.push(post);
+
+      // scroll to the bottom of the page (so post can be seen)
+      this.goToBottomOfPage(10);
+
+      // try to go to the next page incase the post ends up on the next page
+      this.nextPage();
+
+      // this.forumPostsService.addPostByThreadId(this.threadPosts.threadId, post) // add the post to DB
+      // .then(threadPosts => this.threadPosts = threadPosts) // update posts on screen
+      // .then(() => {this.goToBottomOfPage(10);}) // scroll to bottom of page
+      // .then(() => {this.nextPage();}) // try go to next page just incase your post ends up on there
+
+      // save the post in couchDB
+      this.forumPostsService.createPost(this.threadPosts.threadId, post);
 
       // clear the post textarea
       this.postText = "";
-      
+
     } // savePost
 
     goToBottomOfPage(timeout: number): void {

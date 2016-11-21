@@ -32,3 +32,4 @@ vendor/
 *.log
 
 node_modules/
+.vscode/
