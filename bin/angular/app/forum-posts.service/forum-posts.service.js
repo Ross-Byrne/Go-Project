@@ -11,12 +11,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
 require('rxjs/add/operator/toPromise');
-var posts_test_1 = require('../test-data/posts-test');
 var ForumPostsService = (function () {
     function ForumPostsService(http) {
         this.http = http;
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         this.savePostURL = 'http://localhost:8080/api/savePost'; // URL to web api
+        this.getThreadPostsURL = 'http://localhost:8080/api/getThreadPosts'; // URL to web api
     }
     ForumPostsService.prototype.handleError = function (error) {
         // In a real world app, we might use a remote logging infrastructure
@@ -34,23 +34,25 @@ var ForumPostsService = (function () {
     };
     ForumPostsService.prototype.extractData = function (res) {
         var body = res.json();
-        return body.data || {};
+        console.log(body);
+        return body || {};
     };
-    // uses a Promise to return posts asynchronously onces they are ready
     ForumPostsService.prototype.getPostsByThreadId = function (id) {
-        return Promise.resolve(posts_test_1.POSTS).then(function (posts) { return posts.find(function (threadPosts) { return threadPosts.id === id; }); });
+        // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
+        var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+        var options = new http_1.RequestOptions({ headers: headers });
+        return this.http.post(this.getThreadPostsURL, JSON.stringify(id), options)
+            .toPromise()
+            .then(this.extractData)
+            .catch(this.handleError);
     }; // getPostsByThreadId()
-    // addPostByThreadId(id: number, post: Post): Promise<ThreadPosts>{
-    //     Promise.resolve(POSTS).then(posts => posts.find(posts => posts.threadId === id).posts.push(post));
-    //     return this.getPostsByThreadId(id);
-    // } // addPostByThreadId()
     ForumPostsService.prototype.createPost = function (post) {
         // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
         var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         var options = new http_1.RequestOptions({ headers: headers });
         return this.http.post(this.savePostURL, JSON.stringify(post), options)
             .toPromise()
-            .then()
+            .then(this.extractData)
             .catch(this.handleError);
     }; // createPost()
     ForumPostsService = __decorate([
