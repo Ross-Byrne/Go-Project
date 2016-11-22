@@ -90,8 +90,8 @@ export class ThreadPageComponent implements OnInit {
       thread.title = threadTitle;
       thread.body = threadBody;
       thread.tags = splitTags;
-      thread.id = "0"; 
-      thread.threadPostId = "0"; 
+      thread.id = ""; 
+      thread.threadPostId = ""; 
 
 
 
