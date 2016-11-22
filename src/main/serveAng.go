@@ -177,18 +177,29 @@ func saveThreadHandler(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
+
+	//create thread post document
+	//set threadpost id in struct
+
+	theThreadId, err := newUUID() // generate a UUID
+
+	if err != nil {
+		panic(err)
+	}
+
+	thread.Id=theThreadId
+
+	var threadPost ThreadPosts
+
+	threadPost.Posts= []Post{}
+	
+	thread.ThreadPostId=saveDocumentToCouch(threadPost, "posts")
+
 	fmt.Println(thread.Author)
 	fmt.Println(thread.Title)
 	fmt.Println(thread.Author)
 	fmt.Println(thread.Id)
 	fmt.Println(thread.ThreadPostId)
-
-	//create thread post document
-	//set threadpost id in structs
-
-	//var threadPost ThreadPosts
-
-	//thread.ThreadPostId=threadPost.ThreadId;
 
 	// save the thread to couchDB
 	saveDocumentToCouch(thread, "threads")
