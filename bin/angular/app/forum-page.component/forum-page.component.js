@@ -33,7 +33,7 @@ var ForumPageComponent = (function () {
         // for each parameter in the route url
         this.route.params.forEach(function (params) {
             // get the param id
-            var id = +params['id'];
+            var id = params['id'];
             // get the posts from the thread with the id from the url
             _this.forumPostsService.getPostsByThreadId(id)
                 .then(function (threadPosts) { return _this.threadPosts = threadPosts; }); // save the posts object
@@ -54,8 +54,8 @@ var ForumPageComponent = (function () {
         post.authorId = "ross";
         post.authorName = "Ross";
         post.body = postBody;
-        post.threadId = this.threadPosts.threadId; // this will equal thread._id (from couchDB)
-        post.id = 0; // this will be set by couch later
+        post.threadPostId = this.threadPosts.id; // this will equal threadPosts._id (from couchDB)
+        post.id = ""; // this is set on the server
         // add the post to the thread posts object (this is temp)
         this.threadPosts.posts.push(post);
         // scroll to the bottom of the page (so post can be seen)

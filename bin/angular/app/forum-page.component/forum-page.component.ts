@@ -38,7 +38,7 @@ export class ForumPageComponent {
       this.route.params.forEach((params: Params) => {
 
         // get the param id
-        let id = +params['id'];
+        let id = params['id'];
 
         // get the posts from the thread with the id from the url
          this.forumPostsService.getPostsByThreadId(id)
@@ -76,8 +76,8 @@ export class ForumPageComponent {
       post.authorId = "ross";
       post.authorName = "Ross";
       post.body = postBody;
-      post.threadId = this.threadPosts.threadId; // this will equal thread._id (from couchDB)
-      post.id = 0; // this will be set by couch later
+      post.threadPostId = this.threadPosts.id; // this will equal threadPosts._id (from couchDB)
+      post.id = ""; // this is set on the server
 
       // add the post to the thread posts object (this is temp)
       this.threadPosts.posts.push(post);

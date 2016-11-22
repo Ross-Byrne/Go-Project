@@ -6,5 +6,5 @@ var Post = (function () {
     }
     return Post;
 }());
-exports.Post = Post; // ThreadPosts Class
+exports.Post = Post; // Post Class
 //# sourceMappingURL=post.js.map
