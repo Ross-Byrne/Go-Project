@@ -15,11 +15,11 @@ import (
 )
 
 type Post struct {
-	Id         int
-	ThreadId   int
-	Body       string
-	AuthorId   string
-	AuthorName string
+	Id            string
+	ThreadPostId string
+	Body          string
+	AuthorId      string
+	AuthorName    string
 }
 
 type Posts struct {
@@ -27,7 +27,8 @@ type Posts struct {
 }
 
 type ThreadPosts struct {
-	ThreadId int
+	Id       string
+	ThreadId string
 	Posts    []Post
 }
 
@@ -120,17 +121,27 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
+	// set a id for the post
+	theId, err := newUUID() // generate a UUID
+
+	if err != nil {
+		panic(err)
+	}
+
+	post.Id = theId
+
+	fmt.Println(post)
+
 	fmt.Println(post.Body)
 	// save the post to couchDB
 	//saveDocumentToCouch(threadPosts, "posts")
-
 
 	//"https://couchdb-e195fb.smileupps.com/posts/_design/post/_update/addPost/a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b"
 
 	// URL vars
 	domainUrl := "https://couchdb-e195fb.smileupps.com/"
 	updatePostUrl := "posts/_design/post/_update/addPost/"
-	threadPostsID := "a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b"
+	threadPostsID := "a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b" // post.threadPostsId
 
 	theUrl := domainUrl + updatePostUrl + threadPostsID
 
@@ -227,7 +238,7 @@ func readPost() {
 // theUrl must be full URL including Domain name.
 // doc must be the struct with data being posted in the body
 // MUST close the response body after it is returned! EG. "defer resp.Body.Close()"
-func sendPostRequestToCouch(theUrl string, doc interface{}) (*http.Response) {
+func sendPostRequestToCouch(theUrl string, doc interface{}) *http.Response {
 
 	// adapted from the answer on this stackoverflow question:
 	// http://stackoverflow.com/questions/24455147/how-do-i-send-a-json-string-in-a-post-request-in-go
@@ -376,7 +387,7 @@ func saveThread(t Thread) {
 
 // generic function to save a document to couchDB
 // parameters are, the doc, (eg struct made for documents) and the name of DB as a string
-func saveDocumentToCouch(doc interface{}, dbName string) {
+func saveDocumentToCouch(doc interface{}, dbName string) (string) {
 
 	// set timeout
 	var timeout = time.Duration(500 * 100000000)
@@ -411,6 +422,9 @@ func saveDocumentToCouch(doc interface{}, dbName string) {
 	// log details
 	log.Println("revision: " + rev)
 	log.Println("Error: ", err)
+
+	// return the ID of the document created
+	return theId
 
 } // saveDocumentToCouch()
 

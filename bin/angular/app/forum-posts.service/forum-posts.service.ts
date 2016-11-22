@@ -38,9 +38,9 @@ export class ForumPostsService {
 
 
     // uses a Promise to return posts asynchronously onces they are ready
-    getPostsByThreadId(id: number): Promise<ThreadPosts> {
+    getPostsByThreadId(id: string): Promise<ThreadPosts> {
 
-        return Promise.resolve(POSTS).then(posts => posts.find(posts => posts.threadId === id));
+        return Promise.resolve(POSTS).then(posts => posts.find(threadPosts => threadPosts.id === id));
         
     } // getPostsByThreadId()
 
