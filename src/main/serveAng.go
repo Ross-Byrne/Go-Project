@@ -46,6 +46,7 @@ var chttp = http.NewServeMux()
 type Thread struct {
 	Title  string
 	Id     string
+	ThreadPostId string
 	Author string
 	Body   string
 	Tags   []string
@@ -53,19 +54,7 @@ type Thread struct {
 
 func main() {
 
-	//testing thread stuff
-	/*	testThread := Thread{Id: "1", Title: "Title", Author: "Martin", Body: "my thread body", Tags: []string{"tag1", "tag2"}}
-
-		log.Println("Doc sent to G0")
-		log.Println(testThread.Title)
-		log.Println(testThread.Author)
-		log.Println(testThread.Body)
-		log.Println(testThread.Id)
-		log.Println(testThread.Tags)
-		log.Println()
-
-		saveThread(testThread)*/
-	//end thread testing
+	getThreads()
 
 	// handle for serving resource
 	chttp.Handle("/", http.FileServer(http.Dir("./angular")))
@@ -75,6 +64,12 @@ func main() {
 
 	// handler for saving posts made by user to couchDB
 	http.HandleFunc("/api/savePost", savePostHandler)
+
+	// handler for saving posts made by user to couchDB
+	http.HandleFunc("/api/saveThread", saveThreadHandler)
+
+	// handler for saving posts made by user to couchDB
+	http.HandleFunc("/api/getThreads", getThreadHandler)
 
 	// give the user feedback
 	fmt.Println("Listening on port 8080")
@@ -165,6 +160,64 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 
 } // savePostHandler()
 
+// handler for saving posts to couchDB
+func saveThreadHandler(w http.ResponseWriter, r *http.Request) {
+
+	// read all of the bytes from the request body into a byte array
+	body, err := ioutil.ReadAll(r.Body)
+
+	// print out JSON
+	fmt.Println("JSON: " + string(body))
+
+	// make thread struct
+	var thread Thread
+
+	// Unmarshal the JSON into the struct
+	if err = json.Unmarshal(body, &thread); err != nil {
+		panic(err)
+	}
+
+	fmt.Println(thread.Author)
+	fmt.Println(thread.Title)
+	fmt.Println(thread.Author)
+	fmt.Println(thread.Id)
+	fmt.Println(thread.ThreadPostId)
+
+	//create thread post document
+	//set threadpost id in structs
+
+	//var threadPost ThreadPosts
+
+	//thread.ThreadPostId=threadPost.ThreadId;
+
+	// save the thread to couchDB
+	saveDocumentToCouch(thread, "threads")
+
+
+	//"https://couchdb-e195fb.smileupps.com/posts/_design/post/_update/addPost/a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b"
+
+	/*// URL vars
+	domainUrl := "https://couchdb-e195fb.smileupps.com/"
+	threadUrl := "threads/"*/
+	
+
+	/*theUrl := domainUrl + threadUrl*/
+
+	// send the Post request to couch, get the response and then close the response body
+	/*resp := sendThreadRequestToCouch(theUrl, thread)
+	defer resp.Body.Close()*/
+
+	//fmt.Println("response Status:", resp.Status)
+	//fmt.Println("response Headers:", resp.Header)
+
+	// read the bytes from the response body of POST request
+	/*body, _ = ioutil.ReadAll(resp.Body)
+
+	fmt.Println("response Body:", string(body))
+	//fmt.Println("Done.")*/
+
+} // savePostHandler()
+
 func readPost() {
 
 	var timeout = time.Duration(500 * 100000000)
@@ -228,6 +281,51 @@ func sendPostRequestToCouch(theUrl string, doc interface{}) *http.Response {
 	return resp
 
 } // sendPostRequestToCouch()
+
+func sendThreadRequestToCouch(theUrl string, doc interface{}) (*http.Response) {
+
+	// adapted from the answer on this stackoverflow question:
+	// http://stackoverflow.com/questions/24455147/how-do-i-send-a-json-string-in-a-post-request-in-go
+
+	// set the url
+	url := theUrl
+	fmt.Println("URL:>", url)
+
+	var jsonBytes []byte
+
+	// marshal the struct into json byte array
+	jsonBytes, err := json.Marshal(doc)
+
+	// error checks
+	if err != nil {
+		panic(err)
+	}
+
+	// make POST request, send the struct (as JSON) in the body of post
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBytes))
+
+	// set the Header
+	req.Header.Set("Content-Type", "application/json")
+
+	// set the authentication
+	req.SetBasicAuth("admin", "Balloon2016")
+
+	// create a client
+	client := &http.Client{}
+
+	// send the POST request and get the response
+	resp, err := client.Do(req)
+
+	// check for errors
+	if err != nil {
+		panic(err)
+	}
+
+	// return the resp
+	return resp
+
+} // sendThreadRequestToCouch()
+
 
 // newUUID generates a random UUID according to RFC 4122
 func newUUID() (string, error) {
@@ -329,3 +427,36 @@ func saveDocumentToCouch(doc interface{}, dbName string) (string) {
 	return theId
 
 } // saveDocumentToCouch()
+
+func getThreads() {
+
+	/*var timeout = time.Duration(500 * 100000000)
+	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
+	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
+	db := conn.SelectDB("threads", &auth)
+
+	var threads interface{}
+	var threads interface{}
+	var string[] threadsArray
+
+	_, err = db.Read("_all_docs", &threads, nil)
+
+	log.Println("Error: ", err)
+
+	fmt.Println(threadsArray[0])
+
+	_, err = db.ReadMultiple(threadsArray, &threads)
+
+	log.Println("Error: ", err)
+
+	fmt.Println(threads)*/
+
+} // getThreads()
+
+func getThreadHandler(w http.ResponseWriter, r *http.Request) {
+
+	
+
+
+	
+} // savePostHandler()

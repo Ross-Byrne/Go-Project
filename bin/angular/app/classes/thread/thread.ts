@@ -1,8 +1,9 @@
 export class Thread {
 
-  id: number;
-  author: string;
   title: string;
+  id: string;
+  threadPostId: string;
+  author: string;
   body: string;
   tags: string[];
   
