@@ -43,7 +43,7 @@ export class ThreadPageComponent implements OnInit {
     }
 
     gotoDetail(thread: Thread): void {
-        let link = ['/threads', thread.id];
+        let link = ['/threads', thread.ThreadPostId];
         this.router.navigate(link);
     }
 
@@ -86,26 +86,24 @@ export class ThreadPageComponent implements OnInit {
       var thread: Thread = new Thread();
       var splitTags=threadTags.split(",");
 
-      thread.author = "Martin";
-      thread.title = threadTitle;
-      thread.body = threadBody;
-      thread.tags = splitTags;
-      thread.id = ""; 
-      thread.threadPostId = ""; 
+      thread.Author = "Martin";
+      thread.Title = threadTitle;
+      thread.Body = threadBody;
+      thread.Tags = splitTags;
+      thread.Id = ""; 
+      thread.ThreadPostId = ""; 
 
 
 
       // add the thread to the threads object (this is temp)
-      this.threads.push(thread);
+      //this.threads.push(thread);
 
-      // scroll to the bottom of the page (so thread can be seen)
-      this.goToBottomOfPage(10);
-
-      // try to go to the last page
-      this.lastPage();
 
       // save in couchDB
-      this.threadService.saveThread(thread);
+      this.threadService.saveThread(thread)
+        .then(thread => this.threads.push(thread))
+        .then(() => {this.goToBottomOfPage(10);}) // scroll to the bottom of the page (so thread can be seen)
+        .then(() => {this.lastPage();}); // try to go to the last page
 
       // clear
       this.threadTitle = "";

@@ -57,25 +57,25 @@ var ThreadService = (function () {
     }*/
     ThreadService.prototype.saveThreadTest = function (thread) {
         //create Thread
-        console.log(thread.title);
-        console.log(thread.author);
-        console.log(thread.body);
-        console.log(thread.tags);
-        console.log(thread.id);
+        // console.log(thread.title);
+        // console.log(thread.author);
+        // console.log(thread.body);
+        // console.log(thread.tags);
+        // console.log(thread.id);
     };
     ThreadService.prototype.saveThread = function (thread) {
         // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
-        console.log(thread.title);
-        console.log(thread.author);
-        console.log(thread.body);
-        console.log(thread.tags);
-        console.log(thread.id);
-        console.log(thread.threadPostId);
+        // console.log(thread.title);
+        // console.log(thread.author);
+        // console.log(thread.body);
+        // console.log(thread.tags);
+        // console.log(thread.id);
+        // console.log(thread.threadPostId);
         var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         var options = new http_1.RequestOptions({ headers: headers });
         return this.http.post(this.saveThreadURL, JSON.stringify(thread), options)
             .toPromise()
-            .then()
+            .then(this.extractData)
             .catch(this.handleError);
     }; // saveThread()
     ThreadService = __decorate([

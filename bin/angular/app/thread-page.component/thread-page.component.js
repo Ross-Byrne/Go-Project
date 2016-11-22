@@ -35,7 +35,7 @@ var ThreadPageComponent = (function () {
             .then(function (threads) { return _this.threads = threads; });
     };
     ThreadPageComponent.prototype.gotoDetail = function (thread) {
-        var link = ['/threads', thread.id];
+        var link = ['/threads', thread.ThreadPostId];
         this.router.navigate(link);
     };
     ThreadPageComponent.prototype.nextPage = function () {
@@ -63,22 +63,22 @@ var ThreadPageComponent = (function () {
     }; // goToTopOfPage()
     ThreadPageComponent.prototype.saveThread = function (threadTitle, threadBody, threadTags) {
         //add validation to avoid blank posts
+        var _this = this;
         var thread = new thread_1.Thread();
         var splitTags = threadTags.split(",");
-        thread.author = "Martin";
-        thread.title = threadTitle;
-        thread.body = threadBody;
-        thread.tags = splitTags;
-        thread.id = "0";
-        thread.threadPostId = "0";
+        thread.Author = "Martin";
+        thread.Title = threadTitle;
+        thread.Body = threadBody;
+        thread.Tags = splitTags;
+        thread.Id = "";
+        thread.ThreadPostId = "";
         // add the thread to the threads object (this is temp)
-        this.threads.push(thread);
-        // scroll to the bottom of the page (so thread can be seen)
-        this.goToBottomOfPage(10);
-        // try to go to the last page
-        this.lastPage();
+        //this.threads.push(thread);
         // save in couchDB
-        this.threadService.saveThread(thread);
+        this.threadService.saveThread(thread)
+            .then(function (thread) { return _this.threads.push(thread); })
+            .then(function () { _this.goToBottomOfPage(10); }) // scroll to the bottom of the page (so thread can be seen)
+            .then(function () { _this.lastPage(); }); // try to go to the last page
         // clear
         this.threadTitle = "";
         this.threadBody = "";

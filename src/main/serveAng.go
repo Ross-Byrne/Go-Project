@@ -270,7 +270,7 @@ func saveThreadHandler(w http.ResponseWriter, r *http.Request) {
 	var threadPost ThreadPosts
 
 	threadPost.Posts= []Post{}
-	
+
 	thread.ThreadPostId=saveDocumentToCouch(threadPost, "posts")
 
 	fmt.Println(thread.Author)
@@ -282,26 +282,20 @@ func saveThreadHandler(w http.ResponseWriter, r *http.Request) {
 	// save the thread to couchDB
 	saveDocumentToCouch(thread, "threads")
 
-	//"https://couchdb-e195fb.smileupps.com/posts/_design/post/_update/addPost/a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b"
+	var jsonBytes []byte
 
-	/*// URL vars
-	domainUrl := "https://couchdb-e195fb.smileupps.com/"
-	threadUrl := "threads/"*/
+	// marshal the struct into json byte array
+	jsonBytes, err = json.Marshal(thread)
 
-	/*theUrl := domainUrl + threadUrl*/
+	// error checks
+	if err != nil {
+		panic(err)
+	}
 
-	// send the Post request to couch, get the response and then close the response body
-	/*resp := sendThreadRequestToCouch(theUrl, thread)
-	defer resp.Body.Close()*/
-
-	//fmt.Println("response Status:", resp.Status)
-	//fmt.Println("response Headers:", resp.Header)
-
-	// read the bytes from the response body of POST request
-	/*body, _ = ioutil.ReadAll(resp.Body)
-
-	fmt.Println("response Body:", string(body))
-	//fmt.Println("Done.")*/
+	// Write content-type, statuscode, payload
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	fmt.Fprintf(w, string(jsonBytes))
 
 } // savePostHandler()
 
