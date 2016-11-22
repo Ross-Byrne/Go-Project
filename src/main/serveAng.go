@@ -45,6 +45,7 @@ var chttp = http.NewServeMux()
 type Thread struct {
 	Title  string
 	Id     string
+	ThreadPostId string
 	Author string
 	Body   string
 	Tags   []string
@@ -52,19 +53,7 @@ type Thread struct {
 
 func main() {
 
-	//testing thread stuff
-	/*	testThread := Thread{Id: "1", Title: "Title", Author: "Martin", Body: "my thread body", Tags: []string{"tag1", "tag2"}}
-
-		log.Println("Doc sent to G0")
-		log.Println(testThread.Title)
-		log.Println(testThread.Author)
-		log.Println(testThread.Body)
-		log.Println(testThread.Id)
-		log.Println(testThread.Tags)
-		log.Println()
-
-		saveThread(testThread)*/
-	//end thread testing
+	getThreads()
 
 	// handle for serving resource
 	chttp.Handle("/", http.FileServer(http.Dir("./angular")))
@@ -77,6 +66,9 @@ func main() {
 
 	// handler for saving posts made by user to couchDB
 	http.HandleFunc("/api/saveThread", saveThreadHandler)
+
+	// handler for saving posts made by user to couchDB
+	http.HandleFunc("/api/getThreads", getThreadHandler)
 
 	// give the user feedback
 	fmt.Println("Listening on port 8080")
@@ -177,32 +169,41 @@ func saveThreadHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(thread.Author)
 	fmt.Println(thread.Title)
 	fmt.Println(thread.Author)
+	fmt.Println(thread.Id)
+	fmt.Println(thread.ThreadPostId)
+
+	//create thread post document
+	//set threadpost id in structs
+
+	//var threadPost ThreadPosts
+
+	//thread.ThreadPostId=threadPost.ThreadId;
 
 	// save the thread to couchDB
-	//saveDocumentToCouch(thread, "threads")
+	saveDocumentToCouch(thread, "threads")
 
 
 	//"https://couchdb-e195fb.smileupps.com/posts/_design/post/_update/addPost/a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b"
 
-	// URL vars
+	/*// URL vars
 	domainUrl := "https://couchdb-e195fb.smileupps.com/"
-	threadUrl := "threads/"
+	threadUrl := "threads/"*/
 	
 
-	theUrl := domainUrl + threadUrl
+	/*theUrl := domainUrl + threadUrl*/
 
 	// send the Post request to couch, get the response and then close the response body
-	resp := sendThreadRequestToCouch(theUrl, thread)
-	defer resp.Body.Close()
+	/*resp := sendThreadRequestToCouch(theUrl, thread)
+	defer resp.Body.Close()*/
 
 	//fmt.Println("response Status:", resp.Status)
 	//fmt.Println("response Headers:", resp.Header)
 
 	// read the bytes from the response body of POST request
-	body, _ = ioutil.ReadAll(resp.Body)
+	/*body, _ = ioutil.ReadAll(resp.Body)
 
 	fmt.Println("response Body:", string(body))
-	//fmt.Println("Done.")
+	//fmt.Println("Done.")*/
 
 } // savePostHandler()
 
@@ -412,3 +413,36 @@ func saveDocumentToCouch(doc interface{}, dbName string) {
 	log.Println("Error: ", err)
 
 } // saveDocumentToCouch()
+
+func getThreads() {
+
+	/*var timeout = time.Duration(500 * 100000000)
+	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
+	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
+	db := conn.SelectDB("threads", &auth)
+
+	var threads interface{}
+	var threads interface{}
+	var string[] threadsArray
+
+	_, err = db.Read("_all_docs", &threads, nil)
+
+	log.Println("Error: ", err)
+
+	fmt.Println(threadsArray[0])
+
+	_, err = db.ReadMultiple(threadsArray, &threads)
+
+	log.Println("Error: ", err)
+
+	fmt.Println(threads)*/
+
+} // getThreads()
+
+func getThreadHandler(w http.ResponseWriter, r *http.Request) {
+
+	
+
+
+	
+} // savePostHandler()

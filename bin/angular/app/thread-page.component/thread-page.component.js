@@ -27,6 +27,7 @@ var ThreadPageComponent = (function () {
     }
     ThreadPageComponent.prototype.toggle = function () {
         this.opened = !this.opened;
+        this.goToBottomOfPage(10);
     };
     ThreadPageComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -68,7 +69,8 @@ var ThreadPageComponent = (function () {
         thread.title = threadTitle;
         thread.body = threadBody;
         thread.tags = splitTags;
-        thread.id = 0;
+        thread.id = "0";
+        thread.threadPostId = "0";
         // add the thread to the threads object (this is temp)
         this.threads.push(thread);
         // scroll to the bottom of the page (so thread can be seen)

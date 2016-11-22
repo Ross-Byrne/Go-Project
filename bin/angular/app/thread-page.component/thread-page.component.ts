@@ -32,6 +32,7 @@ export class ThreadPageComponent implements OnInit {
     opened: Boolean = false;
     toggle () {
       this.opened = !this.opened;
+      this.goToBottomOfPage(10);
     }
 
 
@@ -89,7 +90,8 @@ export class ThreadPageComponent implements OnInit {
       thread.title = threadTitle;
       thread.body = threadBody;
       thread.tags = splitTags;
-      thread.id = 0; 
+      thread.id = "0"; 
+      thread.threadPostId = "0"; 
 
 
 
