@@ -23,6 +23,7 @@ var ForumPageComponent = (function () {
         this.title = "Thread Name"; // thread name
         //thread: Thread;
         this.threadPosts = new thread_posts_1.ThreadPosts(); // initialise object
+        this.threadPostsId = "";
         // text for post
         this.postText = "";
         this.startIndex = 0; // starting index of displayed posts
@@ -32,15 +33,16 @@ var ForumPageComponent = (function () {
         var _this = this;
         // for each parameter in the route url
         this.route.params.forEach(function (params) {
-            // get the param id
+            // get the param id (this is the threadPostId)
             var id = params['id'];
+            _this.threadPostsId = id;
             // get the posts from the thread with the id from the url
             _this.forumPostsService.getPostsByThreadId(id)
                 .then(function (threadPosts) { return _this.threadPosts = threadPosts; }); // save the posts object
         });
     }; // ngOnInit()
     ForumPageComponent.prototype.nextPage = function () {
-        if (this.startIndex < this.threadPosts.posts.length - this.postsPerPage) {
+        if (this.startIndex < this.threadPosts.Posts.length - this.postsPerPage) {
             this.startIndex++;
         } // if;
     }; // nextPage()
@@ -50,24 +52,24 @@ var ForumPageComponent = (function () {
         } // if
     }; // previousPage()
     ForumPageComponent.prototype.savePost = function (postBody) {
+        var _this = this;
         var post = new post_1.Post();
-        post.authorId = "ross";
-        post.authorName = "Ross";
-        post.body = postBody;
-        post.threadPostId = this.threadPosts.id; // this will equal threadPosts._id (from couchDB)
-        post.id = ""; // this is set on the server
+        post.AuthorId = "ross";
+        post.AuthorName = "Ross";
+        post.Body = postBody;
+        post.ThreadPostId = this.threadPostsId; // this equals threadPosts._id (from couchDB)(used for saving)
+        post.Id = ""; // this is set on the server
         // add the post to the thread posts object (this is temp)
-        this.threadPosts.posts.push(post);
+        //this.threadPosts.Posts.push(post);
         // scroll to the bottom of the page (so post can be seen)
-        this.goToBottomOfPage(10);
+        // this.goToBottomOfPage(10);
         // try to go to the next page incase the post ends up on the next page
-        this.nextPage();
-        // this.forumPostsService.addPostByThreadId(this.threadPosts.threadId, post) // add the post to DB
-        // .then(threadPosts => this.threadPosts = threadPosts) // update posts on screen
-        // .then(() => {this.goToBottomOfPage(10);}) // scroll to bottom of page
-        // .then(() => {this.nextPage();}) // try go to next page just incase your post ends up on there
-        // save the post in couchDB
-        this.forumPostsService.createPost(post);
+        //this.nextPage();
+        this.forumPostsService.createPost(post) // save the post in couchDB
+            .then(function (threadPosts) { return _this.threadPosts = threadPosts; }) // update posts on screen
+            .then(function () { _this.goToBottomOfPage(10); }) // scroll to bottom of page
+            .then(function () { _this.nextPage(); }); // try go to next page just incase your post ends up on there
+        // this.forumPostsService.createPost(post);
         // clear the post textarea
         this.postText = "";
     }; // savePost

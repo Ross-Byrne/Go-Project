@@ -27,8 +27,8 @@ export class ThreadDetailComponent implements OnInit {
     ngOnInit(): void {
       this.route.params.forEach((params: Params) => {
         let id = +params['id'];
-        this.threadService.getThread(id)
-          .then(thread => this.thread = thread);
+        //this.threadService.getThreads()
+          //.then(thread => this.thread = thread);
       });
     }
 

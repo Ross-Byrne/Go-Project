@@ -20,11 +20,10 @@ var ThreadDetailComponent = (function () {
         this.location = location;
     }
     ThreadDetailComponent.prototype.ngOnInit = function () {
-        var _this = this;
         this.route.params.forEach(function (params) {
             var id = +params['id'];
-            _this.threadService.getThread(id)
-                .then(function (thread) { return _this.thread = thread; });
+            //this.threadService.getThreads()
+            //.then(thread => this.thread = thread);
         });
     };
     ThreadDetailComponent.prototype.goBack = function () {
