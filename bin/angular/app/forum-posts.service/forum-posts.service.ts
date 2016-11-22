@@ -29,37 +29,38 @@ export class ForumPostsService {
     private headers = new Headers({'Content-Type': 'application/json'});
 
     private savePostURL = 'http://localhost:8080/api/savePost';  // URL to web api
+    private getThreadPostsURL = 'http://localhost:8080/api/getThreadPosts';  // URL to web api
 
     private extractData(res: Response) {
         let body = res.json();
-        return body.data || { };
+
+        console.log(body);
+        return body || { };
     
     }
 
 
-    // uses a Promise to return posts asynchronously onces they are ready
     getPostsByThreadId(id: string): Promise<ThreadPosts> {
+        // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
 
-        return Promise.resolve(POSTS).then(posts => posts.find(threadPosts => threadPosts.id === id));
-        
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+        return this.http.post(this.getThreadPostsURL, JSON.stringify(id), options)
+                    .toPromise()
+                    .then(this.extractData)
+                    .catch(this.handleError);
+
     } // getPostsByThreadId()
 
-    // addPostByThreadId(id: number, post: Post): Promise<ThreadPosts>{
 
-    //     Promise.resolve(POSTS).then(posts => posts.find(posts => posts.threadId === id).posts.push(post));
-
-    //     return this.getPostsByThreadId(id);
-
-    // } // addPostByThreadId()
-
-    createPost(post: Post): Promise<Post> {
+    createPost(post: Post): Promise<ThreadPosts> {
         // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
 
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         return this.http.post(this.savePostURL, JSON.stringify(post), options)
                     .toPromise()
-                    .then()
+                    .then(this.extractData)
                     .catch(this.handleError);
 
     } // createPost()

@@ -13,15 +13,13 @@
             <div class="panel-body">
                 <div class="media">
                     <div class="media-left">
-                        <a href="">
                         <img class="media-object" src="/assets/img/profile.png" alt="Profile Image" style="width: 5em;">
-                        </a>
-                        {{thread.author}}
+                        {{thread.Author}}
                     </div>
                     <div class="media-body" (click)="gotoDetail(thread)">
-                        {{thread.title}}
+                        {{thread.Title}}
                         <br>
-                        {{thread.body}}
+                        {{thread.Body}}
                     </div>
                 </div> 
             </div>

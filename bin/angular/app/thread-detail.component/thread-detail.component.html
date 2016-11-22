@@ -1,20 +1,20 @@
 <div *ngIf="thread">
-    <h2>{{thread?.title}}</h2>
+    <h2>{{thread.Title}}</h2>
     <div>
-    <label>id: </label>{{thread?.id}}</div>
+    <label>id: </label>{{thread?.Id}}</div>
     <div>
-    <label>author: </label>{{thread?.author}}</div>
+    <label>author: </label>{{thread?.Author}}</div>
     </div>
     <div>
     <!--<label>posts: </label>{{thread?.posts}}</div>-->
     <ul>
         <!--<li *ngFor="let post of thread?.posts">-->
-            {{ body }}
+            {{ Body }}
         <!--</li>-->
     </ul>
     <div>
     <div>
-    <label>tags: </label>{{thread?.tags}}</div>
+    <label>tags: </label>{{thread?.Tags}}</div>
     <div>
     <button (click)="goBack()">Back</button>
 </div>

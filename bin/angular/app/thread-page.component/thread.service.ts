@@ -60,28 +60,28 @@ export class ThreadService {
 
     saveThreadTest(thread: Thread){
         //create Thread
-        console.log(thread.title);
-        console.log(thread.author);
-        console.log(thread.body);
-        console.log(thread.tags);
-        console.log(thread.id);
+        // console.log(thread.title);
+        // console.log(thread.author);
+        // console.log(thread.body);
+        // console.log(thread.tags);
+        // console.log(thread.id);
     }
 
     saveThread(thread: Thread): Promise<Thread> {
         // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
 
-        console.log(thread.title);
-        console.log(thread.author);
-        console.log(thread.body);
-        console.log(thread.tags);
-        console.log(thread.id);
-        console.log(thread.threadPostId);
+        // console.log(thread.title);
+        // console.log(thread.author);
+        // console.log(thread.body);
+        // console.log(thread.tags);
+        // console.log(thread.id);
+        // console.log(thread.threadPostId);
 
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         return this.http.post(this.saveThreadURL, JSON.stringify(thread), options)
                     .toPromise()
-                    .then()
+                    .then(this.extractData)
                     .catch(this.handleError);
 
     } // saveThread()
