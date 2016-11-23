@@ -76,9 +76,14 @@ var ThreadPageComponent = (function () {
         //this.threads.push(thread);
         // save in couchDB
         this.threadService.saveThread(thread)
-            .then(function (thread) { return _this.threads.push(thread); })
+            .then(function () {
+            _this.threadService.getThreads()
+                .then(function (threads) { return _this.threads = threads; });
+        })
             .then(function () { _this.goToBottomOfPage(10); }) // scroll to the bottom of the page (so thread can be seen)
             .then(function () { _this.lastPage(); }); // try to go to the last page
+        this.threadService.getThreads()
+            .then(function (threads) { return _this.threads = threads; });
         // clear
         this.threadTitle = "";
         this.threadBody = "";

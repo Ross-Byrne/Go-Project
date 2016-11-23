@@ -42,17 +42,27 @@ type ThreadPosts struct {
 var chttp = http.NewServeMux()
 
 type Thread struct {
-	Title        string
-	Id           string
-	ThreadPostId string
-	Author       string
-	Body         string
-	Tags         []string
+	Title        string`json:"Title"`
+	Id           string`json:"Id"`
+	ThreadPostId string`json:"ThreadPostId"`
+	Author       string`json:"Author"`
+	Body         string`json:"Body"`
+	Tags         []string`json:"Tags"`
+}
+
+type Row struct {
+	Id           string`json:"id"`
+	Doc           Thread`json:"doc"`
+}
+
+
+type ThreadRows struct {
+	Total_rows  int `json:"total_rows"`
+	//Offset 		int `json:"offset"`
+	Rows		[]Row `json:"rows"`
 }
 
 func main() {
-
-	getThreads()
 
 	// handle for serving resource
 	chttp.Handle("/", http.FileServer(http.Dir("./angular")))
@@ -508,38 +518,66 @@ func saveDocumentToCouch(doc interface{}, dbName string) string {
 
 } // saveDocumentToCouch()
 
-func getThreads() {
+func getThreadId() ([]string) {
 
 	var timeout = time.Duration(500 * 100000000)
 	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
 	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
 	db := conn.SelectDB("threads", &auth)
 
-	var threadID interface{}
+	var rows ThreadRows
 	
-	
-	//var string[] threadsArray
-
-	_, err = db.Read("_all_docs", &threadID, nil)
+	_, err = db.Read("_all_docs", &rows, nil)
 
 	log.Println("Error: ", err)
 
-	fmt.Println(threadID)
 
-	//m := map[string]string{ threadID };
+	idArray := make([]string,rows.Total_rows)
 
-	// for k, v := range m { 
-    // 	fmt.Printf("key[%s] value[%s]\n", k, v)
-	// }	
-
-	// _, err = db.ReadMultiple(threadsArray, &threads)
-
-	// log.Println("Error: ", err)
-
-	// fmt.Println(threads)
+	for i := 0; i < rows.Total_rows; i++ {
+		idArray[i]=rows.Rows[i].Id
+	}
+	
+	return idArray
 
 } // getThreads()
 
 func getThreadHandler(w http.ResponseWriter, r *http.Request) {
 
-} // savePostHandler()
+	threadIds:=getThreadId()
+
+	var timeout = time.Duration(500 * 100000000)
+	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
+	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
+	db := conn.SelectDB("threads", &auth)
+
+	var rows ThreadRows 
+	
+	err = db.ReadMultiple(threadIds, &rows)
+
+	log.Println("Error: ", err)
+
+	threadsArray := make([]Thread,rows.Total_rows)
+
+	for i := 0; i < rows.Total_rows; i++ {
+		threadsArray[i]=rows.Rows[i].Doc
+	}
+
+	fmt.Println(threadsArray)
+
+	var jsonBytes []byte
+
+	// marshal the struct into json byte array
+	jsonBytes, err = json.Marshal(threadsArray)
+
+	// error checks
+	if err != nil {
+		panic(err)
+	}
+
+	// Write content-type, statuscode, payload
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	fmt.Fprintf(w, string(jsonBytes))
+
+} // getThreadHandler()

@@ -15,7 +15,7 @@ require('rxjs/add/operator/map');
 var AuthenticationService = (function () {
     function AuthenticationService(http) {
         this.http = http;
-        this.authURL = 'http://localhost:8080//api/authenticate';
+        this.authURL = 'http://localhost:8080/api/authenticate';
     }
     AuthenticationService.prototype.login = function (username, password) {
         return this.http.post(this.authURL, JSON.stringify({ username: username, password: password }))

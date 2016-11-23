@@ -34,7 +34,7 @@ var LoginComponent = (function () {
             _this.router.navigate(['/']);
         }, function (error) {
             //log or display error
-            console.log(error);
+            console.log("Unable to login: " + error);
             _this.loading = false;
         });
     };

@@ -32,7 +32,7 @@ export class SignUpComponent {
                     this.router.navigate(['/login']);
                 },
                 error => {
-                    console.log(error);
+                    console.log("Unable to signup: "+error);
                     this.loading = false;
                 });
     }

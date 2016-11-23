@@ -9,7 +9,7 @@ import 'rxjs/add/operator/map'
 export class AuthenticationService {
     constructor(private http: Http) { }
 
-    private authURL = 'http://localhost:8080//api/authenticate';
+    private authURL = 'http://localhost:8080/api/authenticate';
  
     login(username: string, password: string) {
         return this.http.post(this.authURL, JSON.stringify({ username: username, password: password }))

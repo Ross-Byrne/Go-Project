@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
 require('rxjs/add/operator/toPromise');
-var mock_threads_1 = require('../mock-threads');
 var ThreadService = (function () {
     function ThreadService(http) {
         this.http = http;
@@ -38,17 +37,17 @@ var ThreadService = (function () {
         return body || {};
     };
     // uses a Promise to return threads asynchronously onces they are ready
+    /*getThreads(): Promise<Thread[]> {
+
+        return Promise.resolve(THREADS);
+    }*/
     ThreadService.prototype.getThreads = function () {
-        return Promise.resolve(mock_threads_1.THREADS);
-    };
-    ThreadService.prototype.getThreadsFromCouch = function (thread) {
         var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         var options = new http_1.RequestOptions({ headers: headers });
         return this.http.get(this.getThreadURL, options)
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);
-        //return Promise.resolve(THREADS);
     };
     /*getThread(id: number): Promise<Thread> {
         
@@ -65,18 +64,14 @@ var ThreadService = (function () {
     };
     ThreadService.prototype.saveThread = function (thread) {
         // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
-        // console.log(thread.title);
-        // console.log(thread.author);
-        // console.log(thread.body);
-        // console.log(thread.tags);
-        // console.log(thread.id);
-        // console.log(thread.threadPostId);
         var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         var options = new http_1.RequestOptions({ headers: headers });
         return this.http.post(this.saveThreadURL, JSON.stringify(thread), options)
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);
+        //add if extractData fine
+        //return this.getThreads();
     }; // saveThread()
     ThreadService = __decorate([
         core_1.Injectable(), 

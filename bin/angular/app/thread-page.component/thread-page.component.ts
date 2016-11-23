@@ -93,17 +93,17 @@ export class ThreadPageComponent implements OnInit {
       thread.Id = ""; 
       thread.ThreadPostId = ""; 
 
-
-
-      // add the thread to the threads object (this is temp)
-      //this.threads.push(thread);
-
-
       // save in couchDB
       this.threadService.saveThread(thread)
-        .then(thread => this.threads.push(thread))
+        
+        .then(() => {this.threadService.getThreads()
+        .then(threads => this.threads = threads);})
         .then(() => {this.goToBottomOfPage(10);}) // scroll to the bottom of the page (so thread can be seen)
         .then(() => {this.lastPage();}); // try to go to the last page
+
+
+        this.threadService.getThreads()
+           .then(threads => this.threads = threads);
 
       // clear
       this.threadTitle = "";
