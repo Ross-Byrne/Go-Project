@@ -72,8 +72,6 @@ var ThreadPageComponent = (function () {
         thread.Tags = splitTags;
         thread.Id = "";
         thread.ThreadPostId = "";
-        // add the thread to the threads object (this is temp)
-        //this.threads.push(thread);
         // save in couchDB
         this.threadService.saveThread(thread)
             .then(function () {
