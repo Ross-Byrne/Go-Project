@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
                 },
                 error => {
                   //log or display error
-                    console.log(error);
+                    console.log("Unable to login: "+error);
                     this.loading = false;
                 });
     }

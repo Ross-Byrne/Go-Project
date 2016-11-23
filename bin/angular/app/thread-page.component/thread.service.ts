@@ -33,13 +33,7 @@ export class ThreadService {
         return body || { };
 }
 
-    // uses a Promise to return threads asynchronously onces they are ready
     getThreads(): Promise<Thread[]> {
-
-        return Promise.resolve(THREADS);
-    }
-
-    getThreadsFromCouch(thread :Thread): Promise<Thread[]> {
 
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
@@ -48,15 +42,7 @@ export class ThreadService {
                     .then(this.extractData)
                     .catch(this.handleError);
 
-        //return Promise.resolve(THREADS);
     }
-
-
-    /*getThread(id: number): Promise<Thread> {
-        
-        return this.getThreads()
-                    .then(threads => threads.find(thread => thread.id === id));
-    }*/
 
     saveThreadTest(thread: Thread){
         //create Thread
@@ -67,15 +53,8 @@ export class ThreadService {
         // console.log(thread.id);
     }
 
-    saveThread(thread: Thread): Promise<Thread> {
+    saveThread(thread: Thread) {
         // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
-
-        // console.log(thread.title);
-        // console.log(thread.author);
-        // console.log(thread.body);
-        // console.log(thread.tags);
-        // console.log(thread.id);
-        // console.log(thread.threadPostId);
 
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
@@ -83,6 +62,11 @@ export class ThreadService {
                     .toPromise()
                     .then(this.extractData)
                     .catch(this.handleError);
+
+        //add if extractData fine
+
+        //return this.getThreads();
+
 
     } // saveThread()
 

@@ -29,7 +29,7 @@ var SignUpComponent = (function () {
             // set success message and pass true paramater to persist the message after redirecting to the login page
             _this.router.navigate(['/login']);
         }, function (error) {
-            console.log(error);
+            console.log("Unable to signup: " + error);
             _this.loading = false;
         });
     };
