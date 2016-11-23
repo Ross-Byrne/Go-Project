@@ -50,9 +50,34 @@ type Thread struct {
 	Tags         []string
 }
 
+type UserDetails struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+// taken from couchDB package source code: https://github.com/rhinoman/couchdb-go/blob/master/couchdb.go#L150
+type UserRecord struct {
+	Name     string   `json:"name"`
+	Password string   `json:"password,omitempty"`
+	Roles    []string `json:"roles"`
+	TheType  string   `json:"type"` //apparently type is a keyword in Go :)
+}
+
 func main() {
 
-	getThreads()
+	//getThreads()
+
+	// var timeout = time.Duration(500 * 100000000)
+	// conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
+	// auth := couchdb.CookieAuth{AuthToken: "qwerty", UpdatedAuthToken: ""} //BasicAuth{Username: "admin", Password: "Balloon2016"}
+	// db := conn.SelectDB("posts", &auth)
+	//
+	// var threadPosts ThreadPosts
+	// _, err = db.Read("1", &threadPosts, nil)
+	//
+	// if err != nil {
+	// 	panic(err)
+	// }
 
 	// handle for serving resource
 	chttp.Handle("/", http.FileServer(http.Dir("./angular")))
@@ -66,11 +91,14 @@ func main() {
 	// handler for loading threadPost from couchDB
 	http.HandleFunc("/api/getThreadPosts", getThreadPosts)
 
-	// handler for saving posts made by user to couchDB
+	// handler for saving threads made by user to couchDB
 	http.HandleFunc("/api/saveThread", saveThreadHandler)
 
-	// handler for saving posts made by user to couchDB
+	// handler for getting threads from couchDB
 	http.HandleFunc("/api/getThreads", getThreadHandler)
+
+	// handler for creating a new user
+	http.HandleFunc("/api/createUser", createUserHandler)
 
 	// give the user feedback
 	fmt.Println("Listening on port 8080")
@@ -103,6 +131,47 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	} // if
 
 } // homeHandler()
+
+// function for creating a user
+func createUserHandler(w http.ResponseWriter, r *http.Request) {
+
+	// read all of the bytes from the request body into a byte array
+	body, err := ioutil.ReadAll(r.Body)
+
+	// print out JSON
+	fmt.Println("JSON: " + string(body))
+
+	// make user details struct
+	var user UserDetails
+
+	// Unmarshal the JSON into the struct
+	if err = json.Unmarshal(body, &user); err != nil {
+		panic(err)
+	}
+
+	// now create the user in couchDB
+	// set timeout
+	var timeout = time.Duration(500 * 100000000)
+
+	// create the connect to couchDB
+	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
+
+	// set authentication
+	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
+
+	roles := []string{}
+	// create the user in couchdb
+	userData := UserRecord{
+		Name:     user.Username,
+		Password: user.Password,
+		Roles:    roles,
+		TheType:  "user"}
+
+	db := conn.SelectDB("_users", &auth)
+	namestring := "org.couchdb.user:" + userData.Name
+	db.Save(&userData, namestring, "")
+
+} // createUserHandler()
 
 // handler for saving posts to couchDB
 func savePostHandler(w http.ResponseWriter, r *http.Request) {
@@ -255,7 +324,6 @@ func saveThreadHandler(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-
 	//create thread post document
 	//set threadpost id in struct
 
@@ -265,13 +333,13 @@ func saveThreadHandler(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	thread.Id=theThreadId
+	thread.Id = theThreadId
 
 	var threadPost ThreadPosts
 
-	threadPost.Posts= []Post{}
+	threadPost.Posts = []Post{}
 
-	thread.ThreadPostId=saveDocumentToCouch(threadPost, "posts")
+	thread.ThreadPostId = saveDocumentToCouch(threadPost, "posts")
 
 	fmt.Println(thread.Author)
 	fmt.Println(thread.Title)
@@ -299,23 +367,6 @@ func saveThreadHandler(w http.ResponseWriter, r *http.Request) {
 
 } // savePostHandler()
 
-func readPost() {
-
-	var timeout = time.Duration(500 * 100000000)
-	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
-	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
-	db := conn.SelectDB("posts", &auth)
-
-	var posts interface{}
-
-	_, err = db.Read("_all_docs", &posts, nil)
-
-	log.Println("Error: ", err)
-
-	fmt.Println(posts)
-
-} // readPost()
-
 // theUrl must be full URL including Domain name.
 // doc must be the struct with data being posted in the body
 // MUST close the response body after it is returned! EG. "defer resp.Body.Close()"
@@ -326,7 +377,6 @@ func sendPostRequestToCouch(theUrl string, doc interface{}) *http.Response {
 
 	// set the url
 	url := theUrl
-	fmt.Println("URL:>", url)
 
 	var jsonBytes []byte
 
