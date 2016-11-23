@@ -510,26 +510,33 @@ func saveDocumentToCouch(doc interface{}, dbName string) string {
 
 func getThreads() {
 
-	/*var timeout = time.Duration(500 * 100000000)
+	var timeout = time.Duration(500 * 100000000)
 	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
 	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
 	db := conn.SelectDB("threads", &auth)
 
-	var threads interface{}
-	var threads interface{}
-	var string[] threadsArray
+	var threadID interface{}
+	
+	
+	//var string[] threadsArray
 
-	_, err = db.Read("_all_docs", &threads, nil)
-
-	log.Println("Error: ", err)
-
-	fmt.Println(threadsArray[0])
-
-	_, err = db.ReadMultiple(threadsArray, &threads)
+	_, err = db.Read("_all_docs", &threadID, nil)
 
 	log.Println("Error: ", err)
 
-	fmt.Println(threads)*/
+	fmt.Println(threadID)
+
+	//m := map[string]string{ threadID };
+
+	// for k, v := range m { 
+    // 	fmt.Printf("key[%s] value[%s]\n", k, v)
+	// }	
+
+	// _, err = db.ReadMultiple(threadsArray, &threads)
+
+	// log.Println("Error: ", err)
+
+	// fmt.Println(threads)
 
 } // getThreads()
 
