@@ -1,3 +1,4 @@
+//adapted from http://jasonwatmore.com/post/2016/09/29/angular-2-user-registration-and-login-example-tutorial
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -10,17 +11,40 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 // System imports
 var core_1 = require('@angular/core');
+var router_1 = require('@angular/router');
+var authentication_service_1 = require('../auth.service/authentication.service');
 var LoginComponent = (function () {
-    function LoginComponent() {
+    function LoginComponent(router, authenticationService) {
+        this.router = router;
+        this.authenticationService = authenticationService;
         this.title = "Login Page";
+        this.model = {};
+        this.loading = false;
     }
+    LoginComponent.prototype.ngOnInit = function () {
+        // reset login status
+        this.authenticationService.logout();
+    };
+    LoginComponent.prototype.login = function () {
+        var _this = this;
+        this.loading = true;
+        this.authenticationService.login(this.model.username, this.model.password)
+            .subscribe(function (data) {
+            //on sucessful log in nav to following
+            _this.router.navigate(['/']);
+        }, function (error) {
+            //log or display error
+            console.log(error);
+            _this.loading = false;
+        });
+    };
     LoginComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
             selector: 'login-page',
             templateUrl: 'login.component.html'
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [router_1.Router, authentication_service_1.AuthenticationService])
     ], LoginComponent);
     return LoginComponent;
 }());
