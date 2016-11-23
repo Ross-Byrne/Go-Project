@@ -74,30 +74,6 @@ func main() {
 
 	//getThreads()
 
-	var timeout = time.Duration(500 * 100000000)
-	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
-	//auth := couchdb.CookieAuth{AuthToken: "qwerty", UpdatedAuthToken: ""} //BasicAuth{Username: "admin", Password: "Balloon2016"}
-//	db := conn.SelectDB("posts", &auth)
-
-	authCookie, err := conn.CreateSession("rossbyrne", "12345")
-
-	if err != nil {
-		panic(err)
-	}
-
-	//auth := couchdb.CookieAuth{AuthToken: authCookie, UpdatedAuthToken: ""} //BasicAuth{Username: "admin", Password: "Balloon2016"}
-	auth := couchdb.CookieAuth{AuthToken: authCookie.AuthToken, UpdatedAuthToken: authCookie.UpdatedAuthToken}
-	db := conn.SelectDB("_users", &auth)
-
-	var user map[string]interface{}
-
-	_, err = db.Read("org.couchdb.user:rossbyrne", &user, nil)
-
-	fmt.Println(user)
-
-
-	//fmt.Println(authCookie)
-
 	// handle for serving resource
 	chttp.Handle("/", http.FileServer(http.Dir("./angular")))
 
@@ -118,6 +94,12 @@ func main() {
 
 	// handler for creating a new user
 	http.HandleFunc("/api/createUser", createUserHandler)
+
+	// handler for logging a user in
+	http.HandleFunc("/api/login", loginHandler)
+
+	// handler for logging a user out
+	http.HandleFunc("/api/logout", logoutHandler)
 
 	// give the user feedback
 	fmt.Println("Listening on port 8080")
@@ -151,7 +133,115 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 
 } // homeHandler()
 
-// function for creating a user
+// function for logining in a user (creates a session cookie)
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+
+	// read all of the bytes from the request body into a byte array
+	body, err := ioutil.ReadAll(r.Body)
+
+	// print out JSON
+	//fmt.Println("JSON: " + string(body))
+
+	// make user details struct
+	var user UserDetails
+
+	// Unmarshal the JSON into the struct
+	if err = json.Unmarshal(body, &user); err != nil {
+		panic(err)
+	}
+
+	// now log the user into couchDB, and get the session cookie
+	// set timeout
+	var timeout = time.Duration(500 * 100000000)
+
+	// create the connect to couchDB
+	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
+
+	// get authentication cookie for user.(creates a session cookie)
+	authCookie, err := conn.CreateSession(user.Username, user.Password)
+
+	// check for errors
+	if err != nil { // if error, login details are wrong
+		log.Println(err)
+
+		// return 403 error
+		w.WriteHeader(403)
+
+	} else { // if everything worked
+
+		var jsonBytes []byte
+
+		// marshal the struct into json byte array
+		jsonBytes, err = json.Marshal(authCookie)
+
+		// error checks
+		if err != nil {
+			log.Println(err)
+		}
+
+		//fmt.Println(string(jsonBytes))
+
+		// Write content-type, statuscode, payload
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(200)
+		fmt.Fprintf(w, string(jsonBytes))
+
+	} // if
+
+} // loginHandler()
+
+// function for loging out a user (destroys session cookie)
+func logoutHandler(w http.ResponseWriter, r *http.Request) {
+
+	// read all of the bytes from the request body into a byte array
+	body, err := ioutil.ReadAll(r.Body)
+
+	// print out JSON
+	fmt.Println("JSON: " + string(body))
+
+	// make cookie struct
+	var authCookie CookieAuth
+
+	// Unmarshal the JSON into the struct
+	if err = json.Unmarshal(body, &authCookie); err != nil {
+
+		log.Println(err)
+
+		w.WriteHeader(500)
+
+		return
+
+	} // if
+
+	// now log the user into couchDB, and get the session cookie
+	// set timeout
+	var timeout = time.Duration(500 * 100000000)
+
+	// create the connect to couchDB
+	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
+
+	// get cookie into correct format
+	auth := couchdb.CookieAuth{AuthToken: authCookie.AuthToken, UpdatedAuthToken: authCookie.UpdatedAuthToken}
+
+	// log the user out by destroying the cookie
+	err = conn.DestroySession(&auth)
+
+	// check for errors
+	if err != nil { // if error, login details are wrong
+		log.Println(err)
+
+		// return error
+		w.WriteHeader(500)
+
+	} else { // if everything worked
+
+		w.WriteHeader(200)
+
+	} // if
+
+} // logoutHandler()
+
+// handler function for creating a user
 func createUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	// read all of the bytes from the request body into a byte array
@@ -586,7 +676,6 @@ func getThreads() {
 
 	var threadID interface{}
 
-
 	//var string[] threadsArray
 
 	_, err = db.Read("_all_docs", &threadID, nil)
@@ -598,7 +687,7 @@ func getThreads() {
 	//m := map[string]string{ threadID };
 
 	// for k, v := range m {
-    // 	fmt.Printf("key[%s] value[%s]\n", k, v)
+	// 	fmt.Printf("key[%s] value[%s]\n", k, v)
 	// }
 
 	// _, err = db.ReadMultiple(threadsArray, &threads)
