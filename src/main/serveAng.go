@@ -63,21 +63,40 @@ type UserRecord struct {
 	TheType  string   `json:"type"` //apparently type is a keyword in Go :)
 }
 
+//Cookie-based auth (for sessions)
+// taken from couchDB package source code: https://sourcegraph.com/github.com/rhinoman/couchdb-go@94e6ab663d5789615eb061b52ed2e67310bac13f/-/blob/auth.go#L34-38
+type CookieAuth struct {
+	AuthToken        string
+	UpdatedAuthToken string
+}
+
 func main() {
 
 	//getThreads()
 
-	// var timeout = time.Duration(500 * 100000000)
-	// conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
-	// auth := couchdb.CookieAuth{AuthToken: "qwerty", UpdatedAuthToken: ""} //BasicAuth{Username: "admin", Password: "Balloon2016"}
-	// db := conn.SelectDB("posts", &auth)
-	//
-	// var threadPosts ThreadPosts
-	// _, err = db.Read("1", &threadPosts, nil)
-	//
-	// if err != nil {
-	// 	panic(err)
-	// }
+	var timeout = time.Duration(500 * 100000000)
+	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
+	//auth := couchdb.CookieAuth{AuthToken: "qwerty", UpdatedAuthToken: ""} //BasicAuth{Username: "admin", Password: "Balloon2016"}
+//	db := conn.SelectDB("posts", &auth)
+
+	authCookie, err := conn.CreateSession("rossbyrne", "12345")
+
+	if err != nil {
+		panic(err)
+	}
+
+	//auth := couchdb.CookieAuth{AuthToken: authCookie, UpdatedAuthToken: ""} //BasicAuth{Username: "admin", Password: "Balloon2016"}
+	auth := couchdb.CookieAuth{AuthToken: authCookie.AuthToken, UpdatedAuthToken: authCookie.UpdatedAuthToken}
+	db := conn.SelectDB("_users", &auth)
+
+	var user map[string]interface{}
+
+	_, err = db.Read("org.couchdb.user:rossbyrne", &user, nil)
+
+	fmt.Println(user)
+
+
+	//fmt.Println(authCookie)
 
 	// handle for serving resource
 	chttp.Handle("/", http.FileServer(http.Dir("./angular")))
@@ -566,8 +585,8 @@ func getThreads() {
 	db := conn.SelectDB("threads", &auth)
 
 	var threadID interface{}
-	
-	
+
+
 	//var string[] threadsArray
 
 	_, err = db.Read("_all_docs", &threadID, nil)
@@ -578,9 +597,9 @@ func getThreads() {
 
 	//m := map[string]string{ threadID };
 
-	// for k, v := range m { 
+	// for k, v := range m {
     // 	fmt.Printf("key[%s] value[%s]\n", k, v)
-	// }	
+	// }
 
 	// _, err = db.ReadMultiple(threadsArray, &threads)
 
