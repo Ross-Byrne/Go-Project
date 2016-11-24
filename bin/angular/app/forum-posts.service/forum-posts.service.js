@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
 require('rxjs/add/operator/toPromise');
+//import { POSTS } from '../test-data/posts-test'; // test data
 var ForumPostsService = (function () {
     function ForumPostsService(http) {
         this.http = http;
@@ -38,10 +39,13 @@ var ForumPostsService = (function () {
         return body || {};
     };
     ForumPostsService.prototype.getPostsByThreadId = function (id) {
-        // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
+        // POST sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
+        var user;
+        user = JSON.parse(localStorage.getItem("user"));
+        var data = { "Cookie": user.cookie, "Id": id };
         var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         var options = new http_1.RequestOptions({ headers: headers });
-        return this.http.post(this.getThreadPostsURL, JSON.stringify(id), options)
+        return this.http.post(this.getThreadPostsURL, JSON.stringify(data), options)
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);
