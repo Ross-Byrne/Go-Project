@@ -13,10 +13,12 @@ var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var thread_1 = require('../classes/thread/thread');
 var thread_service_1 = require('../thread.service/thread.service');
+var authentication_service_1 = require('../auth.service/authentication.service');
 var ThreadPageComponent = (function () {
-    function ThreadPageComponent(router, threadService) {
+    function ThreadPageComponent(router, threadService, authenticationService) {
         this.router = router;
         this.threadService = threadService;
+        this.authenticationService = authenticationService;
         //variables for paging
         this.startIndex = 0;
         this.threadsPerPage = 5;
@@ -84,7 +86,7 @@ var ThreadPageComponent = (function () {
             var thread = new thread_1.Thread();
             var splitTags = threadTags.split(",");
             //initialise thread struct from parameters
-            thread.Author = "Martin";
+            thread.Author = this.authenticationService.userName;
             thread.Title = threadTitle;
             thread.Body = threadBody;
             thread.Tags = splitTags;
@@ -117,7 +119,7 @@ var ThreadPageComponent = (function () {
             selector: 'thread-page',
             templateUrl: 'thread-page.component.html'
         }), 
-        __metadata('design:paramtypes', [router_1.Router, thread_service_1.ThreadService])
+        __metadata('design:paramtypes', [router_1.Router, thread_service_1.ThreadService, authentication_service_1.AuthenticationService])
     ], ThreadPageComponent);
     return ThreadPageComponent;
 }());

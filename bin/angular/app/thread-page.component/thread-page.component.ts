@@ -5,6 +5,7 @@ import { Router }       from '@angular/router';
 
 import { Thread } from '../classes/thread/thread';
 import { ThreadService } from '../thread.service/thread.service';
+import { AuthenticationService } from '../auth.service/authentication.service';
 
 
 @Component({
@@ -29,7 +30,8 @@ export class ThreadPageComponent implements OnInit {
 
     constructor(
         private router: Router,
-        private threadService: ThreadService) {
+        private threadService: ThreadService,
+        private authenticationService: AuthenticationService) {
     }
 
     //toggle to move to bottom of page
@@ -96,7 +98,7 @@ export class ThreadPageComponent implements OnInit {
         var splitTags=threadTags.split(",");
 
         //initialise thread struct from parameters
-        thread.Author = "Martin";
+        thread.Author = this.authenticationService.userName;
         thread.Title = threadTitle;
         thread.Body = threadBody;
         thread.Tags = splitTags;
