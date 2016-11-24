@@ -51,10 +51,18 @@ export class ThreadService {
 
     //save a thread to couchDb Through the go server
     saveThread(thread: Thread) {
+
+        var user: User;
+
+        user = JSON.parse(localStorage.getItem("user"));
+
+         // create object to send data to server including session cookie
+        var data = {"Cookie": user.cookie, "thread": thread};
+
         // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-        return this.http.post(this.saveThreadURL, JSON.stringify(thread), options)
+        return this.http.post(this.saveThreadURL, JSON.stringify(data), options)
                     .toPromise()
                     .then(this.extractData)
                     .catch(this.handleError);

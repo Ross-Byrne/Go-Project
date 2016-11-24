@@ -78,7 +78,7 @@ type PostData struct {
 }
 
 // struct for creating a thread, with thread object and cookie
-type threadData struct {
+type ThreadData struct {
 	Cookie CookieAuth
 	Thread Thread
 }
@@ -470,11 +470,14 @@ func saveThreadHandler(w http.ResponseWriter, r *http.Request) {
 
 	// make thread struct
 	var thread Thread
+	var threadData ThreadData
 
 	// Unmarshal the JSON into the struct
-	if err = json.Unmarshal(body, &thread); err != nil {
+	if err = json.Unmarshal(body, &threadData); err != nil {
 		panic(err)
 	}
+
+	thread = threadData.Thread
 
 	//create thread post document
 	//set threadpost id in struct
@@ -491,7 +494,7 @@ func saveThreadHandler(w http.ResponseWriter, r *http.Request) {
 
 	posts.Posts = []Post{}
 
-	thread.ThreadPostId = saveDocumentToCouch(posts, "posts")
+	thread.ThreadPostId = saveDocumentToCouch(posts, "posts", threadData.Cookie)
 
 	fmt.Println(thread.Author)
 	fmt.Println(thread.Title)
@@ -500,7 +503,7 @@ func saveThreadHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(thread.ThreadPostId)
 
 	// save the thread to couchDB
-	saveDocumentToCouch(thread, "threads")
+	saveDocumentToCouch(thread, "threads", threadData.Cookie)
 
 	var jsonBytes []byte
 
@@ -669,7 +672,7 @@ func saveThread(t Thread) {
 
 // generic function to save a document to couchDB
 // parameters are, the doc, (eg struct made for documents) and the name of DB as a string
-func saveDocumentToCouch(doc interface{}, dbName string) string {
+func saveDocumentToCouch(doc interface{}, dbName string, cookie CookieAuth) string {
 
 	// set timeout
 	var timeout = time.Duration(500 * 100000000)
@@ -677,8 +680,8 @@ func saveDocumentToCouch(doc interface{}, dbName string) string {
 	// create the connect to couchDB
 	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
 
-	// set authentication
-	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
+	// get cookie into correct format
+	auth := couchdb.CookieAuth{AuthToken: cookie.AuthToken, UpdatedAuthToken: cookie.UpdatedAuthToken}
 
 	// select the DB to save to
 	db := conn.SelectDB(dbName, &auth)
@@ -700,6 +703,8 @@ func saveDocumentToCouch(doc interface{}, dbName string) string {
 	rev, err := db.Save(theDoc, theId, "")
 	//If all is well, rev should contain the revision of the newly created
 	//or updated Document
+
+	fmt.Println("Used Session Cookie to authenticate")
 
 	// log details
 	log.Println("revision: " + rev)
