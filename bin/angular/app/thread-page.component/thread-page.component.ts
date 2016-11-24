@@ -5,6 +5,7 @@ import { Router }       from '@angular/router';
 
 import { Thread } from '../classes/thread/thread';
 import { ThreadService } from '../thread.service/thread.service';
+import { AuthenticationService } from '../auth.service/authentication.service';
 
 
 @Component({
@@ -28,6 +29,7 @@ export class ThreadPageComponent implements OnInit {
 
     constructor(
         private router: Router,
+        private authenticationService: AuthenticationService,
         private threadService: ThreadService) {
     }
 
@@ -40,6 +42,15 @@ export class ThreadPageComponent implements OnInit {
 
     //calls threads on page load
     ngOnInit(): void {
+
+      // check if logged in
+      if(this.authenticationService.userName === ""){ // if not
+
+        // go to the login page
+        this.router.navigate(['/login']);
+
+      } // if
+
       this.threadService.getThreads()
            .then(threads => this.threads = threads);
     }

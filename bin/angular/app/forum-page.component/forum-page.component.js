@@ -35,7 +35,7 @@ var ForumPageComponent = (function () {
     }
     ForumPageComponent.prototype.ngOnInit = function () {
         var _this = this;
-        // check it logged in
+        // check if logged in
         if (this.authenticationService.userName === "") {
             // go to the login page
             this.router.navigate(['/login']);

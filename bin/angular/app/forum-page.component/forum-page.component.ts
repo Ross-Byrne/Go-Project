@@ -43,7 +43,7 @@ export class ForumPageComponent implements OnInit {
 
     ngOnInit(): void {
 
-      // check it logged in
+      // check if logged in
       if(this.authenticationService.userName === ""){ // if not
 
         // go to the login page

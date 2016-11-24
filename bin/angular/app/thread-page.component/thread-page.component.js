@@ -13,9 +13,11 @@ var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var thread_1 = require('../classes/thread/thread');
 var thread_service_1 = require('../thread.service/thread.service');
+var authentication_service_1 = require('../auth.service/authentication.service');
 var ThreadPageComponent = (function () {
-    function ThreadPageComponent(router, threadService) {
+    function ThreadPageComponent(router, authenticationService, threadService) {
         this.router = router;
+        this.authenticationService = authenticationService;
         this.threadService = threadService;
         //variables for paging
         this.startIndex = 0;
@@ -36,6 +38,11 @@ var ThreadPageComponent = (function () {
     //calls threads on page load
     ThreadPageComponent.prototype.ngOnInit = function () {
         var _this = this;
+        // check if logged in
+        if (this.authenticationService.userName === "") {
+            // go to the login page
+            this.router.navigate(['/login']);
+        } // if
         this.threadService.getThreads()
             .then(function (threads) { return _this.threads = threads; });
     };
@@ -107,7 +114,7 @@ var ThreadPageComponent = (function () {
             selector: 'thread-page',
             templateUrl: 'thread-page.component.html'
         }), 
-        __metadata('design:paramtypes', [router_1.Router, thread_service_1.ThreadService])
+        __metadata('design:paramtypes', [router_1.Router, authentication_service_1.AuthenticationService, thread_service_1.ThreadService])
     ], ThreadPageComponent);
     return ThreadPageComponent;
 }());
