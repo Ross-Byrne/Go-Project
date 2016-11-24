@@ -15,18 +15,11 @@ var http_1 = require('@angular/http');
 // pages
 var app_component_1 = require('./app.component');
 var dashboard_component_1 = require('./dashboard.component/dashboard.component');
-var heroes_component_1 = require('./heroes.component/heroes.component');
-var hero_detail_component_1 = require('./hero-detail.component/hero-detail.component');
 var login_component_1 = require('./login.component/login.component');
 var sign_up_component_1 = require('./sign-up.component/sign-up.component');
-var settings_component_1 = require('./settings.component/settings.component');
 var post_partial_component_1 = require('./post-partial.component/post-partial.component');
 var forum_page_component_1 = require('./forum-page.component/forum-page.component');
-var code_panel_component_1 = require('./code-panel.component/code-panel.component');
-var code_snippets_component_1 = require('./code-snippets.component/code-snippets.component');
 var thread_page_component_1 = require('./thread-page.component/thread-page.component');
-var thread_partial_component_1 = require('./thread-partial.component/thread-partial.component');
-var thread_detail_component_1 = require('./thread-detail.component/thread-detail.component');
 // services
 var thread_service_1 = require('./thread-page.component/thread.service');
 var hero_service_1 = require('./hero.service/hero.service');
@@ -48,18 +41,11 @@ var AppModule = (function () {
             declarations: [
                 app_component_1.AppComponent,
                 dashboard_component_1.DashboardComponent,
-                hero_detail_component_1.HeroDetailComponent,
-                heroes_component_1.HeroesComponent,
                 login_component_1.LoginComponent,
                 sign_up_component_1.SignUpComponent,
-                settings_component_1.SettingsComponent,
                 post_partial_component_1.PostPartialComponent,
                 forum_page_component_1.ForumPageComponent,
-                code_panel_component_1.CodePanelComponent,
-                code_snippets_component_1.CodeSnippetsComponent,
                 thread_page_component_1.ThreadPageComponent,
-                thread_partial_component_1.ThreadPartialComponent,
-                thread_detail_component_1.ThreadDetailComponent,
             ],
             providers: [
                 hero_service_1.HeroService,
