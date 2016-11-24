@@ -10,6 +10,7 @@
         <a routerLink="/threads" routerLinkActive="active">Threads</a>
       </div>
       <div class="nav-links navbar-right">
+        {{this.authenticationService.userNameMessage}}
         <a routerLink="/login" routerLinkActive="active">Login</a>
         <a routerLink="/signup" routerLinkActive="active">Sign Up</a>
         <a style="cursor: pointer;" (click)="logout()">Logout</a>

@@ -21,6 +21,8 @@ var AuthenticationService = (function () {
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         this.loginUrl = 'http://localhost:8080/api/login';
         this.logoutUrl = 'http://localhost:8080/api/logout';
+        this.userName = "";
+        this.userNameMessage = "";
     }
     AuthenticationService.prototype.extractData = function (res) {
         var body = res.json();
@@ -46,14 +48,15 @@ var AuthenticationService = (function () {
             .then(function (res) {
             cookie = _this.extractData(res); // get the cookie
             user.cookie = cookie; // set the cookie in user object
+            _this.userName = user.username;
+            _this.userNameMessage = "Hello, " + user.username;
             return user; // return the user object to caller
         });
     }; // login()
     // log the current user out
     AuthenticationService.prototype.logout = function () {
-        // remove user from local storage to log user out
-        //localStorage.removeItem('currentUser');
-        //destroy cookie
+        this.userName = "";
+        this.userNameMessage = "";
         // make a new instance of user object
         var user = new user_1.User();
         // get the current logged in user

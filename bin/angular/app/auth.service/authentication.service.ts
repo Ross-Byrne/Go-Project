@@ -26,6 +26,9 @@ export class AuthenticationService {
     private loginUrl = 'http://localhost:8080/api/login';
     private logoutUrl = 'http://localhost:8080/api/logout';
 
+    userName: string = "";
+    userNameMessage: string = "";
+
 
     // logs the user in, returns the user object
     login(username: string, password: string): Promise<User> {
@@ -53,6 +56,9 @@ export class AuthenticationService {
                     cookie = this.extractData(res); // get the cookie
                     user.cookie = cookie; // set the cookie in user object
 
+                    this.userName = user.username;
+                    this.userNameMessage = "Hello, " + user.username;
+
                     return user; // return the user object to caller
                 });
 
@@ -61,9 +67,9 @@ export class AuthenticationService {
     
     // log the current user out
     logout() {
-        // remove user from local storage to log user out
-        //localStorage.removeItem('currentUser');
-        //destroy cookie
+        
+        this.userName = "";
+        this.userNameMessage = "";
 
         // make a new instance of user object
         var user: User = new User();

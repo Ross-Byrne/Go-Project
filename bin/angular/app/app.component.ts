@@ -25,6 +25,8 @@ export class AppComponent implements OnInit {
   ngOnInit() {
         // reset login status
         //this.authenticationService.logout();
+
+        console.log("Hello there!");
     }
 
     logout(){

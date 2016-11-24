@@ -20,6 +20,7 @@ var AppComponent = (function () {
     AppComponent.prototype.ngOnInit = function () {
         // reset login status
         //this.authenticationService.logout();
+        console.log("Hello there!");
     };
     AppComponent.prototype.logout = function () {
         // log the user out
