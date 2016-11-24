@@ -150,7 +150,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 
 	// print out JSON
-	//fmt.Println("JSON: " + string(body))
+	fmt.Println("JSON: " + string(body))
 
 	// make user details struct
 	var user UserDetails
@@ -189,7 +189,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 		}
 
-		//fmt.Println(string(jsonBytes))
+		fmt.Println(string(jsonBytes))
 
 		// Write content-type, statuscode, payload
 		w.Header().Set("Content-Type", "application/json")
