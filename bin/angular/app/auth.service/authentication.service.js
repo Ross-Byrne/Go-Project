@@ -26,9 +26,24 @@ var AuthenticationService = (function () {
     }
     AuthenticationService.prototype.extractData = function (res) {
         var body = res.json();
-        console.log(body);
+        //console.log(body);
         return body || {};
     };
+    AuthenticationService.prototype.ngOnInit = function () {
+        // check it logged in
+        if (localStorage.getItem("user") == null) {
+            // update username
+            this.userName = "";
+            this.userNameMessage = "";
+        }
+        else {
+            // get the current logged in user
+            var user = JSON.parse(localStorage.getItem("user"));
+            // set the username variables
+            this.userName = user.username;
+            this.userNameMessage = "Hello, " + user.username;
+        } // if
+    }; // ngOnInit()
     // logs the user in, returns the user object
     AuthenticationService.prototype.login = function (username, password) {
         var _this = this;

@@ -39,6 +39,11 @@ var ThreadPageComponent = (function () {
     //calls threads on page load
     ThreadPageComponent.prototype.ngOnInit = function () {
         var _this = this;
+        // check if logged in
+        if (this.authenticationService.userName === "") {
+            // go to the login page
+            this.router.navigate(['/login']);
+        } // if
         this.threadService.getThreads()
             .then(function (threads) { return _this.threads = threads; });
     };

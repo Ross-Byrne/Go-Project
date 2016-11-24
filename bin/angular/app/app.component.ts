@@ -15,18 +15,13 @@ import { User } from './classes/user/user';
 
 export class AppComponent implements OnInit {
 
-  title = 'Code Fourms';
-
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService
   ) { }
 
   ngOnInit() {
-        // reset login status
-        //this.authenticationService.logout();
 
-        console.log("Hello there!");
     }
 
     logout(){

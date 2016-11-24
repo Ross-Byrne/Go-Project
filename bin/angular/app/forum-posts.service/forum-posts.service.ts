@@ -5,7 +5,11 @@ import 'rxjs/add/operator/toPromise';
 
 import { Post } from '../classes/post/post';
 import { ThreadPosts } from '../classes/thread-posts/thread-posts';
-import { POSTS } from '../test-data/posts-test';
+import { Thread } from '../classes/thread/thread';
+import { User } from '../classes/user/user';
+
+//import { POSTS } from '../test-data/posts-test'; // test data
+
 
 @Injectable()
 export class ForumPostsService {
@@ -34,18 +38,25 @@ export class ForumPostsService {
     private extractData(res: Response) {
         let body = res.json();
 
-        console.log(body);
+        //console.log(body);
         return body || { };
     
     }
 
 
     getPostsByThreadId(id: string): Promise<ThreadPosts> {
-        // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
+        // POST sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
+
+        var user: User;
+
+        user = JSON.parse(localStorage.getItem("user"));
+
+        // create object to send to server, including session cookie
+        var data = {"Cookie": user.cookie, "Id": id};
 
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-        return this.http.post(this.getThreadPostsURL, JSON.stringify(id), options)
+        return this.http.post(this.getThreadPostsURL, JSON.stringify(data), options)
                     .toPromise()
                     .then(this.extractData)
                     .catch(this.handleError);
@@ -54,11 +65,18 @@ export class ForumPostsService {
 
 
     createPost(post: Post): Promise<ThreadPosts> {
-        // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
+        // POST sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
+
+        var user: User;
+
+        user = JSON.parse(localStorage.getItem("user"));
+
+        // create object to send data to server including session cookie
+        var data = {"Cookie": user.cookie, "post": post};
 
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-        return this.http.post(this.savePostURL, JSON.stringify(post), options)
+        return this.http.post(this.savePostURL, JSON.stringify(data), options)
                     .toPromise()
                     .then(this.extractData)
                     .catch(this.handleError);

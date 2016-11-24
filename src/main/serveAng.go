@@ -18,7 +18,6 @@ type Post struct {
 	Id           string
 	ThreadPostId string
 	Body         string
-	AuthorId     string
 	AuthorName   string
 }
 
@@ -26,28 +25,13 @@ type Posts struct {
 	Posts []Post
 }
 
-type ThreadPosts struct {
-	Posts []Post
-}
-
-/*
-   To get routing to work in the angular app, the index.html file needs to be served
-   everytime a route is entered into the address bar. This lets angular 2 handle the routing
-   instead of Go. In doing this, I ran into the problem of Go returning js files as html.
-   To solve this (after many many hours) I used some code from the answer on this post
-   Link: http://stackoverflow.com/questions/14086063/serve-homepage-and-static-content-from-root
-*/
-
-// for serving angular resources (all angular app files needed)
-var chttp = http.NewServeMux()
-
 type Thread struct {
-	Title        string`json:"Title"`
-	Id           string`json:"Id"`
-	ThreadPostId string`json:"ThreadPostId"`
-	Author       string`json:"Author"`
-	Body         string`json:"Body"`
-	Tags         []string`json:"Tags"`
+	Title        string   `json:"Title"`
+	Id           string   `json:"Id"`
+	ThreadPostId string   `json:"ThreadPostId"`
+	Author       string   `json:"Author"`
+	Body         string   `json:"Body"`
+	Tags         []string `json:"Tags"`
 }
 
 type UserDetails struct {
@@ -71,16 +55,36 @@ type CookieAuth struct {
 }
 
 type Row struct {
-	Id           string`json:"id"`
-	Doc           Thread`json:"doc"`
+	Id  string `json:"id"`
+	Doc Thread `json:"doc"`
 }
 
 type ThreadRows struct {
-	Total_rows  int `json:"total_rows"`
+	Total_rows int `json:"total_rows"`
 	//Offset 		int `json:"offset"`
-	Rows		[]Row `json:"rows"`
+	Rows []Row `json:"rows"`
 }
 
+// struct with cookie and id for getting Posts
+type PostsData struct {
+	Cookie CookieAuth
+	Id     string
+}
+
+// struct for creating posts, with a post and cookie in it
+type PostData struct {
+	Cookie CookieAuth
+	Post   Post
+}
+
+// struct for creating a thread, with thread object and cookie
+type ThreadData struct {
+	Cookie CookieAuth
+	Thread Thread
+}
+
+// for serving angular resources (all angular app files needed)
+var chttp = http.NewServeMux()
 
 func main() {
 
@@ -121,6 +125,14 @@ func main() {
 
 // handler for root address
 func homeHandler(w http.ResponseWriter, r *http.Request) {
+
+	/*
+	   To get routing to work in the angular app, the index.html file needs to be served
+	   everytime a route is entered into the address bar. This lets angular 2 handle the routing
+	   instead of Go. In doing this, I ran into the problem of Go returning js files as html.
+	   To solve this (after many many hours) I used some code from the answer on this post
+	   Link: http://stackoverflow.com/questions/14086063/serve-homepage-and-static-content-from-root
+	*/
 
 	// if path has a . in it, it is looking for a file
 	if strings.Contains(r.URL.Path, ".") {
@@ -314,12 +326,15 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 
 	// make post struct
 	//var post Post
+	var postData PostData
 	var post Post
 
 	// Unmarshal the JSON into the struct
-	if err = json.Unmarshal(body, &post); err != nil {
+	if err = json.Unmarshal(body, &postData); err != nil {
 		log.Println(err)
 	}
+
+	post = postData.Post
 
 	// set a id for the post
 	theId, err := newUUID() // generate a UUID
@@ -331,10 +346,7 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 	post.Id = theId
 
 	fmt.Println(post)
-
 	fmt.Println(post.Body)
-	// save the post to couchDB
-	//saveDocumentToCouch(threadPosts, "posts")
 
 	//"https://couchdb-e195fb.smileupps.com/posts/_design/post/_update/addPost/a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b"
 
@@ -359,14 +371,19 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 	//fmt.Println("Done.")
 
 	var id = post.ThreadPostId
-	var threadPosts ThreadPosts
+	var posts Posts
 
 	var timeout = time.Duration(500 * 100000000)
 	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
-	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
+
+	// get cookie into correct format
+	auth := couchdb.CookieAuth{AuthToken: postData.Cookie.AuthToken, UpdatedAuthToken: postData.Cookie.UpdatedAuthToken}
+
+	//fmt.Println("Used Session Cookie to authenticate")
+
 	db := conn.SelectDB("posts", &auth)
 
-	_, err = db.Read(id, &threadPosts, nil)
+	_, err = db.Read(id, &posts, nil)
 
 	// check errors
 	if err != nil {
@@ -376,7 +393,7 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 	var jsonBytes []byte
 
 	// marshal the struct into json byte array
-	jsonBytes, err = json.Marshal(threadPosts)
+	jsonBytes, err = json.Marshal(posts)
 
 	// error checks
 	if err != nil {
@@ -390,7 +407,7 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 
 } // savePostHandler()
 
-// handler for saving posts to couchDB
+// handler for getting posts from couchDB
 func getThreadPosts(w http.ResponseWriter, r *http.Request) {
 
 	// read all of the bytes from the request body into a byte array
@@ -399,21 +416,26 @@ func getThreadPosts(w http.ResponseWriter, r *http.Request) {
 	// print out JSON
 	fmt.Println("JSON: " + string(body))
 
-	var id string
+	var postsData PostsData
 
 	// Unmarshal the JSON into the struct
-	if err = json.Unmarshal(body, &id); err != nil {
+	if err = json.Unmarshal(body, &postsData); err != nil {
 		panic(err)
 	}
 
-	var threadPosts ThreadPosts
+	var posts Posts
 
 	var timeout = time.Duration(500 * 100000000)
 	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
-	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
+
+	// get cookie into correct format
+	auth := couchdb.CookieAuth{AuthToken: postsData.Cookie.AuthToken, UpdatedAuthToken: postsData.Cookie.UpdatedAuthToken}
+
 	db := conn.SelectDB("posts", &auth)
 
-	_, err = db.Read(id, &threadPosts, nil)
+	_, err = db.Read(postsData.Id, &posts, nil)
+
+	//	fmt.Println("Used Session Cookie to authenticate")
 
 	// check errors
 	if err != nil {
@@ -423,7 +445,7 @@ func getThreadPosts(w http.ResponseWriter, r *http.Request) {
 	var jsonBytes []byte
 
 	// marshal the struct into json byte array
-	jsonBytes, err = json.Marshal(threadPosts)
+	jsonBytes, err = json.Marshal(posts)
 
 	// error checks
 	if err != nil {
@@ -448,11 +470,14 @@ func saveThreadHandler(w http.ResponseWriter, r *http.Request) {
 
 	// make thread struct
 	var thread Thread
+	var threadData ThreadData
 
 	// Unmarshal the JSON into the struct
-	if err = json.Unmarshal(body, &thread); err != nil {
+	if err = json.Unmarshal(body, &threadData); err != nil {
 		panic(err)
 	}
+
+	thread = threadData.Thread
 
 	//create thread post document
 	//set threadpost id in struct
@@ -465,11 +490,11 @@ func saveThreadHandler(w http.ResponseWriter, r *http.Request) {
 
 	thread.Id = theThreadId
 
-	var threadPost ThreadPosts
+	var posts Posts
 
-	threadPost.Posts = []Post{}
+	posts.Posts = []Post{}
 
-	thread.ThreadPostId = saveDocumentToCouch(threadPost, "posts")
+	thread.ThreadPostId = saveDocumentToCouch(posts, "posts", threadData.Cookie)
 
 	fmt.Println(thread.Author)
 	fmt.Println(thread.Title)
@@ -478,7 +503,7 @@ func saveThreadHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(thread.ThreadPostId)
 
 	// save the thread to couchDB
-	saveDocumentToCouch(thread, "threads")
+	saveDocumentToCouch(thread, "threads", threadData.Cookie)
 
 	var jsonBytes []byte
 
@@ -647,7 +672,7 @@ func saveThread(t Thread) {
 
 // generic function to save a document to couchDB
 // parameters are, the doc, (eg struct made for documents) and the name of DB as a string
-func saveDocumentToCouch(doc interface{}, dbName string) string {
+func saveDocumentToCouch(doc interface{}, dbName string, cookie CookieAuth) string {
 
 	// set timeout
 	var timeout = time.Duration(500 * 100000000)
@@ -655,8 +680,8 @@ func saveDocumentToCouch(doc interface{}, dbName string) string {
 	// create the connect to couchDB
 	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
 
-	// set authentication
-	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
+	// get cookie into correct format
+	auth := couchdb.CookieAuth{AuthToken: cookie.AuthToken, UpdatedAuthToken: cookie.UpdatedAuthToken}
 
 	// select the DB to save to
 	db := conn.SelectDB(dbName, &auth)
@@ -679,6 +704,8 @@ func saveDocumentToCouch(doc interface{}, dbName string) string {
 	//If all is well, rev should contain the revision of the newly created
 	//or updated Document
 
+	fmt.Println("Used Session Cookie to authenticate")
+
 	// log details
 	log.Println("revision: " + rev)
 	log.Println("Error: ", err)
@@ -688,12 +715,16 @@ func saveDocumentToCouch(doc interface{}, dbName string) string {
 
 } // saveDocumentToCouch()
 
-func getThreadId() ([]string) {
+func getThreadId(cookie CookieAuth) []string {
 
 	var timeout = time.Duration(500 * 100000000)
 	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
-	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
+
+	// get cookie into correct format
+	auth := couchdb.CookieAuth{AuthToken: cookie.AuthToken, UpdatedAuthToken: cookie.UpdatedAuthToken}
 	db := conn.SelectDB("threads", &auth)
+
+	//fmt.Println("Used Cookie to authenticate")
 
 	var rows ThreadRows
 
@@ -701,11 +732,10 @@ func getThreadId() ([]string) {
 
 	log.Println("Error: ", err)
 
-
-	idArray := make([]string,rows.Total_rows)
+	idArray := make([]string, rows.Total_rows)
 
 	for i := 0; i < rows.Total_rows; i++ {
-		idArray[i]=rows.Rows[i].Id
+		idArray[i] = rows.Rows[i].Id
 	}
 
 	return idArray
@@ -714,7 +744,21 @@ func getThreadId() ([]string) {
 
 func getThreadHandler(w http.ResponseWriter, r *http.Request) {
 
-	threadIds:=getThreadId()
+	// read all of the bytes from the request body into a byte array
+	body, err := ioutil.ReadAll(r.Body)
+
+	// print out JSON
+	fmt.Println("JSON: " + string(body))
+
+	// make cookie struct
+	var cookie CookieAuth
+
+	// Unmarshal the JSON into the struct
+	if err = json.Unmarshal(body, &cookie); err != nil {
+		panic(err)
+	}
+
+	threadIds := getThreadId(cookie)
 
 	var timeout = time.Duration(500 * 100000000)
 	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
@@ -727,10 +771,10 @@ func getThreadHandler(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Error: ", err)
 
-	threadsArray := make([]Thread,rows.Total_rows)
+	threadsArray := make([]Thread, rows.Total_rows)
 
 	for i := 0; i < rows.Total_rows; i++ {
-		threadsArray[i]=rows.Rows[i].Doc
+		threadsArray[i] = rows.Rows[i].Doc
 	}
 
 	fmt.Println(threadsArray)

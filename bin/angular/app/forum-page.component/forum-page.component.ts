@@ -43,8 +43,8 @@ export class ForumPageComponent implements OnInit {
 
     ngOnInit(): void {
 
-      // check it logged in
-      if(localStorage.getItem("user") == null){ // if not
+      // check if logged in
+      if(this.authenticationService.userName === ""){ // if not
 
         // go to the login page
         this.router.navigate(['/login']);
@@ -88,7 +88,6 @@ export class ForumPageComponent implements OnInit {
 
       var post: Post = new Post();
 
-      post.AuthorId = "";
       post.AuthorName = this.authenticationService.userName;
       post.Body = postBody;
       post.ThreadPostId = this.threadPostsId; // this equals threadPosts._id (from couchDB)(used for saving)

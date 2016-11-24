@@ -37,19 +37,25 @@ var ThreadService = (function () {
     };
     //a promise that returns a list of threads from Go server
     ThreadService.prototype.getThreads = function () {
+        var user;
+        user = JSON.parse(localStorage.getItem("user"));
         var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         var options = new http_1.RequestOptions({ headers: headers });
-        return this.http.get(this.getThreadURL, options)
+        return this.http.post(this.getThreadURL, JSON.stringify(user.cookie), options)
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);
     }; //getThreads()
     //save a thread to couchDb Through the go server
     ThreadService.prototype.saveThread = function (thread) {
+        var user;
+        user = JSON.parse(localStorage.getItem("user"));
+        // create object to send data to server including session cookie
+        var data = { "Cookie": user.cookie, "thread": thread };
         // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
         var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         var options = new http_1.RequestOptions({ headers: headers });
-        return this.http.post(this.saveThreadURL, JSON.stringify(thread), options)
+        return this.http.post(this.saveThreadURL, JSON.stringify(data), options)
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);
