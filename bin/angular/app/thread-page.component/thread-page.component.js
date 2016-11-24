@@ -26,6 +26,7 @@ var ThreadPageComponent = (function () {
         this.threadTitle = "";
         this.threadBody = "";
         this.threadTags = "";
+        this.errorLabel = "";
         //toggle to move to bottom of page
         this.opened = false;
     }
@@ -76,30 +77,39 @@ var ThreadPageComponent = (function () {
     ThreadPageComponent.prototype.saveThread = function (threadTitle, threadBody, threadTags) {
         //add validation to avoid blank posts
         var _this = this;
-        var thread = new thread_1.Thread();
-        var splitTags = threadTags.split(",");
-        //initialise thread struct from parameters
-        thread.Author = "Martin";
-        thread.Title = threadTitle;
-        thread.Body = threadBody;
-        thread.Tags = splitTags;
-        thread.Id = "";
-        thread.ThreadPostId = "";
-        // save thread in couchDB
-        this.threadService.saveThread(thread)
-            .then(function () {
-            _this.threadService.getThreads()
+        if (threadTitle == "" || threadBody == "" || threadTags == "") {
+            this.errorLabel = "Insufficent Data";
+        }
+        else {
+            var thread = new thread_1.Thread();
+            var splitTags = threadTags.split(",");
+            //initialise thread struct from parameters
+            thread.Author = "Martin";
+            thread.Title = threadTitle;
+            thread.Body = threadBody;
+            thread.Tags = splitTags;
+            thread.Id = "";
+            thread.ThreadPostId = "";
+            // save thread in couchDB
+            this.threadService.saveThread(thread)
+                .then(function () {
+                _this.threadService.getThreads()
+                    .then(function (threads) { return _this.threads = threads; });
+            })
+                .then(function () { _this.goToBottomOfPage(10); }) // scroll to the bottom of the page (so thread can be seen)
+                .then(function () { _this.lastPage(); }); // try to go to the last page
+            //gets latest threads
+            this.threadService.getThreads()
                 .then(function (threads) { return _this.threads = threads; });
-        })
-            .then(function () { _this.goToBottomOfPage(10); }) // scroll to the bottom of the page (so thread can be seen)
-            .then(function () { _this.lastPage(); }); // try to go to the last page
+            // clear the make post objects
+            this.threadTitle = "";
+            this.threadBody = "";
+            this.threadTags = "";
+            this.errorLabel = "";
+        } //end else
         //gets latest threads
         this.threadService.getThreads()
             .then(function (threads) { return _this.threads = threads; });
-        // clear the make post objects
-        this.threadTitle = "";
-        this.threadBody = "";
-        this.threadTags = "";
     }; // saveThread()
     ThreadPageComponent = __decorate([
         core_1.Component({
