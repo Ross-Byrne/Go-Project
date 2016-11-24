@@ -1,9 +1,64 @@
 <h1>Dashboard</h1>
 
-<div>
-  <div *ngFor="let hero of heroes" (click)="gotoDetail(hero)" class="col-1-4">
-    <div class="module hero">
-      <h4>{{hero.name}}</h4>
+<div id="topOfPage"></div>
+<h1>My Threads</h1>
+
+<div *ngFor="let thread of threads; let i = index" >
+
+    <div *ngIf="i < startIndex + threadsPerPage && i >= startIndex">
+
+        <div class="panel panel-default col-med" >
+            <div class="panel-body">
+                <div class="media">
+                    <div class="media-left">
+                        <img class="media-object" src="/assets/img/profile.png" alt="Profile Image" style="width: 5em;">
+                        {{thread.Author}}
+                    </div>
+                    <div class="media-body" (click)="gotoDetail(thread)">
+                        {{thread.Title}}
+                        <br>
+                        {{thread.Body}}
+                    </div>
+                </div> 
+            </div>
+        </div>
     </div>
-  </div>
 </div>
+
+<div>
+    <nav class="pull-right">
+        <ul class="pager">
+            <li><button class="btn btn-primary" type="button" (click)="previousPage()">Previous</button></li>
+            <li><button class="btn btn-primary" type="button" (click)="nextPage()">Next</button></li>
+            <li><button class="btn btn-primary" type="button" (click)="lastPage()">Last</button></li>
+        </ul>
+    </nav>
+</div>
+
+<!-- Make a Thread 
+<div>
+    
+        <button class="button" style="font-size: 2.4em; height: 2.6em; width: 12em; margin-top: 1em;" class="btn btn-primary btn-lg" role="button" (click)="toggle()">Click to create a thread</button>
+        <div  class="card-block" [ngClass]="{hide: !opened}">
+            <div class="row">
+                <div class="col-lg-7 col-md-offset-2">
+                    <div class="form-group">
+                        <label for="thread">Make a Thread:</label>
+                        <h4 style="color: red">{{errorLabel}}</h4>
+                        <textarea placeholder="Enter thread title here" [(ngModel)]="threadTitle" class="form-control" style="resize: none;" rows="1" id="body"></textarea>
+                        <textarea placeholder="Enter your thread body here" [(ngModel)]="threadBody" class="form-control" style="resize: none;" rows="4" id="body"></textarea>
+                        <textarea placeholder="Enter tags here (Seperated by comma)" [(ngModel)]="threadTags" class="form-control" style="resize: none;" rows="2" id="body"></textarea> 
+                        
+                        
+                    </div>  
+                    
+                </div>
+
+                <div class="col-lg-1" style="align-items: center;">
+                    <button style="font-size: 2.4em; height: 2.6em; width: 4em; margin-top: 1em;" class="btn btn-primary btn-lg" role="button" (click)="saveThread(threadTitle,threadBody,threadTags)">Submit</button>
+                </div> 
+                </div>
+        </div>
+</div>-->
+
+<div id="bottomOfPage"></div>
