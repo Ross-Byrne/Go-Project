@@ -15,12 +15,8 @@ var AppComponent = (function () {
     function AppComponent(router, authenticationService) {
         this.router = router;
         this.authenticationService = authenticationService;
-        this.title = 'Code Fourms';
     }
     AppComponent.prototype.ngOnInit = function () {
-        // reset login status
-        //this.authenticationService.logout();
-        console.log("Hello there!");
     };
     AppComponent.prototype.logout = function () {
         // log the user out

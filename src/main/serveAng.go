@@ -18,7 +18,6 @@ type Post struct {
 	Id           string
 	ThreadPostId string
 	Body         string
-	AuthorId     string
 	AuthorName   string
 }
 

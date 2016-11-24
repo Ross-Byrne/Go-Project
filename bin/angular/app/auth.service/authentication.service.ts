@@ -1,5 +1,5 @@
 //adapted from http://jasonwatmore.com/post/2016/09/29/angular-2-user-registration-and-login-example-tutorial
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Http, Response, RequestOptions, Headers, Request, RequestMethod } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map'
@@ -10,12 +10,12 @@ import { SessionCookie } from '../classes/session-cookie/session-cookie';
  
  
 @Injectable()
-export class AuthenticationService {
+export class AuthenticationService implements OnInit {
 
     private extractData(res: Response) {
 
         let body = res.json();
-        console.log(body);
+        //console.log(body);
         return body || { };
     }
 
@@ -29,6 +29,27 @@ export class AuthenticationService {
     userName: string = "";
     userNameMessage: string = "";
 
+    ngOnInit(): void {
+
+      // check it logged in
+      if(localStorage.getItem("user") == null){ // if not logged
+
+        // update username
+        this.userName = "";
+        this.userNameMessage = "";
+
+      } else {
+
+        // get the current logged in user
+        var user: User = JSON.parse(localStorage.getItem("user"));
+
+        // set the username variables
+        this.userName = user.username;
+        this.userNameMessage = "Hello, " + user.username;
+        
+      } // if
+
+    } // ngOnInit()
 
     // logs the user in, returns the user object
     login(username: string, password: string): Promise<User> {

@@ -36,7 +36,7 @@ var ForumPageComponent = (function () {
     ForumPageComponent.prototype.ngOnInit = function () {
         var _this = this;
         // check it logged in
-        if (localStorage.getItem("user") == null) {
+        if (this.authenticationService.userName === "") {
             // go to the login page
             this.router.navigate(['/login']);
         } // if
@@ -63,7 +63,6 @@ var ForumPageComponent = (function () {
     ForumPageComponent.prototype.savePost = function (postBody) {
         var _this = this;
         var post = new post_1.Post();
-        post.AuthorId = "";
         post.AuthorName = this.authenticationService.userName;
         post.Body = postBody;
         post.ThreadPostId = this.threadPostsId; // this equals threadPosts._id (from couchDB)(used for saving)

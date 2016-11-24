@@ -34,7 +34,7 @@ var ForumPostsService = (function () {
     };
     ForumPostsService.prototype.extractData = function (res) {
         var body = res.json();
-        console.log(body);
+        //console.log(body);
         return body || {};
     };
     ForumPostsService.prototype.getPostsByThreadId = function (id) {

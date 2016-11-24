@@ -5,18 +5,15 @@
 
 <div class="panel panel-default col-med" >
   <div class="panel-body">
-
     <div class="media">
         <div class="media-left">
             <img class="media-object" src="/assets/img/profile.png" alt="Profile Image" style="width: 5em;">
-            {{post.AuthorName}}
         </div>
-        <div class="media-body">
+        <div class="media-body" style="word-wrap: break-word;">
             {{post.Body}}
         </div>
-
     </div>
-
+    <div><i>{{post.AuthorName}}</i></div>
   </div>
 </div>
 
