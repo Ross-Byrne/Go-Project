@@ -68,7 +68,7 @@ type ThreadRows struct {
 // struct with cookie and id for getting Posts
 type PostsData struct {
 	Cookie CookieAuth
-	Id  string
+	Id     string
 }
 
 // struct for creating posts, with a post and cookie in it
@@ -326,12 +326,15 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 
 	// make post struct
 	//var post Post
+	var postData PostData
 	var post Post
 
 	// Unmarshal the JSON into the struct
-	if err = json.Unmarshal(body, &post); err != nil {
+	if err = json.Unmarshal(body, &postData); err != nil {
 		log.Println(err)
 	}
+
+	post = postData.Post
 
 	// set a id for the post
 	theId, err := newUUID() // generate a UUID
@@ -372,7 +375,12 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 
 	var timeout = time.Duration(500 * 100000000)
 	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
-	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
+
+	// get cookie into correct format
+	auth := couchdb.CookieAuth{AuthToken: postData.Cookie.AuthToken, UpdatedAuthToken: postData.Cookie.UpdatedAuthToken}
+
+	//fmt.Println("Used Session Cookie to authenticate")
+
 	db := conn.SelectDB("posts", &auth)
 
 	_, err = db.Read(id, &posts, nil)
@@ -427,7 +435,7 @@ func getThreadPosts(w http.ResponseWriter, r *http.Request) {
 
 	_, err = db.Read(postsData.Id, &posts, nil)
 
-//	fmt.Println("Used Session Cookie to authenticate")
+	//	fmt.Println("Used Session Cookie to authenticate")
 
 	// check errors
 	if err != nil {

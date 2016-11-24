@@ -51,6 +51,7 @@ export class ForumPostsService {
 
         user = JSON.parse(localStorage.getItem("user"));
 
+        // create object to send to server, including session cookie
         var data = {"Cookie": user.cookie, "Id": id};
 
         let headers = new Headers({ 'Content-Type': 'application/json' });
@@ -64,11 +65,18 @@ export class ForumPostsService {
 
 
     createPost(post: Post): Promise<ThreadPosts> {
-        // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
+        // POST sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
+
+        var user: User;
+
+        user = JSON.parse(localStorage.getItem("user"));
+
+        // create object to send data to server including session cookie
+        var data = {"Cookie": user.cookie, "post": post};
 
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-        return this.http.post(this.savePostURL, JSON.stringify(post), options)
+        return this.http.post(this.savePostURL, JSON.stringify(data), options)
                     .toPromise()
                     .then(this.extractData)
                     .catch(this.handleError);
