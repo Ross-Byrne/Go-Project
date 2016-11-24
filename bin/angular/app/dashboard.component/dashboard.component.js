@@ -9,23 +9,49 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var hero_service_1 = require('../hero.service/hero.service');
 var router_1 = require('@angular/router');
+var thread_service_1 = require('../thread.service/thread.service');
+var authentication_service_1 = require('../auth.service/authentication.service');
 var DashboardComponent = (function () {
-    function DashboardComponent(router, heroService) {
+    function DashboardComponent(router, threadService, authenticationService) {
         this.router = router;
-        this.heroService = heroService;
-        this.heroes = [];
+        this.threadService = threadService;
+        this.authenticationService = authenticationService;
+        //variables for paging
+        this.startIndex = 0;
+        this.threadsPerPage = 5;
+        //array of threads to be displayed
+        this.threads = [];
     }
+    //calls threads on page load
     DashboardComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.heroService.getHeroes()
-            .then(function (heroes) { return _this.heroes = heroes.slice(1, 5); });
+        this.threadService.getThreads()
+            .then(function (threads) { return _this.threads = threads.filter(function (item) { return item.Author == _this.authenticationService.userName; }); });
     };
-    DashboardComponent.prototype.gotoDetail = function (hero) {
-        //let link = ['/detail', hero.id];
-        //this.router.navigate(link);
+    //link to view thread and all its posts
+    DashboardComponent.prototype.gotoDetail = function (thread) {
+        var link = ['/threads', thread.ThreadPostId];
+        this.router.navigate(link);
     };
+    //Moves to next Page of threads
+    DashboardComponent.prototype.nextPage = function () {
+        if (this.startIndex < this.threads.length - this.threadsPerPage) {
+            this.startIndex++;
+        } // if;
+    }; // nextPage()
+    //Moves to previous Page of threads
+    DashboardComponent.prototype.previousPage = function () {
+        if (this.startIndex > 0) {
+            this.startIndex--;
+        } // if
+    }; // previousPage()
+    //Moves to last Page of threads
+    DashboardComponent.prototype.lastPage = function () {
+        while (this.startIndex < this.threads.length - this.threadsPerPage) {
+            this.startIndex++;
+        } // if;
+    }; // lastPage()
     DashboardComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
@@ -33,7 +59,7 @@ var DashboardComponent = (function () {
             templateUrl: 'dashboard.component.html',
             styleUrls: ['dashboard.component.css']
         }), 
-        __metadata('design:paramtypes', [router_1.Router, hero_service_1.HeroService])
+        __metadata('design:paramtypes', [router_1.Router, thread_service_1.ThreadService, authentication_service_1.AuthenticationService])
     ], DashboardComponent);
     return DashboardComponent;
 }());

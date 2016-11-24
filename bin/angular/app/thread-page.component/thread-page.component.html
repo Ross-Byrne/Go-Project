@@ -46,9 +46,12 @@
                 <div class="col-lg-7 col-md-offset-2">
                     <div class="form-group">
                         <label for="thread">Make a Thread:</label>
+                        <h4 style="color: red">{{errorLabel}}</h4>
                         <textarea placeholder="Enter thread title here" [(ngModel)]="threadTitle" class="form-control" style="resize: none;" rows="1" id="body"></textarea>
                         <textarea placeholder="Enter your thread body here" [(ngModel)]="threadBody" class="form-control" style="resize: none;" rows="4" id="body"></textarea>
-                        <textarea placeholder="Enter tags here (Seperated by comma)" [(ngModel)]="threadTags" class="form-control" style="resize: none;" rows="2" id="body"></textarea>
+                        <textarea placeholder="Enter tags here (Seperated by comma)" [(ngModel)]="threadTags" class="form-control" style="resize: none;" rows="2" id="body"></textarea> 
+                        
+                        
                     </div>  
                     
                 </div>

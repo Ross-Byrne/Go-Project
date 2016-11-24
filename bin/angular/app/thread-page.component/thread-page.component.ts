@@ -26,11 +26,12 @@ export class ThreadPageComponent implements OnInit {
     threadTitle: string = "";
     threadBody: string = "";
     threadTags: string = "";
+    errorLabel: string = "";
 
     constructor(
         private router: Router,
-        private authenticationService: AuthenticationService,
-        private threadService: ThreadService) {
+        private threadService: ThreadService,
+        private authenticationService: AuthenticationService) {
     }
 
     //toggle to move to bottom of page
@@ -98,33 +99,43 @@ export class ThreadPageComponent implements OnInit {
     saveThread(threadTitle: string,threadBody: string,threadTags: string): void {
       //add validation to avoid blank posts
 
-      var thread: Thread = new Thread();
-      var splitTags=threadTags.split(",");
+      if(threadTitle==""||threadBody==""||threadTags==""){
+        this.errorLabel= "Insufficent Data";
+      }
+      else{
+        var thread: Thread = new Thread();
+        var splitTags=threadTags.split(",");
 
-      //initialise thread struct from parameters
-      thread.Author = "Martin";
-      thread.Title = threadTitle;
-      thread.Body = threadBody;
-      thread.Tags = splitTags;
-      thread.Id = ""; 
-      thread.ThreadPostId = ""; 
+        //initialise thread struct from parameters
+        thread.Author = this.authenticationService.userName;
+        thread.Title = threadTitle;
+        thread.Body = threadBody;
+        thread.Tags = splitTags;
+        thread.Id = ""; 
+        thread.ThreadPostId = ""; 
 
-      // save thread in couchDB
-      this.threadService.saveThread(thread)
-        .then(() => {this.threadService.getThreads()
-        .then(threads => this.threads = threads);})
-        .then(() => {this.goToBottomOfPage(10);}) // scroll to the bottom of the page (so thread can be seen)
-        .then(() => {this.lastPage();}); // try to go to the last page
+        // save thread in couchDB
+        this.threadService.saveThread(thread)
+          .then(() => {this.threadService.getThreads()
+          .then(threads => this.threads = threads);})
+          .then(() => {this.goToBottomOfPage(10);}) // scroll to the bottom of the page (so thread can be seen)
+          .then(() => {this.lastPage();}); // try to go to the last page
 
-        //gets latest threads
+          //gets latest threads
+        this.threadService.getThreads()
+          .then(threads => this.threads = threads);
+
+        // clear the make post objects
+        this.threadTitle = "";
+        this.threadBody = "";
+        this.threadTags = "";
+        this.errorLabel = "";
+
+      }//end else
+
+      //gets latest threads
       this.threadService.getThreads()
         .then(threads => this.threads = threads);
-
-      // clear the make post objects
-      this.threadTitle = "";
-      this.threadBody = "";
-      this.threadTags = "";
-
     } // saveThread()
 
 }//end ThreadPageComponent

@@ -15,10 +15,10 @@ var thread_1 = require('../classes/thread/thread');
 var thread_service_1 = require('../thread.service/thread.service');
 var authentication_service_1 = require('../auth.service/authentication.service');
 var ThreadPageComponent = (function () {
-    function ThreadPageComponent(router, authenticationService, threadService) {
+    function ThreadPageComponent(router, threadService, authenticationService) {
         this.router = router;
-        this.authenticationService = authenticationService;
         this.threadService = threadService;
+        this.authenticationService = authenticationService;
         //variables for paging
         this.startIndex = 0;
         this.threadsPerPage = 5;
@@ -28,6 +28,7 @@ var ThreadPageComponent = (function () {
         this.threadTitle = "";
         this.threadBody = "";
         this.threadTags = "";
+        this.errorLabel = "";
         //toggle to move to bottom of page
         this.opened = false;
     }
@@ -83,30 +84,39 @@ var ThreadPageComponent = (function () {
     ThreadPageComponent.prototype.saveThread = function (threadTitle, threadBody, threadTags) {
         //add validation to avoid blank posts
         var _this = this;
-        var thread = new thread_1.Thread();
-        var splitTags = threadTags.split(",");
-        //initialise thread struct from parameters
-        thread.Author = "Martin";
-        thread.Title = threadTitle;
-        thread.Body = threadBody;
-        thread.Tags = splitTags;
-        thread.Id = "";
-        thread.ThreadPostId = "";
-        // save thread in couchDB
-        this.threadService.saveThread(thread)
-            .then(function () {
-            _this.threadService.getThreads()
+        if (threadTitle == "" || threadBody == "" || threadTags == "") {
+            this.errorLabel = "Insufficent Data";
+        }
+        else {
+            var thread = new thread_1.Thread();
+            var splitTags = threadTags.split(",");
+            //initialise thread struct from parameters
+            thread.Author = this.authenticationService.userName;
+            thread.Title = threadTitle;
+            thread.Body = threadBody;
+            thread.Tags = splitTags;
+            thread.Id = "";
+            thread.ThreadPostId = "";
+            // save thread in couchDB
+            this.threadService.saveThread(thread)
+                .then(function () {
+                _this.threadService.getThreads()
+                    .then(function (threads) { return _this.threads = threads; });
+            })
+                .then(function () { _this.goToBottomOfPage(10); }) // scroll to the bottom of the page (so thread can be seen)
+                .then(function () { _this.lastPage(); }); // try to go to the last page
+            //gets latest threads
+            this.threadService.getThreads()
                 .then(function (threads) { return _this.threads = threads; });
-        })
-            .then(function () { _this.goToBottomOfPage(10); }) // scroll to the bottom of the page (so thread can be seen)
-            .then(function () { _this.lastPage(); }); // try to go to the last page
+            // clear the make post objects
+            this.threadTitle = "";
+            this.threadBody = "";
+            this.threadTags = "";
+            this.errorLabel = "";
+        } //end else
         //gets latest threads
         this.threadService.getThreads()
             .then(function (threads) { return _this.threads = threads; });
-        // clear the make post objects
-        this.threadTitle = "";
-        this.threadBody = "";
-        this.threadTags = "";
     }; // saveThread()
     ThreadPageComponent = __decorate([
         core_1.Component({
@@ -114,7 +124,7 @@ var ThreadPageComponent = (function () {
             selector: 'thread-page',
             templateUrl: 'thread-page.component.html'
         }), 
-        __metadata('design:paramtypes', [router_1.Router, authentication_service_1.AuthenticationService, thread_service_1.ThreadService])
+        __metadata('design:paramtypes', [router_1.Router, thread_service_1.ThreadService, authentication_service_1.AuthenticationService])
     ], ThreadPageComponent);
     return ThreadPageComponent;
 }());
