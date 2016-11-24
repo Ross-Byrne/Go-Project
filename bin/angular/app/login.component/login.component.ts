@@ -6,6 +6,9 @@ import { Router }       from '@angular/router';
 
 import { AuthenticationService } from '../auth.service/authentication.service';
 
+
+import { SessionCookie } from '../classes/session-cookie/session-cookie';
+
 @Component({
   moduleId: module.id,
   selector: 'login-page',
@@ -16,6 +19,7 @@ export class LoginComponent implements OnInit {
     title = "Login Page";
     model: any = {};
     loading = false;
+    cookie: SessionCookie = new SessionCookie();
  
     constructor(
         private router: Router,
@@ -27,17 +31,43 @@ export class LoginComponent implements OnInit {
     }
  
     login() {
+
         this.loading = true;
         this.authenticationService.login(this.model.username, this.model.password)
-            .subscribe(
-                data => {
-                    //on sucessful log in nav to following
-                    this.router.navigate(['/']);
-                },
-                error => {
-                  //log or display error
-                    console.log("Unable to login: "+error);
-                    this.loading = false;
-                });
+        .then(cookie => this.cookie = cookie)
+        .then(() => {
+
+            if(this.cookie.AuthToken != ""){
+                
+                // stop loading
+                this.loading = false;
+
+                // go to home page
+                this.router.navigate(['/']);
+
+            } else {
+
+                // stop loading
+                this.loading = false;
+
+                // handled incorrect login details
+                console.log("Not logged in");
+
+            }
+        })
+
+        console.log(this.cookie);
+
+        // this.authenticationService.login(this.model.username, this.model.password)
+        //     .subscribe(
+        //         data => {
+        //             //on sucessful log in nav to following
+        //             this.router.navigate(['/']);
+        //         },
+        //         error => {
+        //           //log or display error
+        //             console.log("Unable to login: "+error);
+        //             this.loading = false;
+        //         });
     }
 }

@@ -1,27 +1,53 @@
 //adapted from http://jasonwatmore.com/post/2016/09/29/angular-2-user-registration-and-login-example-tutorial
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
+import { Http, Response, RequestOptions, Headers, Request, RequestMethod } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/toPromise';
+
+import { User } from '../classes/user/user';
+import { SessionCookie } from '../classes/session-cookie/session-cookie';
  
  
 @Injectable()
 export class AuthenticationService {
+
+    private extractData(res: Response) {
+
+        let body = res.json();
+        console.log(body);
+        return body || { };
+    }
+
     constructor(private http: Http) { }
 
-    private authURL = 'http://localhost:8080/api/authenticate';
- 
-    login(username: string, password: string) {
-        return this.http.post(this.authURL, JSON.stringify({ username: username, password: password }))
-            .map((response: Response) => {
-                // login successful if there's a jwt token in the response
-                let user = response.json();
-                if (user && user.token) {
-                    // store user details and jwt token in local storage to keep user logged in between page refreshes
-                    //localStorage.setItem('currentUser', JSON.stringify(user));
-                    //store cookie
-                }
-            });
+    private headers = new Headers({'Content-Type': 'application/json'});
+
+    private loginUrl = 'http://localhost:8080/api/login';
+
+
+    login(username: string, password: string): Promise<SessionCookie> {
+
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        var user: User = new User(); // create user object
+
+        user.username = username; // set username
+        user.password = password; // set password
+
+        console.log(user);
+
+        var cookie: SessionCookie = new SessionCookie();
+        cookie.AuthToken = "";
+
+        return this.http.post(this.loginUrl, JSON.stringify(user), options)
+                .toPromise()
+                .then(this.extractData)
+                .catch(() => { 
+                    return cookie
+                });
+
     }
  
     logout() {
