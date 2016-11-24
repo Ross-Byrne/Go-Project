@@ -14,11 +14,10 @@ require('rxjs/add/operator/toPromise');
 var ThreadService = (function () {
     function ThreadService(http) {
         this.http = http;
-        this.saveThreadURL = 'http://localhost:8080/api/saveThread'; // URL to web api
-        this.getThreadURL = 'http://localhost:8080/api/getThreads';
+        this.saveThreadURL = 'http://localhost:8080/api/saveThread'; // URL to save a thread in go
+        this.getThreadURL = 'http://localhost:8080/api/getThreads'; // URL to get a threads from go
     }
     ThreadService.prototype.handleError = function (error) {
-        // In a real world app, we might use a remote logging infrastructure
         var errMsg;
         if (error instanceof http_1.Response) {
             var body = error.json() || '';
@@ -31,11 +30,12 @@ var ThreadService = (function () {
         console.error(errMsg);
         return Promise.reject(errMsg);
     };
+    //extracts data from json response
     ThreadService.prototype.extractData = function (res) {
         var body = res.json();
-        console.log(body);
         return body || {};
     };
+    //a promise that returns a list of threads from Go server
     ThreadService.prototype.getThreads = function () {
         var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         var options = new http_1.RequestOptions({ headers: headers });
@@ -43,15 +43,8 @@ var ThreadService = (function () {
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);
-    };
-    ThreadService.prototype.saveThreadTest = function (thread) {
-        //create Thread
-        // console.log(thread.title);
-        // console.log(thread.author);
-        // console.log(thread.body);
-        // console.log(thread.tags);
-        // console.log(thread.id);
-    };
+    }; //getThreads()
+    //save a thread to couchDb Through the go server
     ThreadService.prototype.saveThread = function (thread) {
         // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
         var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
@@ -60,8 +53,6 @@ var ThreadService = (function () {
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);
-        //add if extractData fine
-        //return this.getThreads();
     }; // saveThread()
     ThreadService = __decorate([
         core_1.Injectable(), 
@@ -69,5 +60,5 @@ var ThreadService = (function () {
     ], ThreadService);
     return ThreadService;
 }());
-exports.ThreadService = ThreadService;
+exports.ThreadService = ThreadService; //end thread service
 //# sourceMappingURL=thread.service.js.map

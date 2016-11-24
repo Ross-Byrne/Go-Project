@@ -21,7 +21,7 @@ import { ThreadPartialComponent }   from './thread-partial.component/thread-part
 import { ThreadDetailComponent }    from './thread-detail.component/thread-detail.component';
 
 // services
-import { ThreadService }    from './thread-page.component/thread.service';
+import { ThreadService } from './thread.service/thread.service';
 import { HeroService }      from './hero.service/hero.service';
 import { routing }          from './app.routing/app.routing';
 import { ForumPostsService }    from './forum-posts.service/forum-posts.service';

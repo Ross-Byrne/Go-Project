@@ -10,11 +10,10 @@ export class ThreadService {
 
     constructor(private http: Http) { }
 
-    private saveThreadURL = 'http://localhost:8080/api/saveThread';  // URL to web api
-    private getThreadURL = 'http://localhost:8080/api/getThreads';
+    private saveThreadURL = 'http://localhost:8080/api/saveThread';  // URL to save a thread in go
+    private getThreadURL = 'http://localhost:8080/api/getThreads';  // URL to get a threads from go
 
     private handleError (error: Response | any) {
-        // In a real world app, we might use a remote logging infrastructure
         let errMsg: string;
         if (error instanceof Response) {
             const body = error.json() || '';
@@ -27,14 +26,14 @@ export class ThreadService {
         return Promise.reject(errMsg);
     }
 
+    //extracts data from json response
     private extractData(res: Response) {
         let body = res.json();
-        console.log(body);
         return body || { };
-}
+    }
 
+    //a promise that returns a list of threads from Go server
     getThreads(): Promise<Thread[]> {
-
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         return this.http.get(this.getThreadURL, options)
@@ -42,32 +41,17 @@ export class ThreadService {
                     .then(this.extractData)
                     .catch(this.handleError);
 
-    }
+    }//getThreads()
 
-    saveThreadTest(thread: Thread){
-        //create Thread
-        // console.log(thread.title);
-        // console.log(thread.author);
-        // console.log(thread.body);
-        // console.log(thread.tags);
-        // console.log(thread.id);
-    }
-
+    //save a thread to couchDb Through the go server
     saveThread(thread: Thread) {
         // sourced from angulars docs: https://angular.io/docs/ts/latest/guide/server-communication.html#!#update
-
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         return this.http.post(this.saveThreadURL, JSON.stringify(thread), options)
                     .toPromise()
                     .then(this.extractData)
                     .catch(this.handleError);
-
-        //add if extractData fine
-
-        //return this.getThreads();
-
-
     } // saveThread()
 
-}
+}//end thread service

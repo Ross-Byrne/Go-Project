@@ -12,7 +12,7 @@ var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var common_1 = require('@angular/common');
 var thread_1 = require('../classes/thread/thread');
-var thread_service_1 = require('../thread-page.component/thread.service');
+var thread_service_1 = require('../thread.service/thread.service');
 var ThreadDetailComponent = (function () {
     function ThreadDetailComponent(threadService, route, location) {
         this.threadService = threadService;
