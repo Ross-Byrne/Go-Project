@@ -49,11 +49,31 @@ var AuthenticationService = (function () {
             return user; // return the user object to caller
         });
     }; // login()
+    // log the current user out
     AuthenticationService.prototype.logout = function () {
         // remove user from local storage to log user out
         //localStorage.removeItem('currentUser');
         //destroy cookie
-    };
+        // make a new instance of user object
+        var user = new user_1.User();
+        // get the current logged in user
+        user = JSON.parse(localStorage.getItem("user"));
+        console.log(user);
+        // if already logged out
+        if (user == null) {
+            console.log("YES");
+            return;
+        }
+        // clear the cached user
+        localStorage.removeItem("user");
+        // set the headers for POST
+        var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+        var options = new http_1.RequestOptions({ headers: headers });
+        // post login details to Go server
+        return this.http.post(this.logoutUrl, JSON.stringify(user.cookie), options)
+            .toPromise()
+            .catch();
+    }; // logout()
     AuthenticationService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [http_1.Http])
