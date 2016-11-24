@@ -17,6 +17,7 @@ export class SignUpComponent {
     title = "Sign Up Page";
     model: any = {};
     loading = false;
+    message = "";
  
     constructor(
         private router: Router,
@@ -50,6 +51,10 @@ export class SignUpComponent {
 
                 // handle error
                 console.log("Error, Username taken!");
+
+                // show error message
+                this.message = "Error! Username Already Taken."
+
             } // if
 
         }).catch(()=>{ // catch exceptions
@@ -59,6 +64,9 @@ export class SignUpComponent {
 
             // handled incorrect login details
             console.log("Error occured! Not signed up!");
+
+            // show error message
+            this.message = "Error occured! Not signed up!"
         });
     }
 }

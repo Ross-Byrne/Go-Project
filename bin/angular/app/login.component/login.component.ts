@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit {
     model: any = {};
     loading = false;
     cookie: SessionCookie = new SessionCookie();
+    message = "";
  
     constructor(
         private router: Router,
@@ -30,6 +31,8 @@ export class LoginComponent implements OnInit {
     ngOnInit() {
         // reset login status
         this.authenticationService.logout();
+
+        this.message = "";
     }
  
     login() {
@@ -63,7 +66,10 @@ export class LoginComponent implements OnInit {
                 this.loading = false;
 
                 // handled incorrect login details
-                console.log("Not logged in!");
+                console.log("Not logged in.");
+
+                // set the error message
+                this.message = "Error Logging in!";
 
             } // if
 
@@ -74,6 +80,9 @@ export class LoginComponent implements OnInit {
 
             // handled incorrect login details
             console.log("Not logged in");
+
+            // set the error message
+            this.message = "Error Logging in.";
         });
     } // login() 
 }

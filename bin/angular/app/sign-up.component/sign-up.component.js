@@ -20,6 +20,7 @@ var SignUpComponent = (function () {
         this.title = "Sign Up Page";
         this.model = {};
         this.loading = false;
+        this.message = "";
     }
     SignUpComponent.prototype.register = function () {
         var _this = this;
@@ -41,12 +42,16 @@ var SignUpComponent = (function () {
                 _this.loading = false;
                 // handle error
                 console.log("Error, Username taken!");
+                // show error message
+                _this.message = "Error! Username Already Taken.";
             } // if
         }).catch(function () {
             // stop loading
             _this.loading = false;
             // handled incorrect login details
             console.log("Error occured! Not signed up!");
+            // show error message
+            _this.message = "Error occured! Not signed up!";
         });
     };
     SignUpComponent = __decorate([
