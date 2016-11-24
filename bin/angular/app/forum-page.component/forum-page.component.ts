@@ -3,10 +3,16 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Params }   from '@angular/router';
 import { Location }                 from '@angular/common';
+import { Router }       from '@angular/router';
 
 import { Post } from '../classes/post/post';
 import { ThreadPosts } from '../classes/thread-posts/thread-posts';
+import { SessionCookie } from '../classes/session-cookie/session-cookie';
+import { User } from '../classes/user/user';
+
 import { ForumPostsService } from '../forum-posts.service/forum-posts.service';
+import { AuthenticationService } from '../auth.service/authentication.service';
+
 
 @Component({
   moduleId: module.id,
@@ -14,7 +20,7 @@ import { ForumPostsService } from '../forum-posts.service/forum-posts.service';
   templateUrl: 'forum-page.component.html'
 })
 
-export class ForumPageComponent {
+export class ForumPageComponent implements OnInit {
 
     title: string = "Thread Name"; // thread name
     //thread: Thread;
@@ -29,11 +35,21 @@ export class ForumPageComponent {
 
     constructor(
       private forumPostsService: ForumPostsService,
+      private authenticationService: AuthenticationService,
       private route: ActivatedRoute,
+      private router: Router,
       private location: Location  
     ) {}
 
     ngOnInit(): void {
+
+      // check it logged in
+      if(localStorage.getItem("user") == null){ // if not
+
+        // go to the login page
+        this.router.navigate(['/login']);
+
+      } // if
 
       // for each parameter in the route url
       this.route.params.forEach((params: Params) => {
@@ -72,20 +88,11 @@ export class ForumPageComponent {
 
       var post: Post = new Post();
 
-      post.AuthorId = "ross";
-      post.AuthorName = "Ross";
+      post.AuthorId = "";
+      post.AuthorName = this.authenticationService.userName;
       post.Body = postBody;
       post.ThreadPostId = this.threadPostsId; // this equals threadPosts._id (from couchDB)(used for saving)
       post.Id = ""; // this is set on the server
-
-      // add the post to the thread posts object (this is temp)
-      //this.threadPosts.Posts.push(post);
-
-      // scroll to the bottom of the page (so post can be seen)
-     // this.goToBottomOfPage(10);
-
-      // try to go to the next page incase the post ends up on the next page
-      //this.nextPage();
 
       this.forumPostsService.createPost(post) // save the post in couchDB
       .then(threadPosts => this.threadPosts = threadPosts) // update posts on screen

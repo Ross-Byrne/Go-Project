@@ -41,7 +41,7 @@ export class SignUpComponent {
 
                 console.log("User Created!");
 
-                // go to home page
+                // go to login page
                 this.router.navigate(['/login']);
 
             } else { // error

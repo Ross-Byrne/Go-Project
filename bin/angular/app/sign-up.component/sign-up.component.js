@@ -34,7 +34,7 @@ var SignUpComponent = (function () {
                 // stop loading
                 _this.loading = false;
                 console.log("User Created!");
-                // go to home page
+                // go to login page
                 _this.router.navigate(['/login']);
             }
             else {
