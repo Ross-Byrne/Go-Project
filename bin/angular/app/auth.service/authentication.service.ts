@@ -58,10 +58,37 @@ export class AuthenticationService {
 
     } // login()
 
- 
+    
+    // log the current user out
     logout() {
         // remove user from local storage to log user out
         //localStorage.removeItem('currentUser');
         //destroy cookie
-    }
+
+        // make a new instance of user object
+        var user: User = new User();
+
+        // get the current logged in user
+        user = JSON.parse(localStorage.getItem("user"));
+
+        console.log(user);
+
+        // if already logged out
+        if(user == null){
+            console.log("YES");
+            return;
+        }
+
+         // clear the cached user
+        localStorage.removeItem("user");
+
+        // set the headers for POST
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        // post login details to Go server
+        return this.http.post(this.logoutUrl, JSON.stringify(user.cookie), options)
+                .toPromise()
+                .catch();
+    } // logout()
 }

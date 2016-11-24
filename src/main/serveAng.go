@@ -243,9 +243,15 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 		// return error
 		w.WriteHeader(500)
 
+		return
+
 	} else { // if everything worked
 
 		w.WriteHeader(200)
+
+		fmt.Println("Logged out")
+
+		return
 
 	} // if
 

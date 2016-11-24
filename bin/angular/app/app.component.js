@@ -9,10 +9,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var router_1 = require('@angular/router');
+var authentication_service_1 = require('./auth.service/authentication.service');
 var AppComponent = (function () {
-    function AppComponent() {
+    function AppComponent(router, authenticationService) {
+        this.router = router;
+        this.authenticationService = authenticationService;
         this.title = 'Code Fourms';
     }
+    AppComponent.prototype.ngOnInit = function () {
+        // reset login status
+        //this.authenticationService.logout();
+    };
+    AppComponent.prototype.logout = function () {
+        // log the user out
+        this.authenticationService.logout();
+        // go to the login page
+        this.router.navigate(['/login']);
+    };
     AppComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
@@ -20,7 +34,7 @@ var AppComponent = (function () {
             templateUrl: 'app.component.html',
             styleUrls: ['app.component.css']
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [router_1.Router, authentication_service_1.AuthenticationService])
     ], AppComponent);
     return AppComponent;
 }());

@@ -12,7 +12,7 @@
       <div class="nav-links navbar-right">
         <a routerLink="/login" routerLinkActive="active">Login</a>
         <a routerLink="/signup" routerLinkActive="active">Sign Up</a>
-        <a>Logout</a>
+        <a style="cursor: pointer;" (click)="logout()">Logout</a>
       </div>
     </div>  
 
@@ -27,7 +27,7 @@
           <li><a routerLink="/threads" routerLinkActive="active">Threads</a></li>
           <li><a routerLink="/login" routerLinkActive="active">Login</a></li>
           <li><a routerLink="/signup" routerLinkActive="active">Sign Up</a></li>
-          <li><a>Logout</a></li>
+          <li><a style="cursor: pointer;" (click)="logout()">Logout</a></li>
         </ul>
       </div>
     </div>
