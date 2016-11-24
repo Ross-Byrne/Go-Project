@@ -4,7 +4,7 @@ import { Component, OnInit }    from '@angular/core';
 import { Router }       from '@angular/router';
 
 import { Thread } from '../classes/thread/thread';
-import { ThreadService } from './thread.service';
+import { ThreadService } from '../thread.service/thread.service';
 
 
 @Component({
@@ -14,12 +14,14 @@ import { ThreadService } from './thread.service';
 })
 
 export class ThreadPageComponent implements OnInit {
-
+    //variables for paging
     startIndex: number = 0;
     threadsPerPage: number = 5;
 
+    //array of threads to be displayed
     threads: Thread[] = [];
 
+    //variables for making a new post
     threadTitle: string = "";
     threadBody: string = "";
     threadTags: string = "";
@@ -29,63 +31,66 @@ export class ThreadPageComponent implements OnInit {
         private threadService: ThreadService) {
     }
 
+    //toggle to move to bottom of page
     opened: Boolean = false;
     toggle () {
       this.opened = !this.opened;
       this.goToBottomOfPage(10);
     }
 
-
-
+    //calls threads on page load
     ngOnInit(): void {
       this.threadService.getThreads()
            .then(threads => this.threads = threads);
     }
 
+    //link to view thread and all its posts
     gotoDetail(thread: Thread): void {
         let link = ['/threads', thread.ThreadPostId];
         this.router.navigate(link);
     }
 
+    //Moves to next Page of threads
     nextPage(): void {
       if(this.startIndex < this.threads.length - this.threadsPerPage){
         this.startIndex++;
       } // if;
     } // nextPage()
 
+    //Moves to previous Page of threads
     previousPage(): void {
       if(this.startIndex > 0){
         this.startIndex--;
       } // if
     } // previousPage()
 
+    //Moves to last Page of threads
     lastPage(): void {
       while(this.startIndex < this.threads.length - this.threadsPerPage){
         this.startIndex++;
       } // if;
     } // lastPage()
 
+    //scrolls to bottomOfPage
     goToBottomOfPage(timeout: number): void {
-
       // wait a selected amount of time before scrolling to bottom of page
       window.setTimeout( function () { document.getElementById('bottomOfPage').scrollIntoView(); }, timeout );
-
     } // goToBottomOfPage()
 
+    //scrolls to topOfPage
     goToTopOfPage(timeout: number): void {
-
       // wait a selected amount of time before scrolling to bottom of page
       window.setTimeout( function () { document.getElementById('topOfPage').scrollIntoView(); }, timeout );
-
     } // goToTopOfPage()
 
+    //passes a new thread to the go server
     saveThread(threadTitle: string,threadBody: string,threadTags: string): void {
-
       //add validation to avoid blank posts
 
       var thread: Thread = new Thread();
       var splitTags=threadTags.split(",");
 
+      //initialise thread struct from parameters
       thread.Author = "Martin";
       thread.Title = threadTitle;
       thread.Body = threadBody;
@@ -93,23 +98,22 @@ export class ThreadPageComponent implements OnInit {
       thread.Id = ""; 
       thread.ThreadPostId = ""; 
 
-      // save in couchDB
+      // save thread in couchDB
       this.threadService.saveThread(thread)
-        
         .then(() => {this.threadService.getThreads()
         .then(threads => this.threads = threads);})
         .then(() => {this.goToBottomOfPage(10);}) // scroll to the bottom of the page (so thread can be seen)
         .then(() => {this.lastPage();}); // try to go to the last page
 
+        //gets latest threads
+      this.threadService.getThreads()
+        .then(threads => this.threads = threads);
 
-        this.threadService.getThreads()
-           .then(threads => this.threads = threads);
-
-      // clear
+      // clear the make post objects
       this.threadTitle = "";
       this.threadBody = "";
       this.threadTags = "";
 
-    } // saveThread
+    } // saveThread()
 
 }//end ThreadPageComponent

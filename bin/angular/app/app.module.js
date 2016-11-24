@@ -21,7 +21,7 @@ var post_partial_component_1 = require('./post-partial.component/post-partial.co
 var forum_page_component_1 = require('./forum-page.component/forum-page.component');
 var thread_page_component_1 = require('./thread-page.component/thread-page.component');
 // services
-var thread_service_1 = require('./thread-page.component/thread.service');
+var thread_service_1 = require('./thread.service/thread.service');
 var hero_service_1 = require('./hero.service/hero.service');
 var app_routing_1 = require('./app.routing/app.routing');
 var forum_posts_service_1 = require('./forum-posts.service/forum-posts.service');

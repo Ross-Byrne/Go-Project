@@ -14,12 +14,14 @@ import { ForumPageComponent }       from './forum-page.component/forum-page.comp
 import { ThreadPageComponent }      from './thread-page.component/thread-page.component';
 
 // services
-import { ThreadService }            from './thread-page.component/thread.service';
-import { HeroService }              from './hero.service/hero.service';
-import { routing }                  from './app.routing/app.routing';
-import { ForumPostsService }        from './forum-posts.service/forum-posts.service';
-import { AuthenticationService }    from './auth.service/authentication.service';
-import { UserService }              from './user.service/user.service';
+
+import { ThreadService } from './thread.service/thread.service';
+import { HeroService }      from './hero.service/hero.service';
+import { routing }          from './app.routing/app.routing';
+import { ForumPostsService }    from './forum-posts.service/forum-posts.service';
+import { AuthenticationService } from './auth.service/authentication.service';
+import { UserService } from './user.service/user.service';
+
 
 @NgModule({
     imports: [
