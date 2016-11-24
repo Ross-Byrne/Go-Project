@@ -14,11 +14,6 @@ import (
 	"time"
 )
 
-type DataWrapper struct {
-	Cookie     CookieAuth
-	dataStruct interface{}
-}
-
 type Post struct {
 	Id           string
 	ThreadPostId string
@@ -30,9 +25,6 @@ type Posts struct {
 	Posts []Post
 }
 
-type ThreadPosts struct {
-	Posts []Post
-}
 type Thread struct {
 	Title        string   `json:"Title"`
 	Id           string   `json:"Id"`
@@ -71,6 +63,11 @@ type ThreadRows struct {
 	Total_rows int `json:"total_rows"`
 	//Offset 		int `json:"offset"`
 	Rows []Row `json:"rows"`
+}
+
+type PostsData struct {
+	Cookie CookieAuth
+	Posts  Posts
 }
 
 // need a struct with cookie and id for getting threadPosts
@@ -363,14 +360,14 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 	//fmt.Println("Done.")
 
 	var id = post.ThreadPostId
-	var threadPosts ThreadPosts
+	var posts Posts
 
 	var timeout = time.Duration(500 * 100000000)
 	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
 	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
 	db := conn.SelectDB("posts", &auth)
 
-	_, err = db.Read(id, &threadPosts, nil)
+	_, err = db.Read(id, &posts, nil)
 
 	// check errors
 	if err != nil {
@@ -380,7 +377,7 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 	var jsonBytes []byte
 
 	// marshal the struct into json byte array
-	jsonBytes, err = json.Marshal(threadPosts)
+	jsonBytes, err = json.Marshal(posts)
 
 	// error checks
 	if err != nil {
@@ -394,7 +391,7 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 
 } // savePostHandler()
 
-// handler for saving posts to couchDB
+// handler for getting posts from couchDB
 func getThreadPosts(w http.ResponseWriter, r *http.Request) {
 
 	// read all of the bytes from the request body into a byte array
@@ -410,14 +407,14 @@ func getThreadPosts(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	var threadPosts ThreadPosts
+	var posts Posts
 
 	var timeout = time.Duration(500 * 100000000)
 	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
 	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
 	db := conn.SelectDB("posts", &auth)
 
-	_, err = db.Read(id, &threadPosts, nil)
+	_, err = db.Read(id, &posts, nil)
 
 	// check errors
 	if err != nil {
@@ -427,7 +424,7 @@ func getThreadPosts(w http.ResponseWriter, r *http.Request) {
 	var jsonBytes []byte
 
 	// marshal the struct into json byte array
-	jsonBytes, err = json.Marshal(threadPosts)
+	jsonBytes, err = json.Marshal(posts)
 
 	// error checks
 	if err != nil {
@@ -469,11 +466,11 @@ func saveThreadHandler(w http.ResponseWriter, r *http.Request) {
 
 	thread.Id = theThreadId
 
-	var threadPost ThreadPosts
+	var posts Posts
 
-	threadPost.Posts = []Post{}
+	posts.Posts = []Post{}
 
-	thread.ThreadPostId = saveDocumentToCouch(threadPost, "posts")
+	thread.ThreadPostId = saveDocumentToCouch(posts, "posts")
 
 	fmt.Println(thread.Author)
 	fmt.Println(thread.Title)
