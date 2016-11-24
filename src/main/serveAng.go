@@ -14,6 +14,11 @@ import (
 	"time"
 )
 
+type DataWrapper struct {
+	Cookie     CookieAuth
+	dataStruct interface{}
+}
+
 type Post struct {
 	Id           string
 	ThreadPostId string
@@ -28,25 +33,13 @@ type Posts struct {
 type ThreadPosts struct {
 	Posts []Post
 }
-
-/*
-   To get routing to work in the angular app, the index.html file needs to be served
-   everytime a route is entered into the address bar. This lets angular 2 handle the routing
-   instead of Go. In doing this, I ran into the problem of Go returning js files as html.
-   To solve this (after many many hours) I used some code from the answer on this post
-   Link: http://stackoverflow.com/questions/14086063/serve-homepage-and-static-content-from-root
-*/
-
-// for serving angular resources (all angular app files needed)
-var chttp = http.NewServeMux()
-
 type Thread struct {
-	Title        string`json:"Title"`
-	Id           string`json:"Id"`
-	ThreadPostId string`json:"ThreadPostId"`
-	Author       string`json:"Author"`
-	Body         string`json:"Body"`
-	Tags         []string`json:"Tags"`
+	Title        string   `json:"Title"`
+	Id           string   `json:"Id"`
+	ThreadPostId string   `json:"ThreadPostId"`
+	Author       string   `json:"Author"`
+	Body         string   `json:"Body"`
+	Tags         []string `json:"Tags"`
 }
 
 type UserDetails struct {
@@ -70,16 +63,23 @@ type CookieAuth struct {
 }
 
 type Row struct {
-	Id           string`json:"id"`
-	Doc           Thread`json:"doc"`
+	Id  string `json:"id"`
+	Doc Thread `json:"doc"`
 }
 
 type ThreadRows struct {
-	Total_rows  int `json:"total_rows"`
+	Total_rows int `json:"total_rows"`
 	//Offset 		int `json:"offset"`
-	Rows		[]Row `json:"rows"`
+	Rows []Row `json:"rows"`
 }
 
+// need a struct with cookie and id for getting threadPosts
+// need a struct for creating posts, with a post and cookie in it
+// need a struct for creating a thread, with thread object and cookie
+// need to post cookie to server when getting all threads
+
+// for serving angular resources (all angular app files needed)
+var chttp = http.NewServeMux()
 
 func main() {
 
@@ -120,6 +120,14 @@ func main() {
 
 // handler for root address
 func homeHandler(w http.ResponseWriter, r *http.Request) {
+
+	/*
+	   To get routing to work in the angular app, the index.html file needs to be served
+	   everytime a route is entered into the address bar. This lets angular 2 handle the routing
+	   instead of Go. In doing this, I ran into the problem of Go returning js files as html.
+	   To solve this (after many many hours) I used some code from the answer on this post
+	   Link: http://stackoverflow.com/questions/14086063/serve-homepage-and-static-content-from-root
+	*/
 
 	// if path has a . in it, it is looking for a file
 	if strings.Contains(r.URL.Path, ".") {
@@ -330,10 +338,7 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 	post.Id = theId
 
 	fmt.Println(post)
-
 	fmt.Println(post.Body)
-	// save the post to couchDB
-	//saveDocumentToCouch(threadPosts, "posts")
 
 	//"https://couchdb-e195fb.smileupps.com/posts/_design/post/_update/addPost/a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b"
 
@@ -687,7 +692,7 @@ func saveDocumentToCouch(doc interface{}, dbName string) string {
 
 } // saveDocumentToCouch()
 
-func getThreadId() ([]string) {
+func getThreadId() []string {
 
 	var timeout = time.Duration(500 * 100000000)
 	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
@@ -700,11 +705,10 @@ func getThreadId() ([]string) {
 
 	log.Println("Error: ", err)
 
-
-	idArray := make([]string,rows.Total_rows)
+	idArray := make([]string, rows.Total_rows)
 
 	for i := 0; i < rows.Total_rows; i++ {
-		idArray[i]=rows.Rows[i].Id
+		idArray[i] = rows.Rows[i].Id
 	}
 
 	return idArray
@@ -713,7 +717,7 @@ func getThreadId() ([]string) {
 
 func getThreadHandler(w http.ResponseWriter, r *http.Request) {
 
-	threadIds:=getThreadId()
+	threadIds := getThreadId()
 
 	var timeout = time.Duration(500 * 100000000)
 	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
@@ -726,10 +730,10 @@ func getThreadHandler(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Error: ", err)
 
-	threadsArray := make([]Thread,rows.Total_rows)
+	threadsArray := make([]Thread, rows.Total_rows)
 
 	for i := 0; i < rows.Total_rows; i++ {
-		threadsArray[i]=rows.Rows[i].Doc
+		threadsArray[i] = rows.Rows[i].Doc
 	}
 
 	fmt.Println(threadsArray)
