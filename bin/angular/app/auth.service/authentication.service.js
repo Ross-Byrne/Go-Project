@@ -61,10 +61,9 @@ var AuthenticationService = (function () {
         var user = new user_1.User();
         // get the current logged in user
         user = JSON.parse(localStorage.getItem("user"));
-        console.log(user);
+        // console.log(user);
         // if already logged out
         if (user == null) {
-            console.log("YES");
             return;
         }
         // clear the cached user
