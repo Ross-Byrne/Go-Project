@@ -26,29 +26,36 @@ export class AuthenticationService {
     private loginUrl = 'http://localhost:8080/api/login';
 
 
-    login(username: string, password: string): Promise<SessionCookie> {
+    // logs the user in, returns the user object
+    login(username: string, password: string): Promise<User> {
 
+        // clear the cached user
+        localStorage.removeItem("user");
+
+        // set the headers for POST
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
 
         var user: User = new User(); // create user object
 
         user.username = username; // set username
-        user.password = password; // set password
 
-        console.log(user);
-
+        // create new cookie object
         var cookie: SessionCookie = new SessionCookie();
-        cookie.AuthToken = "";
+        cookie.AuthToken = ""; // set defualt value
 
-        return this.http.post(this.loginUrl, JSON.stringify(user), options)
+        // post login details to Go server
+        return this.http.post(this.loginUrl, JSON.stringify({username: username, password: password}), options)
                 .toPromise()
-                .then(this.extractData)
-                .catch(() => { 
-                    return cookie
+                .then((res: Response) => {
+
+                    cookie = this.extractData(res); // get the cookie
+                    user.cookie = cookie; // set the cookie in user object
+
+                    return user; // return the user object to caller
                 });
 
-    }
+    } // login()
  
     logout() {
         // remove user from local storage to log user out

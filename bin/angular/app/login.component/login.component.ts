@@ -8,6 +8,8 @@ import { AuthenticationService } from '../auth.service/authentication.service';
 
 
 import { SessionCookie } from '../classes/session-cookie/session-cookie';
+import { User } from '../classes/user/user';
+
 
 @Component({
   moduleId: module.id,
@@ -33,41 +35,45 @@ export class LoginComponent implements OnInit {
     login() {
 
         this.loading = true;
-        this.authenticationService.login(this.model.username, this.model.password)
-        .then(cookie => this.cookie = cookie)
-        .then(() => {
+        var loggedinuser: User = new User();
 
-            if(this.cookie.AuthToken != ""){
+        this.authenticationService.login(this.model.username, this.model.password) // log the user in
+        .then(user => loggedinuser = user) // set the user object
+        .then(() => { // hand the user object
+
+            // check if the cookie is valid
+            if(loggedinuser.cookie.AuthToken !== ""){
                 
                 // stop loading
                 this.loading = false;
 
+                // store the user in localStorage
+                localStorage.setItem("user", JSON.stringify(loggedinuser))
+
+                //console.log(localStorage.getItem("user"));
+                //console.log(loggedinuser);
+
                 // go to home page
                 this.router.navigate(['/']);
 
-            } else {
+            } else { // if not valid
 
+                
                 // stop loading
                 this.loading = false;
 
                 // handled incorrect login details
-                console.log("Not logged in");
+                console.log("Not logged in!");
 
-            }
-        })
+            } // if
 
-        console.log(this.cookie);
+        }).catch(()=>{ // catch exceptions
 
-        // this.authenticationService.login(this.model.username, this.model.password)
-        //     .subscribe(
-        //         data => {
-        //             //on sucessful log in nav to following
-        //             this.router.navigate(['/']);
-        //         },
-        //         error => {
-        //           //log or display error
-        //             console.log("Unable to login: "+error);
-        //             this.loading = false;
-        //         });
-    }
+            // stop loading
+            this.loading = false;
+
+            // handled incorrect login details
+            console.log("Not logged in");
+        });
+    } // login() 
 }

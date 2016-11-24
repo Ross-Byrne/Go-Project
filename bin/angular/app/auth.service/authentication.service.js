@@ -26,22 +26,28 @@ var AuthenticationService = (function () {
         console.log(body);
         return body || {};
     };
+    // logs the user in, returns the user object
     AuthenticationService.prototype.login = function (username, password) {
+        var _this = this;
+        // clear the cached user
+        localStorage.removeItem("user");
+        // set the headers for POST
         var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         var options = new http_1.RequestOptions({ headers: headers });
         var user = new user_1.User(); // create user object
         user.username = username; // set username
-        user.password = password; // set password
-        console.log(user);
+        // create new cookie object
         var cookie = new session_cookie_1.SessionCookie();
-        cookie.AuthToken = "";
-        return this.http.post(this.loginUrl, JSON.stringify(user), options)
+        cookie.AuthToken = ""; // set defualt value
+        // post login details to Go server
+        return this.http.post(this.loginUrl, JSON.stringify({ username: username, password: password }), options)
             .toPromise()
-            .then(this.extractData)
-            .catch(function () {
-            return cookie;
+            .then(function (res) {
+            cookie = _this.extractData(res); // get the cookie
+            user.cookie = cookie; // set the cookie in user object
+            return user; // return the user object to caller
         });
-    };
+    }; // login()
     AuthenticationService.prototype.logout = function () {
         // remove user from local storage to log user out
         //localStorage.removeItem('currentUser');
