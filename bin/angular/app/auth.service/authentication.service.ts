@@ -24,6 +24,7 @@ export class AuthenticationService {
     private headers = new Headers({'Content-Type': 'application/json'});
 
     private loginUrl = 'http://localhost:8080/api/login';
+    private logoutUrl = 'http://localhost:8080/api/logout';
 
 
     // logs the user in, returns the user object
@@ -56,6 +57,7 @@ export class AuthenticationService {
                 });
 
     } // login()
+
  
     logout() {
         // remove user from local storage to log user out

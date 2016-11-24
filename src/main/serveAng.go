@@ -265,7 +265,7 @@ func createUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Unmarshal the JSON into the struct
 	if err = json.Unmarshal(body, &user); err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	// now create the user in couchDB
@@ -288,7 +288,12 @@ func createUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	db := conn.SelectDB("_users", &auth)
 	namestring := "org.couchdb.user:" + userData.Name
-	db.Save(&userData, namestring, "")
+	_, err = db.Save(&userData, namestring, "")
+
+	if err != nil { // if there is an error, user already exists
+		w.WriteHeader(409) // return conflict code
+		return
+	} // if
 
 } // createUserHandler()
 
@@ -307,14 +312,14 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Unmarshal the JSON into the struct
 	if err = json.Unmarshal(body, &post); err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	// set a id for the post
 	theId, err := newUUID() // generate a UUID
 
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	post.Id = theId
