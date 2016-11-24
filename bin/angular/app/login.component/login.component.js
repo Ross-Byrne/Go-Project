@@ -23,10 +23,12 @@ var LoginComponent = (function () {
         this.model = {};
         this.loading = false;
         this.cookie = new session_cookie_1.SessionCookie();
+        this.message = "";
     }
     LoginComponent.prototype.ngOnInit = function () {
         // reset login status
         this.authenticationService.logout();
+        this.message = "";
     };
     LoginComponent.prototype.login = function () {
         var _this = this;
@@ -50,13 +52,17 @@ var LoginComponent = (function () {
                 // stop loading
                 _this.loading = false;
                 // handled incorrect login details
-                console.log("Not logged in!");
+                console.log("Not logged in.");
+                // set the error message
+                _this.message = "Error Logging in!";
             } // if
         }).catch(function () {
             // stop loading
             _this.loading = false;
             // handled incorrect login details
             console.log("Not logged in");
+            // set the error message
+            _this.message = "Error Logging in.";
         });
     }; // login() 
     LoginComponent = __decorate([

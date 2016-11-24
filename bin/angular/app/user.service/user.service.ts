@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { Http, Response, RequestOptions, Headers, Request, RequestMethod } from '@angular/http';
+
+import 'rxjs/add/operator/toPromise';
  
 import { User } from '../classes/user/user';
  
@@ -7,8 +9,14 @@ import { User } from '../classes/user/user';
 export class UserService {
     constructor(private http: Http) { }
 
-    private userURL = 'http://localhost:8080//api/users';
+    private userURL = 'http://localhost:8080/api/createUser';
 
+    private extractData(res: Response) {
+
+        let body = res.json();
+        console.log(body);
+        return body || { };
+    }
  
     /*getAll() {
         return this.http.get('/api/users', this.jwt()).map((response: Response) => response.json());
@@ -18,15 +26,28 @@ export class UserService {
         return this.http.get('/api/users/' + id, this.jwt()).map((response: Response) => response.json());
     }*/
  
-    createUser(user: User) {
-        //create a new user
-        return this.http.post(this.userURL, user, this.jwt())
-        .map((response: Response) => response.json());
-    }
+    // signs the user up, returns if it worked or not
+    signup(username: string, password: string): Promise<Boolean> {
+
+        // set the headers for POST
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        console.log({username: username, password: password});
+
+        // post login details to Go server
+        return this.http.post(this.userURL, JSON.stringify({username: username, password: password}), options)
+                .toPromise()
+                .then(() => {
+                    return true;
+                })
+                .catch(() => { 
+                    return false;
+                });
+
+    } // signup()
  
-    /*delete(id: number) {
-        return this.http.delete('/api/users/' + id, this.jwt()).map((response: Response) => response.json());
-    }*/
+    
  
     // private helper methods
  

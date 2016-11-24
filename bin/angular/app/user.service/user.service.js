@@ -10,11 +10,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
+require('rxjs/add/operator/toPromise');
 var UserService = (function () {
     function UserService(http) {
         this.http = http;
-        this.userURL = 'http://localhost:8080//api/users';
+        this.userURL = 'http://localhost:8080/api/createUser';
     }
+    UserService.prototype.extractData = function (res) {
+        var body = res.json();
+        console.log(body);
+        return body || {};
+    };
     /*getAll() {
         return this.http.get('/api/users', this.jwt()).map((response: Response) => response.json());
     }
@@ -22,14 +28,22 @@ var UserService = (function () {
     getById(id: number) {
         return this.http.get('/api/users/' + id, this.jwt()).map((response: Response) => response.json());
     }*/
-    UserService.prototype.createUser = function (user) {
-        //create a new user
-        return this.http.post(this.userURL, user, this.jwt())
-            .map(function (response) { return response.json(); });
-    };
-    /*delete(id: number) {
-        return this.http.delete('/api/users/' + id, this.jwt()).map((response: Response) => response.json());
-    }*/
+    // signs the user up, returns if it worked or not
+    UserService.prototype.signup = function (username, password) {
+        // set the headers for POST
+        var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+        var options = new http_1.RequestOptions({ headers: headers });
+        console.log({ username: username, password: password });
+        // post login details to Go server
+        return this.http.post(this.userURL, JSON.stringify({ username: username, password: password }), options)
+            .toPromise()
+            .then(function () {
+            return true;
+        })
+            .catch(function () {
+            return false;
+        });
+    }; // signup()
     // private helper methods
     UserService.prototype.jwt = function () {
         //can be cookie

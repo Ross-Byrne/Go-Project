@@ -10,9 +10,10 @@
         <a routerLink="/threads" routerLinkActive="active">Threads</a>
       </div>
       <div class="nav-links navbar-right">
-        <a routerLink="/login" routerLinkActive="active">Login</a>
-        <a routerLink="/signup" routerLinkActive="active">Sign Up</a>
-        <a>Logout</a>
+        {{this.authenticationService.userNameMessage}}
+        <a *ngIf="this.authenticationService.userName === ''" routerLink="/login" routerLinkActive="active">Login</a>
+        <a *ngIf="this.authenticationService.userName === ''" routerLink="/signup" routerLinkActive="active">Sign Up</a>
+        <a *ngIf="this.authenticationService.userName !== ''" style="cursor: pointer;" (click)="logout()">Logout</a>
       </div>
     </div>  
 
@@ -25,9 +26,9 @@
         <ul class="dropdown-menu dropdown-menu-right">
           <li><a routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
           <li><a routerLink="/threads" routerLinkActive="active">Threads</a></li>
-          <li><a routerLink="/login" routerLinkActive="active">Login</a></li>
-          <li><a routerLink="/signup" routerLinkActive="active">Sign Up</a></li>
-          <li><a>Logout</a></li>
+          <li><a *ngIf="this.authenticationService.userName === ''" routerLink="/login" routerLinkActive="active">Login</a></li>
+          <li><a *ngIf="this.authenticationService.userName === ''" routerLink="/signup" routerLinkActive="active">Sign Up</a></li>
+          <li><a *ngIf="this.authenticationService.userName !== ''" style="cursor: pointer;" (click)="logout()">Logout</a></li>
         </ul>
       </div>
     </div>

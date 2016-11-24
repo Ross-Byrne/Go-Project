@@ -17,6 +17,7 @@ export class SignUpComponent {
     title = "Sign Up Page";
     model: any = {};
     loading = false;
+    message = "";
  
     constructor(
         private router: Router,
@@ -25,15 +26,47 @@ export class SignUpComponent {
  
     register() {
         this.loading = true;
-        this.userService.createUser(this.model)
-            .subscribe(
-                data => {
-                    // set success message and pass true paramater to persist the message after redirecting to the login page
-                    this.router.navigate(['/login']);
-                },
-                error => {
-                    console.log("Unable to signup: "+error);
-                    this.loading = false;
-                });
+        var worked: Boolean = false;
+
+        this.userService.signup(this.model.username, this.model.password) // create a user
+        .then(status => worked = status) // get the status
+        .then(() => { //handle signup
+
+            // check if the sign was successful
+            if(worked === true){
+                
+                // stop loading
+                this.loading = false;
+
+
+                console.log("User Created!");
+
+                // go to login page
+                this.router.navigate(['/login']);
+
+            } else { // error
+
+                // stop loading
+                this.loading = false;
+
+                // handle error
+                console.log("Error, Username taken!");
+
+                // show error message
+                this.message = "Error! Username Already Taken."
+
+            } // if
+
+        }).catch(()=>{ // catch exceptions
+
+            // stop loading
+            this.loading = false;
+
+            // handled incorrect login details
+            console.log("Error occured! Not signed up!");
+
+            // show error message
+            this.message = "Error occured! Not signed up!"
+        });
     }
 }
