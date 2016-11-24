@@ -20,6 +20,7 @@ var AuthenticationService = (function () {
         this.http = http;
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         this.loginUrl = 'http://localhost:8080/api/login';
+        this.logoutUrl = 'http://localhost:8080/api/logout';
     }
     AuthenticationService.prototype.extractData = function (res) {
         var body = res.json();

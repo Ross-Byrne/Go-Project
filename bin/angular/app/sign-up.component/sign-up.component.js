@@ -24,13 +24,29 @@ var SignUpComponent = (function () {
     SignUpComponent.prototype.register = function () {
         var _this = this;
         this.loading = true;
-        this.userService.createUser(this.model)
-            .subscribe(function (data) {
-            // set success message and pass true paramater to persist the message after redirecting to the login page
-            _this.router.navigate(['/login']);
-        }, function (error) {
-            console.log("Unable to signup: " + error);
+        var worked = false;
+        this.userService.signup(this.model.username, this.model.password) // create a user
+            .then(function (status) { return worked = status; }) // get the status
+            .then(function () {
+            // check if the sign was successful
+            if (worked === true) {
+                // stop loading
+                _this.loading = false;
+                console.log("User Created!");
+                // go to home page
+                _this.router.navigate(['/login']);
+            }
+            else {
+                // stop loading
+                _this.loading = false;
+                // handle error
+                console.log("Error, Username taken!");
+            } // if
+        }).catch(function () {
+            // stop loading
             _this.loading = false;
+            // handled incorrect login details
+            console.log("Error occured! Not signed up!");
         });
     };
     SignUpComponent = __decorate([
