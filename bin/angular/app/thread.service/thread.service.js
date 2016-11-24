@@ -37,9 +37,11 @@ var ThreadService = (function () {
     };
     //a promise that returns a list of threads from Go server
     ThreadService.prototype.getThreads = function () {
+        var user;
+        user = JSON.parse(localStorage.getItem("user"));
         var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         var options = new http_1.RequestOptions({ headers: headers });
-        return this.http.get(this.getThreadURL, options)
+        return this.http.post(this.getThreadURL, JSON.stringify(user.cookie), options)
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);

@@ -3,6 +3,7 @@ import { Http, Response, RequestOptions, Headers, Request, RequestMethod} from '
 import 'rxjs/add/operator/toPromise';
 
 import { Thread } from '../classes/thread/thread';
+import { User } from '../classes/user/user';
 import { THREADS } from '../mock-threads';
 
 @Injectable()
@@ -34,9 +35,14 @@ export class ThreadService {
 
     //a promise that returns a list of threads from Go server
     getThreads(): Promise<Thread[]> {
+
+        var user: User;
+
+        user = JSON.parse(localStorage.getItem("user"));
+
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-        return this.http.get(this.getThreadURL, options)
+        return this.http.post(this.getThreadURL, JSON.stringify(user.cookie), options)
                     .toPromise()
                     .then(this.extractData)
                     .catch(this.handleError);

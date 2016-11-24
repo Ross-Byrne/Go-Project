@@ -65,15 +65,23 @@ type ThreadRows struct {
 	Rows []Row `json:"rows"`
 }
 
+// struct with cookie and id for getting Posts
 type PostsData struct {
 	Cookie CookieAuth
 	Posts  Posts
 }
 
-// need a struct with cookie and id for getting threadPosts
-// need a struct for creating posts, with a post and cookie in it
-// need a struct for creating a thread, with thread object and cookie
-// need to post cookie to server when getting all threads
+// struct for creating posts, with a post and cookie in it
+type PostData struct {
+	Cookie CookieAuth
+	Post   Post
+}
+
+// struct for creating a thread, with thread object and cookie
+type threadData struct {
+	Cookie CookieAuth
+	Thread Thread
+}
 
 // for serving angular resources (all angular app files needed)
 var chttp = http.NewServeMux()
@@ -689,12 +697,16 @@ func saveDocumentToCouch(doc interface{}, dbName string) string {
 
 } // saveDocumentToCouch()
 
-func getThreadId() []string {
+func getThreadId(cookie CookieAuth) []string {
 
 	var timeout = time.Duration(500 * 100000000)
 	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
-	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
+
+	// get cookie into correct format
+	auth := couchdb.CookieAuth{AuthToken: cookie.AuthToken, UpdatedAuthToken: cookie.UpdatedAuthToken}
 	db := conn.SelectDB("threads", &auth)
+
+	//fmt.Println("Used Cookie to authenticate")
 
 	var rows ThreadRows
 
@@ -714,7 +726,21 @@ func getThreadId() []string {
 
 func getThreadHandler(w http.ResponseWriter, r *http.Request) {
 
-	threadIds := getThreadId()
+	// read all of the bytes from the request body into a byte array
+	body, err := ioutil.ReadAll(r.Body)
+
+	// print out JSON
+	fmt.Println("JSON: " + string(body))
+
+	// make cookie struct
+	var cookie CookieAuth
+
+	// Unmarshal the JSON into the struct
+	if err = json.Unmarshal(body, &cookie); err != nil {
+		panic(err)
+	}
+
+	threadIds := getThreadId(cookie)
 
 	var timeout = time.Duration(500 * 100000000)
 	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
