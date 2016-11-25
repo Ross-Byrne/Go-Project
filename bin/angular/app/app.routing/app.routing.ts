@@ -36,7 +36,10 @@ const appRoutes: Routes = [
     {
         path: 'threads/:id',
         component: ForumPageComponent       // show the posts for the thread with id = id in address url
-    }
+    },
+
+    //if cannot find url redirect to 
+    { path: '**', redirectTo: '/dashboard' }
 ];
 
 export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
