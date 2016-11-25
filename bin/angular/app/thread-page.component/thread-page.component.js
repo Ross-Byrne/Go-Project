@@ -84,7 +84,7 @@ var ThreadPageComponent = (function () {
     ThreadPageComponent.prototype.saveThread = function (threadTitle, threadBody, threadTags) {
         //add validation to avoid blank posts
         var _this = this;
-        if (threadTitle == "" || threadBody == "" || threadTags == "") {
+        if (threadTitle == "" || threadBody == "" || threadTags == "" || this.authenticationService.userName == "") {
             this.errorLabel = "Insufficent Data";
         }
         else {
@@ -114,9 +114,6 @@ var ThreadPageComponent = (function () {
             this.threadTags = "";
             this.errorLabel = "";
         } //end else
-        //gets latest threads
-        this.threadService.getThreads()
-            .then(function (threads) { return _this.threads = threads; });
     }; // saveThread()
     ThreadPageComponent = __decorate([
         core_1.Component({
