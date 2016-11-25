@@ -83,10 +83,16 @@ type ThreadData struct {
 	Thread Thread
 }
 
+//var couchDBUrl string = "couchdb-e195fb.smileupps.com"
+var couchDBUrl string = "couchdb-a21442.smileupps.com"
+
+
 // for serving angular resources (all angular app files needed)
 var chttp = http.NewServeMux()
 
 func main() {
+
+	
 
 	// handle for serving resource
 	chttp.Handle("/", http.FileServer(http.Dir("./angular")))
@@ -177,7 +183,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	var timeout = time.Duration(500 * 100000000)
 
 	// create the connect to couchDB
-	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
+	conn, err := couchdb.NewSSLConnection(couchDBUrl, 443, timeout)
 
 	// get authentication cookie for user.(creates a session cookie)
 	authCookie, err := conn.CreateSession(user.Username, user.Password)
@@ -240,7 +246,7 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 	var timeout = time.Duration(500 * 100000000)
 
 	// create the connect to couchDB
-	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
+	conn, err := couchdb.NewSSLConnection(couchDBUrl, 443, timeout)
 
 	// get cookie into correct format
 	auth := couchdb.CookieAuth{AuthToken: authCookie.AuthToken, UpdatedAuthToken: authCookie.UpdatedAuthToken}
@@ -291,7 +297,7 @@ func createUserHandler(w http.ResponseWriter, r *http.Request) {
 	var timeout = time.Duration(500 * 100000000)
 
 	// create the connect to couchDB
-	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
+	conn, err := couchdb.NewSSLConnection(couchDBUrl, 443, timeout)
 
 	// set authentication
 	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
@@ -351,7 +357,7 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 	//"https://couchdb-e195fb.smileupps.com/posts/_design/post/_update/addPost/a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b"
 
 	// URL vars
-	domainUrl := "https://couchdb-e195fb.smileupps.com/"
+	domainUrl := "https://"+couchDBUrl+"/"
 	updatePostUrl := "posts/_design/post/_update/addPost/"
 	threadPostsID := post.ThreadPostId
 
@@ -374,7 +380,7 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 	var posts Posts
 
 	var timeout = time.Duration(500 * 100000000)
-	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
+	conn, err := couchdb.NewSSLConnection(couchDBUrl, 443, timeout)
 
 	// get cookie into correct format
 	auth := couchdb.CookieAuth{AuthToken: postData.Cookie.AuthToken, UpdatedAuthToken: postData.Cookie.UpdatedAuthToken}
@@ -426,7 +432,7 @@ func getThreadPosts(w http.ResponseWriter, r *http.Request) {
 	var posts Posts
 
 	var timeout = time.Duration(500 * 100000000)
-	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
+	conn, err := couchdb.NewSSLConnection(couchDBUrl, 443, timeout)
 
 	// get cookie into correct format
 	auth := couchdb.CookieAuth{AuthToken: postsData.Cookie.AuthToken, UpdatedAuthToken: postsData.Cookie.UpdatedAuthToken}
@@ -434,8 +440,6 @@ func getThreadPosts(w http.ResponseWriter, r *http.Request) {
 	db := conn.SelectDB("posts", &auth)
 
 	_, err = db.Read(postsData.Id, &posts, nil)
-
-	//	fmt.Println("Used Session Cookie to authenticate")
 
 	// check errors
 	if err != nil {
@@ -479,15 +483,14 @@ func saveThreadHandler(w http.ResponseWriter, r *http.Request) {
 
 	thread = threadData.Thread
 
-	//create thread post document
-	//set threadpost id in struct
-
+	//create thread post document and unique id
 	theThreadId, err := newUUID() // generate a UUID
 
 	if err != nil {
 		panic(err)
 	}
 
+	//set threadpost id in struct
 	thread.Id = theThreadId
 
 	var posts Posts
@@ -495,12 +498,6 @@ func saveThreadHandler(w http.ResponseWriter, r *http.Request) {
 	posts.Posts = []Post{}
 
 	thread.ThreadPostId = saveDocumentToCouch(posts, "posts", threadData.Cookie)
-
-	fmt.Println(thread.Author)
-	fmt.Println(thread.Title)
-	fmt.Println(thread.Author)
-	fmt.Println(thread.Id)
-	fmt.Println(thread.ThreadPostId)
 
 	// save the thread to couchDB
 	saveDocumentToCouch(thread, "threads", threadData.Cookie)
@@ -626,50 +623,6 @@ func newUUID() (string, error) {
 	return fmt.Sprintf("%x-%x-%x-%x-%x", uuid[0:4], uuid[4:6], uuid[6:8], uuid[8:10], uuid[10:]), nil
 }
 
-func saveThread(t Thread) {
-	var timeout = time.Duration(500 * 100000000)
-	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
-	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
-	db := conn.SelectDB("threads", &auth)
-
-	/*log.Println(t.title)
-	log.Println(t.author)
-	log.Println(t.body)
-	log.Println(t.id)
-	log.Println(t.tags)*/
-
-	theDoc := Thread{
-		Title:  t.Title,
-		Id:     t.Id,
-		Author: t.Author,
-		Body:   t.Body,
-		Tags:   t.Tags,
-		//title: "My remote thread",
-	}
-
-	log.Println("Doc sent to Couch")
-	log.Println(theDoc.Title)
-	log.Println(theDoc.Author)
-	log.Println(theDoc.Body)
-	log.Println(theDoc.Id)
-	log.Println(theDoc.Tags)
-	log.Println()
-
-	theId, err := newUUID() //use whatever method you like to generate a uuid
-	//The third argument here would be a revision, if you were updating an existing document
-	if err != nil {
-		fmt.Printf("error: %v\n", err)
-	}
-	log.Println("Saving Thread")
-	rev, err := db.Save(theDoc, theId, "")
-	//If all is well, rev should contain the revision of the newly created
-	//or updated Document
-
-	log.Println("revision: " + rev)
-	log.Println("Error: ", err)
-
-}
-
 // generic function to save a document to couchDB
 // parameters are, the doc, (eg struct made for documents) and the name of DB as a string
 func saveDocumentToCouch(doc interface{}, dbName string, cookie CookieAuth) string {
@@ -678,7 +631,7 @@ func saveDocumentToCouch(doc interface{}, dbName string, cookie CookieAuth) stri
 	var timeout = time.Duration(500 * 100000000)
 
 	// create the connect to couchDB
-	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
+	conn, err := couchdb.NewSSLConnection(couchDBUrl, 443, timeout)
 
 	// get cookie into correct format
 	auth := couchdb.CookieAuth{AuthToken: cookie.AuthToken, UpdatedAuthToken: cookie.UpdatedAuthToken}
@@ -718,13 +671,11 @@ func saveDocumentToCouch(doc interface{}, dbName string, cookie CookieAuth) stri
 func getThreadId(cookie CookieAuth) []string {
 
 	var timeout = time.Duration(500 * 100000000)
-	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
+	conn, err := couchdb.NewSSLConnection(couchDBUrl, 443, timeout)
 
 	// get cookie into correct format
 	auth := couchdb.CookieAuth{AuthToken: cookie.AuthToken, UpdatedAuthToken: cookie.UpdatedAuthToken}
 	db := conn.SelectDB("threads", &auth)
-
-	//fmt.Println("Used Cookie to authenticate")
 
 	var rows ThreadRows
 
@@ -761,7 +712,7 @@ func getThreadHandler(w http.ResponseWriter, r *http.Request) {
 	threadIds := getThreadId(cookie)
 
 	var timeout = time.Duration(500 * 100000000)
-	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
+	conn, err := couchdb.NewSSLConnection(couchDBUrl, 443, timeout)
 	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
 	db := conn.SelectDB("threads", &auth)
 

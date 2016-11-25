@@ -122,8 +122,8 @@ export class ThreadPageComponent implements OnInit {
           .then(() => {this.lastPage();}); // try to go to the last page
 
           //gets latest threads
-        this.threadService.getThreads()
-          .then(threads => this.threads = threads);
+        // this.threadService.getThreads()
+        //   .then(threads => this.threads = threads);
 
         // clear the make post objects
         this.threadTitle = "";
