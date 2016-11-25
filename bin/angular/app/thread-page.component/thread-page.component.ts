@@ -99,7 +99,7 @@ export class ThreadPageComponent implements OnInit {
     saveThread(threadTitle: string,threadBody: string,threadTags: string): void {
       //add validation to avoid blank posts
 
-      if(threadTitle==""||threadBody==""||threadTags==""){
+      if(threadTitle==""||threadBody==""||threadTags==""||this.authenticationService.userName==""){
         this.errorLabel= "Insufficent Data";
       }
       else{
@@ -133,9 +133,6 @@ export class ThreadPageComponent implements OnInit {
 
       }//end else
 
-      //gets latest threads
-      this.threadService.getThreads()
-        .then(threads => this.threads = threads);
-    } // saveThread()
+} // saveThread()
 
 }//end ThreadPageComponent

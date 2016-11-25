@@ -31,6 +31,14 @@ export class DashboardComponent implements OnInit {
 
     //calls threads on page load
     ngOnInit(): void {
+      // check if logged in
+      if(this.authenticationService.userName === ""){ // if not
+
+        // go to the login page
+        this.router.navigate(['/login']);
+
+      } // if
+
           this.threadService.getThreads()
            .then(threads => this.threads = threads.filter(item => item.Author == this.authenticationService.userName)); 
     }
