@@ -2,6 +2,16 @@
 4th year emerging technologies in Go 
 
 #Introduction
+Intro here
+
+#Installation
+How to install here
+
+#Features
+what feature the webapp has here
+
+#Tutorial
+tutorial on how to use webapp here
 
 #Technologies
 
@@ -48,7 +58,7 @@ function (doc, req) {
 ```
 How the post url would be laid out
 
-"\<Doamin>/\<db>/\<designDocument>/\<_update>/\<updateFunction>/\<documentID>"
+"\<Domain>/\<db>/\<designDocument>/\<_update>/\<updateFunction>/\<documentID>"
 
 An Example POST URL is as follows:
 
@@ -76,3 +86,25 @@ type Post struct {
 }
 ```
 
+##Front End
+###Angular 2
+Angular 2 here
+
+###Typescript
+Typescript here
+
+##Server
+###Go
+Golang here
+
+#Testing
+To ensure the quality of our software we used test driven development. Every API call was tested after it was designed and implemented.The tool we used to test was Postman:
+https://www.getpostman.com/
+
+##Postman
+Postman is an API tool that allows you to build debug and test API's faster.Postman lets you create and send any HTTP requests using its request builder, Write your own test cases to validate response data and response times.
+
+//photo here?
+
+#Security
+Talk about security here
