@@ -15,6 +15,9 @@ import { AuthenticationService } from '../auth.service/authentication.service';
 })
 
 export class ThreadPageComponent implements OnInit {
+
+    loading: boolean = false;
+
     //variables for paging
     startIndex: number = 0;
     threadsPerPage: number = 5;
@@ -44,6 +47,8 @@ export class ThreadPageComponent implements OnInit {
     //calls threads on page load
     ngOnInit(): void {
 
+      this.loading = true;
+
       // check if logged in
       if(this.authenticationService.userName === ""){ // if not
 
@@ -53,7 +58,8 @@ export class ThreadPageComponent implements OnInit {
       } // if
 
       this.threadService.getThreads()
-           .then(threads => this.threads = threads);
+           .then(threads => this.threads = threads)
+           .then(() => {this.loading = false;})
     }
 
     //link to view thread and all its posts
@@ -97,6 +103,9 @@ export class ThreadPageComponent implements OnInit {
 
     //passes a new thread to the go server
     saveThread(threadTitle: string,threadBody: string,threadTags: string): void {
+
+      this.loading = true;
+
       //add validation to avoid blank posts
 
       if(threadTitle==""||threadBody==""||threadTags==""||this.authenticationService.userName==""){
@@ -119,7 +128,8 @@ export class ThreadPageComponent implements OnInit {
           .then(() => {this.threadService.getThreads()
           .then(threads => this.threads = threads);})
           .then(() => {this.goToBottomOfPage(10);}) // scroll to the bottom of the page (so thread can be seen)
-          .then(() => {this.lastPage();}); // try to go to the last page
+          .then(() => {this.lastPage();}) // try to go to the last page
+          .then(() => {this.loading = false;})
 
           //gets latest threads
         // this.threadService.getThreads()

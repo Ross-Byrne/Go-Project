@@ -24,6 +24,7 @@ var ForumPageComponent = (function () {
         this.route = route;
         this.router = router;
         this.location = location;
+        this.loading = false;
         this.title = "Thread Name"; // thread name
         //thread: Thread;
         this.threadPosts = new thread_posts_1.ThreadPosts(); // initialise object
@@ -35,6 +36,7 @@ var ForumPageComponent = (function () {
     }
     ForumPageComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.loading = true;
         // check if logged in
         if (this.authenticationService.userName === "") {
             // go to the login page
@@ -49,7 +51,8 @@ var ForumPageComponent = (function () {
             _this.title = id2;
             // get the posts from the thread with the id from the url
             _this.forumPostsService.getPostsByThreadId(id)
-                .then(function (threadPosts) { return _this.threadPosts = threadPosts; }); // save the posts object
+                .then(function (threadPosts) { return _this.threadPosts = threadPosts; }) // save the posts object
+                .then(function () { _this.loading = false; });
         });
     }; // ngOnInit()
     ForumPageComponent.prototype.nextPage = function () {
@@ -64,6 +67,7 @@ var ForumPageComponent = (function () {
     }; // previousPage()
     ForumPageComponent.prototype.savePost = function (postBody) {
         var _this = this;
+        this.loading = true;
         var post = new post_1.Post();
         post.AuthorName = this.authenticationService.userName;
         post.Body = postBody;
@@ -72,7 +76,8 @@ var ForumPageComponent = (function () {
         this.forumPostsService.createPost(post) // save the post in couchDB
             .then(function (threadPosts) { return _this.threadPosts = threadPosts; }) // update posts on screen
             .then(function () { _this.goToBottomOfPage(10); }) // scroll to bottom of page
-            .then(function () { _this.nextPage(); }); // try go to next page just incase your post ends up on there
+            .then(function () { _this.nextPage(); }) // try go to next page just incase your post ends up on there
+            .then(function () { _this.loading = false; });
         // this.forumPostsService.createPost(post);
         // clear the post textarea
         this.postText = "";

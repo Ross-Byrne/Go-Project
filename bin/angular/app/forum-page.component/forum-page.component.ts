@@ -21,7 +21,7 @@ import { AuthenticationService } from '../auth.service/authentication.service';
 })
 
 export class ForumPageComponent implements OnInit {
-
+    loading: boolean = false;
     title: string = "Thread Name"; // thread name
     //thread: Thread;
     threadPosts: ThreadPosts = new ThreadPosts(); // initialise object
@@ -43,6 +43,8 @@ export class ForumPageComponent implements OnInit {
 
     ngOnInit(): void {
 
+      this.loading = true;
+
       // check if logged in
       if(this.authenticationService.userName === ""){ // if not
 
@@ -63,7 +65,8 @@ export class ForumPageComponent implements OnInit {
 
         // get the posts from the thread with the id from the url
          this.forumPostsService.getPostsByThreadId(id)
-           .then(threadPosts => this.threadPosts = threadPosts);        // save the posts object
+           .then(threadPosts => this.threadPosts = threadPosts)        // save the posts object
+           .then(()=>{this.loading = false;})
       });
     } // ngOnInit()
 
@@ -89,6 +92,8 @@ export class ForumPageComponent implements OnInit {
 
     savePost(postBody: string): void {
 
+      this.loading = true;
+
       var post: Post = new Post();
 
       post.AuthorName = this.authenticationService.userName;
@@ -100,6 +105,7 @@ export class ForumPageComponent implements OnInit {
       .then(threadPosts => this.threadPosts = threadPosts) // update posts on screen
       .then(() => {this.goToBottomOfPage(10);}) // scroll to bottom of page
       .then(() => {this.nextPage();}) // try go to next page just incase your post ends up on there
+      .then(() => {this.loading = false;})
 
       
      // this.forumPostsService.createPost(post);

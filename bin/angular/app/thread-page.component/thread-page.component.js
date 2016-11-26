@@ -19,6 +19,7 @@ var ThreadPageComponent = (function () {
         this.router = router;
         this.threadService = threadService;
         this.authenticationService = authenticationService;
+        this.loading = false;
         //variables for paging
         this.startIndex = 0;
         this.threadsPerPage = 5;
@@ -39,13 +40,15 @@ var ThreadPageComponent = (function () {
     //calls threads on page load
     ThreadPageComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.loading = true;
         // check if logged in
         if (this.authenticationService.userName === "") {
             // go to the login page
             this.router.navigate(['/login']);
         } // if
         this.threadService.getThreads()
-            .then(function (threads) { return _this.threads = threads; });
+            .then(function (threads) { return _this.threads = threads; })
+            .then(function () { _this.loading = false; });
     };
     //link to view thread and all its posts
     ThreadPageComponent.prototype.gotoDetail = function (thread) {
@@ -82,8 +85,9 @@ var ThreadPageComponent = (function () {
     }; // goToTopOfPage()
     //passes a new thread to the go server
     ThreadPageComponent.prototype.saveThread = function (threadTitle, threadBody, threadTags) {
-        //add validation to avoid blank posts
         var _this = this;
+        this.loading = true;
+        //add validation to avoid blank posts
         if (threadTitle == "" || threadBody == "" || threadTags == "" || this.authenticationService.userName == "") {
             this.errorLabel = "Insufficent Data";
         }
@@ -104,7 +108,8 @@ var ThreadPageComponent = (function () {
                     .then(function (threads) { return _this.threads = threads; });
             })
                 .then(function () { _this.goToBottomOfPage(10); }) // scroll to the bottom of the page (so thread can be seen)
-                .then(function () { _this.lastPage(); }); // try to go to the last page
+                .then(function () { _this.lastPage(); }) // try to go to the last page
+                .then(function () { _this.loading = false; });
             //gets latest threads
             // this.threadService.getThreads()
             //   .then(threads => this.threads = threads);

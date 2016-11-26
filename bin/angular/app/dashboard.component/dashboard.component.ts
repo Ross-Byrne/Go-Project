@@ -16,6 +16,8 @@ import { AuthenticationService } from '../auth.service/authentication.service';
 
 export class DashboardComponent implements OnInit {
 
+  loading: boolean = false;
+
   //variables for paging
     startIndex: number = 0;
     threadsPerPage: number = 5;
@@ -31,6 +33,9 @@ export class DashboardComponent implements OnInit {
 
     //calls threads on page load
     ngOnInit(): void {
+
+      this.loading = true;
+
       // check if logged in
       if(this.authenticationService.userName === ""){ // if not
 
@@ -40,7 +45,8 @@ export class DashboardComponent implements OnInit {
       } // if
 
           this.threadService.getThreads()
-           .then(threads => this.threads = threads.filter(item => item.Author == this.authenticationService.userName)); 
+           .then(threads => this.threads = threads.filter(item => item.Author == this.authenticationService.userName))
+           .then(() => {this.loading = false;});
     }
 
     //link to view thread and all its posts
