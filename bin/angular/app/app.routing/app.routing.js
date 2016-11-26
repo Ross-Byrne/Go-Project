@@ -29,7 +29,7 @@ var appRoutes = [
         component: thread_page_component_1.ThreadPageComponent
     },
     {
-        path: 'threads/:id',
+        path: 'threads/:id/:id2',
         component: forum_page_component_1.ForumPageComponent // show the posts for the thread with id = id in address url
     },
     //if cannot find url redirect to 

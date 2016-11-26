@@ -45,6 +45,8 @@ var ForumPageComponent = (function () {
             // get the param id (this is the threadPostId)
             var id = params['id'];
             _this.threadPostsId = id;
+            var id2 = params['id2'];
+            _this.title = id2;
             // get the posts from the thread with the id from the url
             _this.forumPostsService.getPostsByThreadId(id)
                 .then(function (threadPosts) { return _this.threadPosts = threadPosts; }); // save the posts object

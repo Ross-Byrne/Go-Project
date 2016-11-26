@@ -58,6 +58,9 @@ export class ForumPageComponent implements OnInit {
         let id = params['id'];
         this.threadPostsId = id;
 
+        let id2 = params['id2'];
+        this.title = id2;
+
         // get the posts from the thread with the id from the url
          this.forumPostsService.getPostsByThreadId(id)
            .then(threadPosts => this.threadPosts = threadPosts);        // save the posts object

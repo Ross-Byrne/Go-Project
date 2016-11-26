@@ -49,7 +49,7 @@ var ThreadPageComponent = (function () {
     };
     //link to view thread and all its posts
     ThreadPageComponent.prototype.gotoDetail = function (thread) {
-        var link = ['/threads', thread.ThreadPostId];
+        var link = ['/threads', thread.ThreadPostId, thread.Title];
         this.router.navigate(link);
     };
     //Moves to next Page of threads

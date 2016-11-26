@@ -34,7 +34,7 @@ const appRoutes: Routes = [
         component: ThreadPageComponent
     },
     {
-        path: 'threads/:id',
+        path: 'threads/:id/:id2',
         component: ForumPageComponent       // show the posts for the thread with id = id in address url
     },
 
