@@ -42,8 +42,9 @@ type: export GOPATH=$HOME/path/to/project
 How to for Windows
 type: set GOPATH=c:\path\to\project
 
-
 Install necessary dependancies:
+
+With GOPATH set, in a terminal or CMD with Git enabled, run:
 go get github.com/rhinoman/couchdb-go
 
 Navigate to:
