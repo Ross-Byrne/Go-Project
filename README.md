@@ -26,6 +26,7 @@ This page displays all of the posts a given thread contains. Users can also add 
 Install necessary Technologies (node npm go)
 
 Download and install the latest version of Go: https://golang.org/dl/
+
 Download node from here: https://nodejs.org/en/download/
 
 NodeJS V 6.9.1 LTS for greater.
