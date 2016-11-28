@@ -1,157 +1,611 @@
-// Copyright 2010 The Go Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-/*package main
+package main
 
 import (
-	"bufio"
+	"bytes"
 	"crypto/rand"
+	"encoding/json"
 	"fmt"
+	"github.com/rhinoman/couchdb-go"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"strings"
-	"text/template"
 	"time"
-
-	"github.com/gorilla/mux"
-	"github.com/rhinoman/couchdb-go"
 )
 
-type TestDocument struct {
-	Title string
-	Note  string
+type Post struct {
+	Id           string
+	ThreadPostId string
+	Body         string
+	AuthorName   string
 }
 
-type TestThread struct {
-	Title string
-	//Id     string
-	//Author string
+type Posts struct {
+	Posts []Post
 }
 
 type Thread struct {
-	Title  string
-	Id     string
-	Author string
-	Body   string
-	//tags   []string
+	Title        string   `json:"Title"`
+	Id           string   `json:"Id"`
+	ThreadPostId string   `json:"ThreadPostId"`
+	Author       string   `json:"Author"`
+	Body         string   `json:"Body"`
+	Tags         []string `json:"Tags"`
 }
+
+type UserDetails struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+// taken from couchDB package source code: https://github.com/rhinoman/couchdb-go/blob/master/couchdb.go#L150
+type UserRecord struct {
+	Name     string   `json:"name"`
+	Password string   `json:"password,omitempty"`
+	Roles    []string `json:"roles"`
+	TheType  string   `json:"type"` //apparently type is a keyword in Go :)
+}
+
+//Cookie-based auth (for sessions)
+// taken from couchDB package source code: https://sourcegraph.com/github.com/rhinoman/couchdb-go@94e6ab663d5789615eb061b52ed2e67310bac13f/-/blob/auth.go#L34-38
+type CookieAuth struct {
+	AuthToken        string
+	UpdatedAuthToken string
+}
+
+type Row struct {
+	Id  string `json:"id"`
+	Doc Thread `json:"doc"`
+}
+
+type ThreadRows struct {
+	Total_rows int `json:"total_rows"`
+	//Offset 		int `json:"offset"`
+	Rows []Row `json:"rows"`
+}
+
+// struct with cookie and id for getting Posts
+type PostsData struct {
+	Cookie CookieAuth
+	Id     string
+}
+
+// struct for creating posts, with a post and cookie in it
+type PostData struct {
+	Cookie CookieAuth
+	Post   Post
+}
+
+// struct for creating a thread, with thread object and cookie
+type ThreadData struct {
+	Cookie CookieAuth
+	Thread Thread
+}
+
+//var couchDBUrl string = "couchdb-e195fb.smileupps.com"
+var couchDBUrl string = "couchdb-a21442.smileupps.com"
+
+
+// for serving angular resources (all angular app files needed)
+var chttp = http.NewServeMux()
 
 func main() {
-	//serveWeb()
-	couchSave()
-}
 
-var themeName = getThemeName()
-var staticPages = populateStaticPages()
+	// handle for serving resource
+	chttp.Handle("/", http.FileServer(http.Dir("./angular")))
 
-func serveWeb() {
-	gorillaRoute := mux.NewRouter()
+	// handle serving index.html at root
+	http.HandleFunc("/", homeHandler)
 
-	gorillaRoute.HandleFunc("/", serveContact)
-	gorillaRoute.HandleFunc("/{page_alias}", serveContact)
+	// handler for saving posts made by user to couchDB
+	http.HandleFunc("/api/savePost", savePostHandler)
 
-	http.HandleFunc("/img/", serveResource)
-	http.HandleFunc("/css/", serveResource)
-	http.HandleFunc("/js/", serveResource)
+	// handler for loading threadPost from couchDB
+	http.HandleFunc("/api/getThreadPosts", getThreadPosts)
 
-	http.Handle("/", gorillaRoute)
+	// handler for saving threads made by user to couchDB
+	http.HandleFunc("/api/saveThread", saveThreadHandler)
+
+	// handler for getting threads from couchDB
+	http.HandleFunc("/api/getThreads", getThreadHandler)
+
+	// handler for creating a new user
+	http.HandleFunc("/api/createUser", createUserHandler)
+
+	// handler for logging a user in
+	http.HandleFunc("/api/login", loginHandler)
+
+	// handler for logging a user out
+	http.HandleFunc("/api/logout", logoutHandler)
+
+	// give the user feedback
+	fmt.Println("Listening on port 8080")
+
+	// listen on port and handle connections
 	http.ListenAndServe(":8080", nil)
-}
 
-func couchdbSave() {
+} // main()
+
+// handler for root address
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+
+	/*
+	   To get routing to work in the angular app, the index.html file needs to be served
+	   everytime a route is entered into the address bar. This lets angular 2 handle the routing
+	   instead of Go. In doing this, I ran into the problem of Go returning js files as html.
+	   To solve this (after many many hours) I used some code from the answer on this post
+	   Link: http://stackoverflow.com/questions/14086063/serve-homepage-and-static-content-from-root
+	*/
+
+	// if path has a . in it, it is looking for a file
+	if strings.Contains(r.URL.Path, ".") {
+
+		// print out required file path
+		fmt.Println("Reqired File Path:", r.URL.Path)
+
+		// serve the required resources using the resource handle declared further up
+		chttp.ServeHTTP(w, r)
+
+	} else { // if path is not for a resource
+
+		// serve the index.html file again, angular 2 is handling the routing
+		http.ServeFile(w, r, "angular/index.html")
+
+		// print out feedback
+		fmt.Println("Serve index.html")
+
+	} // if
+
+} // homeHandler()
+
+// function for logining in a user (creates a session cookie)
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+
+	// read all of the bytes from the request body into a byte array
+	body, err := ioutil.ReadAll(r.Body)
+
+	// print out JSON
+	fmt.Println("JSON: " + string(body))
+
+	// make user details struct
+	var user UserDetails
+
+	// Unmarshal the JSON into the struct
+	if err = json.Unmarshal(body, &user); err != nil {
+		panic(err)
+	}
+
+	// now log the user into couchDB, and get the session cookie
+	// set timeout
 	var timeout = time.Duration(500 * 100000000)
-	conn, err := couchdb.NewConnection("127.0.0.1", 5985, timeout)
-	auth := couchdb.BasicAuth{Username: "Manus", Password: "manus"}
-	db := conn.SelectDB("manus", &auth)
 
-	theDoc := TestDocument{
-		Title: "My Document",
-		Note:  "This is a note",
+	// create the connect to couchDB
+	conn, err := couchdb.NewSSLConnection(couchDBUrl, 443, timeout)
+
+	// get authentication cookie for user.(creates a session cookie)
+	authCookie, err := conn.CreateSession(user.Username, user.Password)
+
+	// check for errors
+	if err != nil { // if error, login details are wrong
+		log.Println(err)
+
+		// return 403 error
+		w.WriteHeader(403)
+
+	} else { // if everything worked
+
+		var jsonBytes []byte
+
+		// marshal the struct into json byte array
+		jsonBytes, err = json.Marshal(authCookie)
+
+		// error checks
+		if err != nil {
+			log.Println(err)
+		}
+
+		fmt.Println(string(jsonBytes))
+
+		// Write content-type, statuscode, payload
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(200)
+		fmt.Fprintf(w, string(jsonBytes))
+
+	} // if
+
+} // loginHandler()
+
+// function for loging out a user (destroys session cookie)
+func logoutHandler(w http.ResponseWriter, r *http.Request) {
+
+	// read all of the bytes from the request body into a byte array
+	body, err := ioutil.ReadAll(r.Body)
+
+	// print out JSON
+	fmt.Println("JSON: " + string(body))
+
+	// make cookie struct
+	var authCookie CookieAuth
+
+	// Unmarshal the JSON into the struct
+	if err = json.Unmarshal(body, &authCookie); err != nil {
+
+		log.Println(err)
+
+		w.WriteHeader(500)
+
+		return
+
+	} // if
+
+	// now log the user into couchDB, and get the session cookie
+	// set timeout
+	var timeout = time.Duration(500 * 100000000)
+
+	// create the connect to couchDB
+	conn, err := couchdb.NewSSLConnection(couchDBUrl, 443, timeout)
+
+	// get cookie into correct format
+	auth := couchdb.CookieAuth{AuthToken: authCookie.AuthToken, UpdatedAuthToken: authCookie.UpdatedAuthToken}
+
+	// log the user out by destroying the cookie
+	err = conn.DestroySession(&auth)
+
+	// check for errors
+	if err != nil { // if error, login details are wrong
+		log.Println(err)
+
+		// return error
+		w.WriteHeader(500)
+
+		return
+
+	} else { // if everything worked
+
+		w.WriteHeader(200)
+
+		fmt.Println("Logged out")
+
+		return
+
+	} // if
+
+} // logoutHandler()
+
+// handler function for creating a user
+func createUserHandler(w http.ResponseWriter, r *http.Request) {
+
+	// read all of the bytes from the request body into a byte array
+	body, err := ioutil.ReadAll(r.Body)
+
+	// print out JSON
+	fmt.Println("JSON: " + string(body))
+
+	// make user details struct
+	var user UserDetails
+
+	// Unmarshal the JSON into the struct
+	if err = json.Unmarshal(body, &user); err != nil {
+		log.Println(err)
 	}
 
-	theId, err := newUUID() //use whatever method you like to generate a uuid
-	//The third argument here would be a revision, if you were updating an existing document
+	// now create the user in couchDB
+	// set timeout
+	var timeout = time.Duration(500 * 100000000)
+
+	// create the connect to couchDB
+	conn, err := couchdb.NewSSLConnection(couchDBUrl, 443, timeout)
+
+	// set authentication
+	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
+
+	roles := []string{}
+	// create the user in couchdb
+	userData := UserRecord{
+		Name:     user.Username,
+		Password: user.Password,
+		Roles:    roles,
+		TheType:  "user"}
+
+	db := conn.SelectDB("_users", &auth)
+	namestring := "org.couchdb.user:" + userData.Name
+	_, err = db.Save(&userData, namestring, "")
+
+	if err != nil { // if there is an error, user already exists
+		w.WriteHeader(409) // return conflict code
+		return
+	} // if
+
+} // createUserHandler()
+
+// handler for saving posts to couchDB
+func savePostHandler(w http.ResponseWriter, r *http.Request) {
+
+	// read all of the bytes from the request body into a byte array
+	body, err := ioutil.ReadAll(r.Body)
+
+	// print out JSON
+	fmt.Println("JSON: " + string(body))
+
+	// make post struct
+	//var post Post
+	var postData PostData
+	var post Post
+
+	// Unmarshal the JSON into the struct
+	if err = json.Unmarshal(body, &postData); err != nil {
+		log.Println(err)
+	}
+
+	post = postData.Post
+
+	// set a id for the post
+	theId, err := newUUID() // generate a UUID
+
 	if err != nil {
-		fmt.Printf("error: %v\n", err)
-	}
-	rev, err := db.Save(theDoc, theId, "")
-	//If all is well, rev should contain the revision of the newly created
-	//or updated Document
-
-	log.Println(rev)
-	log.Println(err)
-
-}
-
-func serveContact(w http.ResponseWriter, r *http.Request) {
-	urlParams := mux.Vars(r)
-	page_alias := urlParams["page_alias"]
-
-	if page_alias == "" {
-		page_alias = "home"
+		log.Println(err)
 	}
 
-	staticPage := staticPages.Lookup(page_alias + ".html")
-	if staticPage == nil {
-		staticPage = staticPages.Lookup("404.html")
-		w.WriteHeader(404)
-	}
-	staticPage.Execute(w, nil)
-}
+	post.Id = theId
 
-func getThemeName() string {
-	return "resources"
-}
+	fmt.Println(post)
+	fmt.Println(post.Body)
 
-func populateStaticPages() *template.Template {
-	result := template.New("templates")
-	templatePaths := new([]string)
+	//"https://couchdb-e195fb.smileupps.com/posts/_design/post/_update/addPost/a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b"
 
-	basePath := "pages"
-	templateFolder, _ := os.Open(basePath)
-	defer templateFolder.Close()
-	templatePathsRaw, _ := templateFolder.Readdir(-1)
+	// URL vars
+	domainUrl := "https://"+couchDBUrl+"/"
+	updatePostUrl := "posts/_design/post/_update/addPost/"
+	threadPostsID := post.ThreadPostId
 
-	for _, pathInfo := range templatePathsRaw {
-		log.Println(pathInfo.Name())
-		*templatePaths = append(*templatePaths, basePath+"/"+pathInfo.Name())
-	}
+	theUrl := domainUrl + updatePostUrl + threadPostsID
 
-	result.ParseFiles(*templatePaths...)
-	return result
-}
+	// send the Post request to couch, get the response and then close the response body
+	resp := sendPostRequestToCouch(theUrl, post)
+	defer resp.Body.Close()
 
-func serveResource(w http.ResponseWriter, req *http.Request) {
-	path := "public/" + themeName + req.URL.Path
-	var contentType string
+	//fmt.Println("response Status:", resp.Status)
+	//fmt.Println("response Headers:", resp.Header)
 
-	if strings.HasSuffix(path, ".css") {
-		contentType = "text/css; charset=utf-8"
-	} else if strings.HasSuffix(path, ".png") {
-		contentType = "image/png; charse=utf-8"
-	} else if strings.HasSuffix(path, ".jpg") {
-		contentType = "image/jpg; charset=utf-8"
-	} else if strings.HasSuffix(path, ".js") {
-		contentType = "application/javascript; charset=utf-8"
-	} else {
-		contentType = "text/plain; charset=utf-8"
-	}
+	// read the bytes from the response body of POST request
+	body, _ = ioutil.ReadAll(resp.Body)
 
-	log.Println(path)
-	f, err := os.Open(path)
-	if err == nil {
-		defer f.Close()
-		w.Header().Add("Content-Type", contentType)
-		br := bufio.NewReader(f)
-		br.WriteTo(w)
-	} else {
-		w.WriteHeader(404)
+	fmt.Println("response Body:", string(body))
+	//fmt.Println("Done.")
+
+	var id = post.ThreadPostId
+	var posts Posts
+
+	var timeout = time.Duration(500 * 100000000)
+	conn, err := couchdb.NewSSLConnection(couchDBUrl, 443, timeout)
+
+	// get cookie into correct format
+	auth := couchdb.CookieAuth{AuthToken: postData.Cookie.AuthToken, UpdatedAuthToken: postData.Cookie.UpdatedAuthToken}
+
+	//fmt.Println("Used Session Cookie to authenticate")
+
+	db := conn.SelectDB("posts", &auth)
+
+	_, err = db.Read(id, &posts, nil)
+
+	// check errors
+	if err != nil {
+		panic(err)
 	}
 
-}
+	var jsonBytes []byte
+
+	// marshal the struct into json byte array
+	jsonBytes, err = json.Marshal(posts)
+
+	// error checks
+	if err != nil {
+		panic(err)
+	}
+
+	// Write content-type, statuscode, payload
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	fmt.Fprintf(w, string(jsonBytes))
+
+} // savePostHandler()
+
+// handler for getting posts from couchDB
+func getThreadPosts(w http.ResponseWriter, r *http.Request) {
+
+	// read all of the bytes from the request body into a byte array
+	body, err := ioutil.ReadAll(r.Body)
+
+	// print out JSON
+	fmt.Println("JSON: " + string(body))
+
+	var postsData PostsData
+
+	// Unmarshal the JSON into the struct
+	if err = json.Unmarshal(body, &postsData); err != nil {
+		panic(err)
+	}
+
+	var posts Posts
+
+	var timeout = time.Duration(500 * 100000000)
+	conn, err := couchdb.NewSSLConnection(couchDBUrl, 443, timeout)
+
+	// get cookie into correct format
+	auth := couchdb.CookieAuth{AuthToken: postsData.Cookie.AuthToken, UpdatedAuthToken: postsData.Cookie.UpdatedAuthToken}
+
+	db := conn.SelectDB("posts", &auth)
+
+	_, err = db.Read(postsData.Id, &posts, nil)
+
+	// check errors
+	if err != nil {
+		panic(err)
+	}
+
+	var jsonBytes []byte
+
+	// marshal the struct into json byte array
+	jsonBytes, err = json.Marshal(posts)
+
+	// error checks
+	if err != nil {
+		panic(err)
+	}
+
+	// Write content-type, statuscode, payload
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	fmt.Fprintf(w, string(jsonBytes))
+
+} // getThreadPosts()
+
+// handler for saving posts to couchDB
+func saveThreadHandler(w http.ResponseWriter, r *http.Request) {
+
+	// read all of the bytes from the request body into a byte array
+	body, err := ioutil.ReadAll(r.Body)
+
+	// print out JSON
+	fmt.Println("JSON: " + string(body))
+
+	// make thread struct
+	var thread Thread
+	var threadData ThreadData
+
+	// Unmarshal the JSON into the struct
+	if err = json.Unmarshal(body, &threadData); err != nil {
+		panic(err)
+	}
+
+	thread = threadData.Thread
+
+	//create thread post document and unique id
+	theThreadId, err := newUUID() // generate a UUID
+
+	if err != nil {
+		panic(err)
+	}
+
+	//set threadpost id in struct
+	thread.Id = theThreadId
+
+	var posts Posts
+
+	posts.Posts = []Post{}
+
+	thread.ThreadPostId = saveDocumentToCouch(posts, "posts", threadData.Cookie)
+
+	// save the thread to couchDB
+	saveDocumentToCouch(thread, "threads", threadData.Cookie)
+
+	var jsonBytes []byte
+
+	// marshal the struct into json byte array
+	jsonBytes, err = json.Marshal(thread)
+
+	// error checks
+	if err != nil {
+		panic(err)
+	}
+
+	// Write content-type, statuscode, payload
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	fmt.Fprintf(w, string(jsonBytes))
+
+} // savePostHandler()
+
+// theUrl must be full URL including Domain name.
+// doc must be the struct with data being posted in the body
+// MUST close the response body after it is returned! EG. "defer resp.Body.Close()"
+func sendPostRequestToCouch(theUrl string, doc interface{}) *http.Response {
+
+	// adapted from the answer on this stackoverflow question:
+	// http://stackoverflow.com/questions/24455147/how-do-i-send-a-json-string-in-a-post-request-in-go
+
+	// set the url
+	url := theUrl
+
+	var jsonBytes []byte
+
+	// marshal the struct into json byte array
+	jsonBytes, err := json.Marshal(doc)
+
+	// error checks
+	if err != nil {
+		panic(err)
+	}
+
+	// make POST request, send the struct (as JSON) in the body of post
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBytes))
+
+	// set the Header
+	req.Header.Set("Content-Type", "application/json")
+
+	// set the authentication
+	req.SetBasicAuth("admin", "Balloon2016")
+
+	// create a client
+	client := &http.Client{}
+
+	// send the POST request and get the response
+	resp, err := client.Do(req)
+
+	// check for errors
+	if err != nil {
+		panic(err)
+	}
+
+	// return the resp
+	return resp
+
+} // sendPostRequestToCouch()
+
+func sendThreadRequestToCouch(theUrl string, doc interface{}) *http.Response {
+
+	// adapted from the answer on this stackoverflow question:
+	// http://stackoverflow.com/questions/24455147/how-do-i-send-a-json-string-in-a-post-request-in-go
+
+	// set the url
+	url := theUrl
+	fmt.Println("URL:>", url)
+
+	var jsonBytes []byte
+
+	// marshal the struct into json byte array
+	jsonBytes, err := json.Marshal(doc)
+
+	// error checks
+	if err != nil {
+		panic(err)
+	}
+
+	// make POST request, send the struct (as JSON) in the body of post
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBytes))
+
+	// set the Header
+	req.Header.Set("Content-Type", "application/json")
+
+	// set the authentication
+	req.SetBasicAuth("admin", "Balloon2016")
+
+	// create a client
+	client := &http.Client{}
+
+	// send the POST request and get the response
+	resp, err := client.Do(req)
+
+	// check for errors
+	if err != nil {
+		panic(err)
+	}
+
+	// return the resp
+	return resp
+
+} // sendThreadRequestToCouch()
 
 // newUUID generates a random UUID according to RFC 4122
 func newUUID() (string, error) {
@@ -167,31 +621,126 @@ func newUUID() (string, error) {
 	return fmt.Sprintf("%x-%x-%x-%x-%x", uuid[0:4], uuid[4:6], uuid[6:8], uuid[8:10], uuid[10:]), nil
 }
 
-func couchSave() {
+// generic function to save a document to couchDB
+// parameters are, the doc, (eg struct made for documents) and the name of DB as a string
+func saveDocumentToCouch(doc interface{}, dbName string, cookie CookieAuth) string {
+
+	// set timeout
 	var timeout = time.Duration(500 * 100000000)
-	conn, err := couchdb.NewSSLConnection("couchdb-e195fb.smileupps.com", 443, timeout)
-	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
-	db := conn.SelectDB("threads", &auth)
 
-	theDoc := Thread{
-		Title:  "test",
-		Id:     "test",
-		Author: "test",
-		Body:   "test",
-		//tags:   "test",
-	}
+	// create the connect to couchDB
+	conn, err := couchdb.NewSSLConnection(couchDBUrl, 443, timeout)
 
+	// get cookie into correct format
+	auth := couchdb.CookieAuth{AuthToken: cookie.AuthToken, UpdatedAuthToken: cookie.UpdatedAuthToken}
+
+	// select the DB to save to
+	db := conn.SelectDB(dbName, &auth)
+
+	// set the document
+	theDoc := doc
+
+	// create an ID
 	theId, err := newUUID() //use whatever method you like to generate a uuid
+
 	//The third argument here would be a revision, if you were updating an existing document
 	if err != nil {
 		fmt.Printf("error: %v\n", err)
 	}
+
+	log.Println("Saving to", dbName)
+
+	// save the document
 	rev, err := db.Save(theDoc, theId, "")
 	//If all is well, rev should contain the revision of the newly created
 	//or updated Document
 
-	log.Println(rev)
-	log.Println(err)
+	fmt.Println("Used Session Cookie to authenticate")
 
-}
-*/
+	// log details
+	log.Println("revision: " + rev)
+	log.Println("Error: ", err)
+
+	// return the ID of the document created
+	return theId
+
+} // saveDocumentToCouch()
+
+func getThreadId(cookie CookieAuth) []string {
+
+	var timeout = time.Duration(500 * 100000000)
+	conn, err := couchdb.NewSSLConnection(couchDBUrl, 443, timeout)
+
+	// get cookie into correct format
+	auth := couchdb.CookieAuth{AuthToken: cookie.AuthToken, UpdatedAuthToken: cookie.UpdatedAuthToken}
+	db := conn.SelectDB("threads", &auth)
+
+	var rows ThreadRows
+
+	_, err = db.Read("_all_docs", &rows, nil)
+
+	log.Println("Error: ", err)
+
+	idArray := make([]string, rows.Total_rows)
+
+	for i := 0; i < rows.Total_rows; i++ {
+		idArray[i] = rows.Rows[i].Id
+	}
+
+	return idArray
+
+} // getThreads()
+
+func getThreadHandler(w http.ResponseWriter, r *http.Request) {
+
+	// read all of the bytes from the request body into a byte array
+	body, err := ioutil.ReadAll(r.Body)
+
+	// print out JSON
+	fmt.Println("JSON: " + string(body))
+
+	// make cookie struct
+	var cookie CookieAuth
+
+	// Unmarshal the JSON into the struct
+	if err = json.Unmarshal(body, &cookie); err != nil {
+		panic(err)
+	}
+
+	threadIds := getThreadId(cookie)
+
+	var timeout = time.Duration(500 * 100000000)
+	conn, err := couchdb.NewSSLConnection(couchDBUrl, 443, timeout)
+	auth := couchdb.BasicAuth{Username: "admin", Password: "Balloon2016"}
+	db := conn.SelectDB("threads", &auth)
+
+	var rows ThreadRows
+
+	err = db.ReadMultiple(threadIds, &rows)
+
+	log.Println("Error: ", err)
+
+	threadsArray := make([]Thread, rows.Total_rows)
+
+	for i := 0; i < rows.Total_rows; i++ {
+		threadsArray[i] = rows.Rows[i].Doc
+	}
+
+	fmt.Println(threadsArray)
+
+	var jsonBytes []byte
+
+	// marshal the struct into json byte array
+	jsonBytes, err = json.Marshal(threadsArray)
+
+	// error checks
+	if err != nil {
+		panic(err)
+	}
+
+	// Write content-type, statuscode, payload
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	fmt.Fprintf(w, string(jsonBytes))
+
+} // getThreadHandler()
