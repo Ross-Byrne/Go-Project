@@ -37,7 +37,11 @@ Git clone "url here"
 
 Set your go path: 	
 How to for linux
+type: export GOPATH=$HOME/path/to/project
+
 How to for Windows
+type: set GOPATH=c:\path\to\project
+
 
 Install necessary dependancies:
 go get github.com/rhinoman/couchdb-go
