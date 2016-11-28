@@ -110,9 +110,6 @@ var ThreadPageComponent = (function () {
                 .then(function () { _this.goToBottomOfPage(10); }) // scroll to the bottom of the page (so thread can be seen)
                 .then(function () { _this.lastPage(); }) // try to go to the last page
                 .then(function () { _this.loading = false; });
-            //gets latest threads
-            // this.threadService.getThreads()
-            //   .then(threads => this.threads = threads);
             // clear the make post objects
             this.threadTitle = "";
             this.threadBody = "";

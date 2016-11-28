@@ -5,13 +5,14 @@ import (
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
-	"github.com/rhinoman/couchdb-go"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/rhinoman/couchdb-go"
 )
 
 type Post struct {
@@ -54,15 +55,16 @@ type CookieAuth struct {
 	UpdatedAuthToken string
 }
 
+//struct for rows of threads returned from Couch
 type Row struct {
 	Id  string `json:"id"`
 	Doc Thread `json:"doc"`
 }
 
+//struct for handling get Threads result returned from couch
 type ThreadRows struct {
-	Total_rows int `json:"total_rows"`
-	//Offset 		int `json:"offset"`
-	Rows []Row `json:"rows"`
+	Total_rows int   `json:"total_rows"`
+	Rows       []Row `json:"rows"`
 }
 
 // struct with cookie and id for getting Posts
@@ -85,7 +87,6 @@ type ThreadData struct {
 
 //var couchDBUrl string = "couchdb-e195fb.smileupps.com"
 var couchDBUrl string = "couchdb-a21442.smileupps.com"
-
 
 // for serving angular resources (all angular app files needed)
 var chttp = http.NewServeMux()
@@ -355,7 +356,7 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 	//"https://couchdb-e195fb.smileupps.com/posts/_design/post/_update/addPost/a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b"
 
 	// URL vars
-	domainUrl := "https://"+couchDBUrl+"/"
+	domainUrl := "https://" + couchDBUrl + "/"
 	updatePostUrl := "posts/_design/post/_update/addPost/"
 	threadPostsID := post.ThreadPostId
 
@@ -495,6 +496,7 @@ func saveThreadHandler(w http.ResponseWriter, r *http.Request) {
 
 	posts.Posts = []Post{}
 
+	//saves ThreadPostId to couch
 	thread.ThreadPostId = saveDocumentToCouch(posts, "posts", threadData.Cookie)
 
 	// save the thread to couchDB
@@ -666,6 +668,7 @@ func saveDocumentToCouch(doc interface{}, dbName string, cookie CookieAuth) stri
 
 } // saveDocumentToCouch()
 
+//function to get an array of threadIds
 func getThreadId(cookie CookieAuth) []string {
 
 	var timeout = time.Duration(500 * 100000000)
@@ -677,12 +680,15 @@ func getThreadId(cookie CookieAuth) []string {
 
 	var rows ThreadRows
 
+	//gets the IDs of all the threads stored in couch
 	_, err = db.Read("_all_docs", &rows, nil)
 
 	log.Println("Error: ", err)
 
+	//initialise array dynamically
 	idArray := make([]string, rows.Total_rows)
 
+	//adds to threadIds to from struct to Array
 	for i := 0; i < rows.Total_rows; i++ {
 		idArray[i] = rows.Rows[i].Id
 	}
@@ -716,17 +722,20 @@ func getThreadHandler(w http.ResponseWriter, r *http.Request) {
 
 	var rows ThreadRows
 
+	//get multiple threads from couch given an array of ThreadIDs
 	err = db.ReadMultiple(threadIds, &rows)
 
 	log.Println("Error: ", err)
 
 	threadsArray := make([]Thread, rows.Total_rows)
 
+	//takes threads from struct and passes to ThreadArray
 	for i := 0; i < rows.Total_rows; i++ {
 		threadsArray[i] = rows.Rows[i].Doc
 	}
 
-	fmt.Println(threadsArray)
+	//Print array to screen
+	//fmt.Println(threadsArray)
 
 	var jsonBytes []byte
 
