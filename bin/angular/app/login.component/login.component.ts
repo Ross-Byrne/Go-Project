@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
                 this.loading = false;
 
                 // handled incorrect login details
-                console.log("Not logged in.");
+                //console.log("Not logged in.");
 
                 // set the error message
                 this.message = "Error Logging in!";
@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit {
             this.loading = false;
 
             // handled incorrect login details
-            console.log("Not logged in");
+            //console.log("Not logged in");
 
             // set the error message
             this.message = "Error Logging in.";

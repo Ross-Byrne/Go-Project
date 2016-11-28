@@ -53,7 +53,7 @@ var LoginComponent = (function () {
                 // stop loading
                 _this.loading = false;
                 // handled incorrect login details
-                console.log("Not logged in.");
+                //console.log("Not logged in.");
                 // set the error message
                 _this.message = "Error Logging in!";
             } // if
@@ -61,7 +61,7 @@ var LoginComponent = (function () {
             // stop loading
             _this.loading = false;
             // handled incorrect login details
-            console.log("Not logged in");
+            //console.log("Not logged in");
             // set the error message
             _this.message = "Error Logging in.";
         });
