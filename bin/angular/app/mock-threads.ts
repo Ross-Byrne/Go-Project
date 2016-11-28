@@ -1,14 +1,14 @@
 import { Thread } from './classes/thread/thread';
 
 export const THREADS: Thread[] = [
-    // {id: "1", threadPostId:"1", author: 'Mr. Nice',    title: 'Thread Title 1',      tags: ['Angular 2',"Go","javascript","Typescript"],     body:'this is my thread'},
-    // {id: "2", threadPostId:"2", author: 'Narco',       title: 'Thread Title 2',      tags: ['Angular 2',"Go","javascript","Typescript"],     body:'this is my thread'},
-    // {id: "3", threadPostId:"3", author: 'Bombasto',    title: 'Thread Title 3',      tags: ['Angular 2',"Go","javascript","Typescript"],     body:'this is my thread'},
-    // {id: "4", threadPostId:"4", author: 'Celeritas',   title: 'Thread Title 4',      tags: ['Angular 2',"Go","javascript","Typescript"],     body:'this is my thread'},
-    // {id: "5", threadPostId:"5", author: 'Magneta',     title: 'Thread Title 5',      tags: ['Angular 2',"Go","javascript","Typescript"],     body:'this is my thread'},
-    // {id: "6", threadPostId:"6", author: 'RubberMan',   title: 'Thread Title 6',      tags: ['Angular 2',"Go","javascript","Typescript"],     body:'this is my thread'},
-    // {id: "7", threadPostId:"7", author: 'Dynama',      title: 'Thread Title 7',      tags: ['Angular 2',"Go","javascript","Typescript"],     body:'this is my thread'},
-    // {id: "8", threadPostId:"8", author: 'Dr IQ',       title: 'Thread Title 8',      tags: ['Angular 2',"Go","javascript","Typescript"],     body:'this is my thread'},
-    // {id: "9", threadPostId:"9", author: 'Magma',       title: 'Thread Title 9',      tags: ['Angular 2',"Go","javascript","Typescript"],     body:'this is my thread'},
-    // {id: "10", threadPostId:"10", author: 'Tornado',    title: 'Thread Title 10',     tags: ['Angular 2',"Go","javascript","Typescript"],     body:'this is my thread'}
+    {Id: "1",  ThreadPostId:"1",   Author: 'Mr. Nice',    Title: 'Thread Title 1',      Tags: ['Angular 2',"Go","Javascript","Typescript"],     Body:'this is my thread'},
+    {Id: "2",  ThreadPostId:"2",   Author: 'Narco',       Title: 'Thread Title 2',      Tags: ['Angular 2',"Go","Javascript","Typescript"],     Body:'this is my thread'},
+    {Id: "3",  ThreadPostId:"3",   Author: 'Bombasto',    Title: 'Thread Title 3',      Tags: ['Angular 2',"Go","Javascript","Typescript"],     Body:'this is my thread'},
+    {Id: "4",  ThreadPostId:"4",   Author: 'Celeritas',   Title: 'Thread Title 4',      Tags: ['Angular 2',"Go","Javascript","Typescript"],     Body:'this is my thread'},
+    {Id: "5",  ThreadPostId:"5",   Author: 'Magneta',     Title: 'Thread Title 5',      Tags: ['Angular 2',"Go","Javascript","Typescript"],     Body:'this is my thread'},
+    {Id: "6",  ThreadPostId:"6",   Author: 'RubberMan',   Title: 'Thread Title 6',      Tags: ['Angular 2',"Go","Javascript","Typescript"],     Body:'this is my thread'},
+    {Id: "7",  ThreadPostId:"7",   Author: 'Dynama',      Title: 'Thread Title 7',      Tags: ['Angular 2',"Go","Javascript","Typescript"],     Body:'this is my thread'},
+    {Id: "8",  ThreadPostId:"8",   Author: 'Dr IQ',       Title: 'Thread Title 8',      Tags: ['Angular 2',"Go","Javascript","Typescript"],     Body:'this is my thread'},
+    {Id: "9",  ThreadPostId:"9",   Author: 'Magma',       Title: 'Thread Title 9',      Tags: ['Angular 2',"Go","Javascript","Typescript"],     Body:'this is my thread'},
+    {Id: "10", ThreadPostId:"10",  Author: 'Tornado',     Title: 'Thread Title 10',     Tags: ['Angular 2',"Go","Javascript","Typescript"],     Body:'this is my thread'}
 ];

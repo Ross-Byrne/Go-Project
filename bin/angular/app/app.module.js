@@ -22,7 +22,6 @@ var forum_page_component_1 = require('./forum-page.component/forum-page.componen
 var thread_page_component_1 = require('./thread-page.component/thread-page.component');
 // services
 var thread_service_1 = require('./thread.service/thread.service');
-var hero_service_1 = require('./hero.service/hero.service');
 var app_routing_1 = require('./app.routing/app.routing');
 var forum_posts_service_1 = require('./forum-posts.service/forum-posts.service');
 var authentication_service_1 = require('./auth.service/authentication.service');
@@ -48,7 +47,6 @@ var AppModule = (function () {
                 thread_page_component_1.ThreadPageComponent,
             ],
             providers: [
-                hero_service_1.HeroService,
                 thread_service_1.ThreadService,
                 forum_posts_service_1.ForumPostsService,
                 authentication_service_1.AuthenticationService,

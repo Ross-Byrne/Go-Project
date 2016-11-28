@@ -16,7 +16,6 @@ import { ThreadPageComponent }      from './thread-page.component/thread-page.co
 // services
 
 import { ThreadService } from './thread.service/thread.service';
-import { HeroService }      from './hero.service/hero.service';
 import { routing }          from './app.routing/app.routing';
 import { ForumPostsService }    from './forum-posts.service/forum-posts.service';
 import { AuthenticationService } from './auth.service/authentication.service';
@@ -40,7 +39,6 @@ import { UserService } from './user.service/user.service';
         ThreadPageComponent,
     ],
     providers: [
-        HeroService,
         ThreadService,
         ForumPostsService,
         AuthenticationService,
