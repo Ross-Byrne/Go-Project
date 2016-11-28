@@ -23,8 +23,11 @@ export class AuthenticationService implements OnInit {
 
     private headers = new Headers({'Content-Type': 'application/json'});
 
-    private loginUrl = 'http://localhost:8080/api/login';
-    private logoutUrl = 'http://localhost:8080/api/logout';
+   // private loginUrl = 'http://localhost:8080/api/login';
+    //private logoutUrl = 'http://localhost:8080/api/logout';
+
+    private loginUrl = 'http://goproject.ukwest.cloudapp.azure.com:8080/api/login';
+    private logoutUrl = 'http://goproject.ukwest.cloudapp.azure.com:8080/api/logout';
 
     userName: string = "";
     userNameMessage: string = "";

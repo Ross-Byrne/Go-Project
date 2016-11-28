@@ -14,8 +14,10 @@ require('rxjs/add/operator/toPromise');
 var ThreadService = (function () {
     function ThreadService(http) {
         this.http = http;
-        this.saveThreadURL = 'http://localhost:8080/api/saveThread'; // URL to save a thread in go
-        this.getThreadURL = 'http://localhost:8080/api/getThreads'; // URL to get a threads from go
+        //private saveThreadURL = 'http://localhost:8080/api/saveThread';  // URL to save a thread in go
+        //private getThreadURL = 'http://localhost:8080/api/getThreads';  // URL to get a threads from go
+        this.saveThreadURL = 'http://goproject.ukwest.cloudapp.azure.com:8080/api/saveThread'; // URL to save a thread in go
+        this.getThreadURL = 'http://goproject.ukwest.cloudapp.azure.com:8080/api/getThreads'; // URL to get a threads from go
     }
     ThreadService.prototype.handleError = function (error) {
         var errMsg;

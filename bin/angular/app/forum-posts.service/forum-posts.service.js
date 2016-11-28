@@ -16,8 +16,10 @@ var ForumPostsService = (function () {
     function ForumPostsService(http) {
         this.http = http;
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
-        this.savePostURL = 'http://localhost:8080/api/savePost'; // URL to web api
-        this.getThreadPostsURL = 'http://localhost:8080/api/getThreadPosts'; // URL to web api
+        //private savePostURL = 'http://localhost:8080/api/savePost';  // URL to web api
+        //private getThreadPostsURL = 'http://localhost:8080/api/getThreadPosts';  // URL to web api
+        this.savePostURL = 'http://goproject.ukwest.cloudapp.azure.com:8080/api/savePost'; // URL to web api
+        this.getThreadPostsURL = 'http://goproject.ukwest.cloudapp.azure.com:8080/api/getThreadPosts'; // URL to web api
     }
     ForumPostsService.prototype.handleError = function (error) {
         // In a real world app, we might use a remote logging infrastructure

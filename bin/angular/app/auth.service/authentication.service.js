@@ -19,8 +19,10 @@ var AuthenticationService = (function () {
     function AuthenticationService(http) {
         this.http = http;
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
-        this.loginUrl = 'http://localhost:8080/api/login';
-        this.logoutUrl = 'http://localhost:8080/api/logout';
+        // private loginUrl = 'http://localhost:8080/api/login';
+        //private logoutUrl = 'http://localhost:8080/api/logout';
+        this.loginUrl = 'http://goproject.ukwest.cloudapp.azure.com:8080/api/login';
+        this.logoutUrl = 'http://goproject.ukwest.cloudapp.azure.com:8080/api/logout';
         this.userName = "";
         this.userNameMessage = "";
     }

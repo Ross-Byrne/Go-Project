@@ -32,8 +32,11 @@ export class ForumPostsService {
 
     private headers = new Headers({'Content-Type': 'application/json'});
 
-    private savePostURL = 'http://localhost:8080/api/savePost';  // URL to web api
-    private getThreadPostsURL = 'http://localhost:8080/api/getThreadPosts';  // URL to web api
+    //private savePostURL = 'http://localhost:8080/api/savePost';  // URL to web api
+    //private getThreadPostsURL = 'http://localhost:8080/api/getThreadPosts';  // URL to web api
+
+    private savePostURL = 'http://goproject.ukwest.cloudapp.azure.com:8080/api/savePost';  // URL to web api
+    private getThreadPostsURL = 'http://goproject.ukwest.cloudapp.azure.com:8080/api/getThreadPosts';  // URL to web api
 
     private extractData(res: Response) {
         let body = res.json();
