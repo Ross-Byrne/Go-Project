@@ -1,14 +1,29 @@
 # Go-Project
-4th year emerging technologies in Go 
+4th year emerging technologies project using Go, CouchDb and Angular 2. 
 
 #Introduction
-Intro here
+The goal of this project was to create a single page web application using a go back-end server for our emerging technologies module. We decided to use Angular 2 as our Front end as it is new and this was a good opportunity to learn it. We decided to use CouchDb as our database because of its powerful user management. This includes user authenication and creation as well as session management. 
+
+Our original idea was to create a forum for sharing and editing code snipping and general conversation about programing. Due to unforeseen circumstances we had to reduce the scope of the project. Our current project is a forum with user login and sign-up.
+
+#Features
+###Login:
+This page handles user authentication. Users enter their login information. Angular passes this information to the Go server. The Go server checks user information on couchDb and passes the result back to Angular. If successful the user will be redirected to their dashboard.
+
+###Signup
+This page handles user registration. User enters their details. Angular passes this information to the Go server. The Go server checks if the users information is already stored on couchDb. If not a new user is created and Angular redirects the user to the Login Page.
+
+###User Dashboard
+This page is a dashboard that is unique to each user. Its displays all the threads that the user has created on the server.
+
+###Thread Page
+This page displays all of the threads posted to the server. Threads are clickable and redirects to see all the posts replying to the threads.The page also contains a button that opens a form that allows users to add a new post to the forum.
+
+###Posts Page
+This page displays all of the posts a given thread contains. Users can also add a new post to the thread.
 
 #Installation
 How to install here
-
-#Features
-what feature the webapp has here
 
 #Tutorial
 tutorial on how to use webapp here
@@ -93,7 +108,7 @@ Angular 2 here
 ###Typescript
 Typescript here
 
-##Server
+##Api and Front-end server
 ###Go
 Golang here
 
@@ -104,7 +119,23 @@ https://www.getpostman.com/
 ##Postman
 Postman is an API tool that allows you to build debug and test API's faster.Postman lets you create and send any HTTP requests using its request builder, Write your own test cases to validate response data and response times.
 
-//photo here?
+//screenshot here?
 
 #Security
-Talk about security here
+###User Authentication
+User authentication is handled by CouchDB using Session Cookies.
+Once a user is logged in, they recieve a session cookie from CouchDB, which creates the session once passed the user's login details.
+
+Any API calls to the Go server, other then new user creation, must have a session cookie.
+The Go server then uses the session cookie for authenticating calls to CouchDB.
+
+###Routing
+As a form of security, when the webpage loads, the user is directed to the login/signup page if there is no logged in user.
+If manual routes are typed into the address bar while a user is not logged in, the user is redirected to the login/signup page.
+If manual routes are typed into the address bar, that are not valid, the user is redirected to the homepage.
+
+#Deployment
+We deployed and tested the project on ubuntu server 16.04 LTS.
+
+#Project Management
+We used slack (https://slack.com/is) for managing our team communications and we used Github for managing our source control and issue tracking.
