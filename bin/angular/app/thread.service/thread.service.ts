@@ -5,7 +5,8 @@ import 'rxjs/add/operator/toPromise';
 
 import { Thread } from '../classes/thread/thread';
 import { User } from '../classes/user/user';
-import { THREADS } from '../mock-threads';
+//import for test data 
+//import { THREADS } from '../mock-threads';
 
 @Injectable()
 export class ThreadService {
