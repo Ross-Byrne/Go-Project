@@ -51,7 +51,7 @@ export class DashboardComponent implements OnInit {
 
     //link to view thread and all its posts
     gotoDetail(thread: Thread): void {
-        let link = ['/threads', thread.ThreadPostId];
+        let link = ['/threads', thread.ThreadPostId, thread.Title];
         this.router.navigate(link);
     }
 

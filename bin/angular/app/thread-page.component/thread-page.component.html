@@ -15,13 +15,14 @@
                 <div class="media">
                     <div class="media-left">
                         <img class="media-object" src="/assets/img/profile.png" alt="Profile Image" style="width: 5em;">
-                        {{thread.Author}}
+                        
                     </div>
                     <div class="media-body" (click)="gotoDetail(thread)">
                         {{thread.Title}}
                         <br>
                         {{thread.Body}}
                     </div>
+                    <div><i>{{thread.Author}}</i></div>
                 </div> 
             </div>
         </div>

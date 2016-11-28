@@ -39,7 +39,7 @@ var DashboardComponent = (function () {
     };
     //link to view thread and all its posts
     DashboardComponent.prototype.gotoDetail = function (thread) {
-        var link = ['/threads', thread.ThreadPostId];
+        var link = ['/threads', thread.ThreadPostId, thread.Title];
         this.router.navigate(link);
     };
     //Moves to next Page of threads
