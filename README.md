@@ -23,7 +23,7 @@ This page displays all of the threads posted to the server. Threads are clickabl
 This page displays all of the posts a given thread contains. Users can also add a new post to the thread.
 
 #Installation
-Install necessary Technologies (node npm go)
+##Install necessary Technologies (node npm go)
 
 Download and install the latest version of Go: https://golang.org/dl/
 
@@ -31,11 +31,12 @@ Download node from here: https://nodejs.org/en/download/
 
 NodeJS V 6.9.1 LTS or greater.
 
-Possibly install(npm install -g concurrently npm install -g lite-server npm install -g typescript)
+##Get the project folder with source code
 
-Git clone "url here"
+Either download zip or git clone the repository using the https url
+url: https://github.com/Go-project-HQ/Go-Project.git
 
-Set your go path: 
+##Set your go path: 
 
 How to for linux
 type: export GOPATH=$HOME/path/to/project
@@ -43,10 +44,13 @@ type: export GOPATH=$HOME/path/to/project
 How to for Windows
 type: set GOPATH=c:\path\to\project
 
-Install necessary dependancies:
+##Install necessary dependancies:
 
 With GOPATH set, in a terminal or CMD with Git enabled, run:
 go get github.com/rhinoman/couchdb-go
+
+##Setup Angular 2
+You need to install node_modules for the anulgar 2 app and compile the typescript.
 
 Navigate to bin/angular folder in project folder:
 
@@ -55,11 +59,13 @@ If on Windows, run the following commands in NodeJS cmd
 run - npm install
 run - npm start to compile code
 
-if npm start files, might need to manually install the following npm packages:
+In very small number of cases on Windows, command "npm start" fails. If this happens, you need to manually install the following npm packages:
+
 npm install -g concurrently 
 npm install -g lite-server 
 npm install -g typescript
 
+##Compile and Run Go Server 
 Navigate to bin directory in Project directory:
 build main.go into bin from src/main
 
@@ -71,6 +77,7 @@ E.g.	windows main.exe
 
 (Now server is running)
 
+##Use WebApp
 In your browser navigate to localhost:8080
 
 Webpage should now load from Go server
