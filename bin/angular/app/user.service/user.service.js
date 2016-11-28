@@ -14,9 +14,11 @@ require('rxjs/add/operator/toPromise');
 var UserService = (function () {
     function UserService(http) {
         this.http = http;
-        //private userURL = 'http://localhost:8080/api/createUser';
-        this.userURL = 'http://goproject.ukwest.cloudapp.azure.com:8080/api/createUser';
+        // local development urls
+        this.userURL = 'http://localhost:8080/api/createUser';
     }
+    // production urls
+    // private userURL = 'http://goproject.ukwest.cloudapp.azure.com:8080/api/createUser';
     UserService.prototype.extractData = function (res) {
         var body = res.json();
         console.log(body);

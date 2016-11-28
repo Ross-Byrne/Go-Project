@@ -9,9 +9,12 @@ import { User } from '../classes/user/user';
 export class UserService {
     constructor(private http: Http) { }
 
-    //private userURL = 'http://localhost:8080/api/createUser';
+    // local development urls
+    private userURL = 'http://localhost:8080/api/createUser';
 
-    private userURL = 'http://goproject.ukwest.cloudapp.azure.com:8080/api/createUser';
+    // production urls
+    
+    // private userURL = 'http://goproject.ukwest.cloudapp.azure.com:8080/api/createUser';
 
     private extractData(res: Response) {
 
