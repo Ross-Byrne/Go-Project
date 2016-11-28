@@ -1,9 +1,12 @@
+<!-- 
+    This is the page that displays all of the users threads.
+-->
+
 <h1>Dashboard</h1>
 
 <div id="topOfPage"></div>
 <h1>My Threads</h1>
 <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-
 
 <div *ngFor="let thread of threads; let i = index">
 
@@ -26,7 +29,6 @@
         </div>
     </div>
 </div>
-
 <div>
     <nav class="pull-right">
         <ul class="pager">
@@ -36,31 +38,4 @@
         </ul>
     </nav>
 </div>
-
-<!-- Make a Thread 
-<div>
-    
-        <button class="button" style="font-size: 2.4em; height: 2.6em; width: 12em; margin-top: 1em;" class="btn btn-primary btn-lg" role="button" (click)="toggle()">Click to create a thread</button>
-        <div  class="card-block" [ngClass]="{hide: !opened}">
-            <div class="row">
-                <div class="col-lg-7 col-md-offset-2">
-                    <div class="form-group">
-                        <label for="thread">Make a Thread:</label>
-                        <h4 style="color: red">{{errorLabel}}</h4>
-                        <textarea placeholder="Enter thread title here" [(ngModel)]="threadTitle" class="form-control" style="resize: none;" rows="1" id="body"></textarea>
-                        <textarea placeholder="Enter your thread body here" [(ngModel)]="threadBody" class="form-control" style="resize: none;" rows="4" id="body"></textarea>
-                        <textarea placeholder="Enter tags here (Seperated by comma)" [(ngModel)]="threadTags" class="form-control" style="resize: none;" rows="2" id="body"></textarea> 
-                        
-                        
-                    </div>  
-                    
-                </div>
-
-                <div class="col-lg-1" style="align-items: center;">
-                    <button style="font-size: 2.4em; height: 2.6em; width: 4em; margin-top: 1em;" class="btn btn-primary btn-lg" role="button" (click)="saveThread(threadTitle,threadBody,threadTags)">Submit</button>
-                </div> 
-                </div>
-        </div>
-</div>-->
-
 <div id="bottomOfPage"></div>
