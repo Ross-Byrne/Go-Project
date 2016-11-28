@@ -23,7 +23,34 @@ This page displays all of the threads posted to the server. Threads are clickabl
 This page displays all of the posts a given thread contains. Users can also add a new post to the thread.
 
 #Installation
-How to install here
+Install necessary Technologies (node npm go)
+
+Possibly install(npm install -g concurrently npm install -g lite-servernnpm install -g typescript)
+
+Git clone "url here"
+
+Set your go path: 	
+How to for linux
+How to for Windows
+
+Install necessary dependancies:
+go get github.com/rhinoman/couchdb-go
+
+Navigate to:
+bin/angular> 
+run - npm install
+run - npm start to compile code
+
+nav to:
+bin>run- build main.go into bin from src/main
+
+run compiled binary file	
+E.g.	windows main.exe
+	linux ./main
+
+(Now server is running)
+
+In your browser navigate to localhost:8080
 
 #Tutorial
 tutorial on how to use webapp here
