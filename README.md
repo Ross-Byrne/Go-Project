@@ -122,7 +122,17 @@ Postman is an API tool that allows you to build debug and test API's faster.Post
 //screenshot here?
 
 #Security
-Talk about security here
+###User Authentication
+User authentication is handled by CouchDB using Session Cookies.
+Once a user is logged in, they recieve a session cookie from CouchDB, which creates the session once passed the user's login details.
+
+Any API calls to the Go server, other then new user creation, must have a session cookie.
+The Go server then uses the session cookie for authenticating calls to CouchDB.
+
+###Routing
+As a form of security, when the webpage loads, the user is directed to the login/signup page if there is no logged in user.
+If manual routes are typed into the address bar while a user is not logged in, the user is redirected to the login/signup page.
+If manual routes are typed into the address bar, that are not valid, the user is redirected to the homepage.
 
 #Deployment
 We deployed and tested the project on ubuntu server 16.04 LTS.
