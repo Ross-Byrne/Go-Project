@@ -29,7 +29,7 @@ Download and install the latest version of Go: https://golang.org/dl/
 
 Download node from here: https://nodejs.org/en/download/
 
-NodeJS V 6.9.1 LTS for greater.
+NodeJS V 6.9.1 LTS or greater.
 
 Possibly install(npm install -g concurrently npm install -g lite-server npm install -g typescript)
 
