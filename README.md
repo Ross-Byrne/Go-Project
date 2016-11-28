@@ -35,7 +35,8 @@ Possibly install(npm install -g concurrently npm install -g lite-server npm inst
 
 Git clone "url here"
 
-Set your go path: 	
+Set your go path: 
+
 How to for linux
 type: export GOPATH=$HOME/path/to/project
 
@@ -47,21 +48,32 @@ Install necessary dependancies:
 With GOPATH set, in a terminal or CMD with Git enabled, run:
 go get github.com/rhinoman/couchdb-go
 
-Navigate to:
-bin/angular> 
+Navigate to bin/angular folder in project folder:
+
+If on Windows, run the following commands in NodeJS cmd
+
 run - npm install
 run - npm start to compile code
 
-nav to:
-bin>run- build main.go into bin from src/main
+if npm start files, might need to manually install the following npm packages:
+npm install -g concurrently 
+npm install -g lite-server 
+npm install -g typescript
 
-run compiled binary file	
+Navigate to bin directory in Project directory:
+build main.go into bin from src/main
+
+Command, run from bin dir: go build ../src/main/main.go
+
+run compiled binary file called main	
 E.g.	windows main.exe
 	linux ./main
 
 (Now server is running)
 
 In your browser navigate to localhost:8080
+
+Webpage should now load from Go server
 
 #Tutorial
 tutorial on how to use webapp here
