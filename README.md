@@ -7,7 +7,16 @@ The goal of this project was to create a single page web application using a go 
 Our original idea was to create a forum for sharing and editing code snipping and general conversation about programing. Due to unforeseen circumstances we had to reduce the scope of the project. Our current project is a forum with user login and sign-up.
 
 #Features
-what feature the webapp has here
+##Login:
+This page handles user authentication. Users enter their login information. Angular passes this information to the Go server. The Go server checks user information on couchDb and passes the result back to Angular.
+##Signup
+..
+##User Dashboard
+..
+##Thread Page
+..
+##Posts Page
+..
 
 #Installation
 How to install here
