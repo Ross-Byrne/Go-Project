@@ -93,7 +93,7 @@ Angular 2 here
 ###Typescript
 Typescript here
 
-##Server
+##Api and Front-end server
 ###Go
 Golang here
 
@@ -104,7 +104,13 @@ https://www.getpostman.com/
 ##Postman
 Postman is an API tool that allows you to build debug and test API's faster.Postman lets you create and send any HTTP requests using its request builder, Write your own test cases to validate response data and response times.
 
-//photo here?
+//screenshot here?
 
 #Security
 Talk about security here
+
+#Deployment
+We deployed and tested the project on ubuntu server 16.04 LTS.
+
+#Project Management
+We used slack (https://slack.com/is) for managing our team communications and we used Github for managing our source control and issue tracking.
