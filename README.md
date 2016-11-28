@@ -34,14 +34,15 @@ NodeJS V 6.9.1 LTS or greater.
 ##Get the project folder with source code
 
 Either download zip or git clone the repository using the https url
-url: https://github.com/Go-project-HQ/Go-Project.git
+
+URL: https://github.com/Go-project-HQ/Go-Project.git
 
 ##Set your go path: 
 
-How to for linux
+####How to for linux
 type: export GOPATH=$HOME/path/to/project
 
-How to for Windows
+####How to for Windows
 type: set GOPATH=c:\path\to\project
 
 ##Install necessary dependancies:
@@ -61,15 +62,19 @@ run - npm start to compile code
 
 In very small number of cases on Windows, command "npm start" fails. If this happens, you need to manually install the following npm packages:
 
-npm install -g concurrently 
+npm install -g concurrently
+
 npm install -g lite-server 
+
 npm install -g typescript
 
 ##Compile and Run Go Server 
 Navigate to bin directory in Project directory:
 build main.go into bin from src/main
 
-Command, run from bin dir: go build ../src/main/main.go
+Run the following command from bin dir:
+
+go build ../src/main/main.go
 
 run compiled binary file called main	
 E.g.	windows main.exe
