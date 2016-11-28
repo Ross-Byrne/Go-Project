@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+// System imports
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
 require('rxjs/add/operator/toPromise');
@@ -21,22 +22,15 @@ var UserService = (function () {
     // private userURL = 'http://goproject.ukwest.cloudapp.azure.com:8080/api/createUser';
     UserService.prototype.extractData = function (res) {
         var body = res.json();
-        console.log(body);
         return body || {};
     };
-    /*getAll() {
-        return this.http.get('/api/users', this.jwt()).map((response: Response) => response.json());
-    }
- 
-    getById(id: number) {
-        return this.http.get('/api/users/' + id, this.jwt()).map((response: Response) => response.json());
-    }*/
     // signs the user up, returns if it worked or not
     UserService.prototype.signup = function (username, password) {
         // set the headers for POST
         var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         var options = new http_1.RequestOptions({ headers: headers });
-        console.log({ username: username, password: password });
+        //debugging for username and password
+        //console.log({username: username, password: password});
         // post login details to Go server
         return this.http.post(this.userURL, JSON.stringify({ username: username, password: password }), options)
             .toPromise()
@@ -47,21 +41,11 @@ var UserService = (function () {
             return false;
         });
     }; // signup()
-    // private helper methods
-    UserService.prototype.jwt = function () {
-        //can be cookie
-        // create authorization header with jwt token
-        var currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        if (currentUser && currentUser.token) {
-            var headers = new http_1.Headers({ 'Authorization': 'Bearer ' + currentUser.token });
-            return new http_1.RequestOptions({ headers: headers });
-        }
-    };
     UserService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [http_1.Http])
     ], UserService);
     return UserService;
 }());
-exports.UserService = UserService;
+exports.UserService = UserService; //end User.Service
 //# sourceMappingURL=user.service.js.map

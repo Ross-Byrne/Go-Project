@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+// System imports
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var thread_service_1 = require('../thread.service/thread.service');
@@ -36,12 +37,12 @@ var DashboardComponent = (function () {
         this.threadService.getThreads()
             .then(function (threads) { return _this.threads = threads.filter(function (item) { return item.Author == _this.authenticationService.userName; }); })
             .then(function () { _this.loading = false; });
-    };
+    }; //ngOnInit()
     //link to view thread and all its posts
     DashboardComponent.prototype.gotoDetail = function (thread) {
         var link = ['/threads', thread.ThreadPostId, thread.Title];
         this.router.navigate(link);
-    };
+    }; //gotoDetail()
     //Moves to next Page of threads
     DashboardComponent.prototype.nextPage = function () {
         if (this.startIndex < this.threads.length - this.threadsPerPage) {
@@ -71,5 +72,5 @@ var DashboardComponent = (function () {
     ], DashboardComponent);
     return DashboardComponent;
 }());
-exports.DashboardComponent = DashboardComponent;
+exports.DashboardComponent = DashboardComponent; //end dashboard
 //# sourceMappingURL=dashboard.component.js.map

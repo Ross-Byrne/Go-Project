@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 //adapted from http://jasonwatmore.com/post/2016/09/29/angular-2-user-registration-and-login-example-tutorial
+// System imports
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
 require('rxjs/add/operator/map');
@@ -30,7 +31,6 @@ var AuthenticationService = (function () {
     }
     AuthenticationService.prototype.extractData = function (res) {
         var body = res.json();
-        //console.log(body);
         return body || {};
     };
     AuthenticationService.prototype.ngOnInit = function () {
@@ -80,7 +80,6 @@ var AuthenticationService = (function () {
         var user = new user_1.User();
         // get the current logged in user
         user = JSON.parse(localStorage.getItem("user"));
-        // console.log(user);
         // if already logged out
         if (user == null) {
             return;
@@ -101,5 +100,5 @@ var AuthenticationService = (function () {
     ], AuthenticationService);
     return AuthenticationService;
 }());
-exports.AuthenticationService = AuthenticationService;
+exports.AuthenticationService = AuthenticationService; //end authentication.service
 //# sourceMappingURL=authentication.service.js.map
