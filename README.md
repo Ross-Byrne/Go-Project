@@ -10,20 +10,20 @@ Our original idea was to create a forum for sharing and editing code snipping an
 ###Login:
 This page handles user authentication. Users enter their login information. Angular passes this information to the Go server. The Go server checks user information on couchDb and passes the result back to Angular. If successful the user will be redirected to their dashboard.
 
-###Signup
+###Signup:
 This page handles user registration. User enters their details. Angular passes this information to the Go server. The Go server checks if the users information is already stored on couchDb. If not a new user is created and Angular redirects the user to the Login Page.
 
-###User Dashboard
+###User Dashboard:
 This page is a dashboard that is unique to each user. Its displays all the threads that the user has created on the server.
 
-###Thread Page
+###Thread Page:
 This page displays all of the threads posted to the server. Threads are clickable and redirects to see all the posts replying to the threads.The page also contains a button that opens a form that allows users to add a new post to the forum.
 
-###Posts Page
+###Posts Page:
 This page displays all of the posts a given thread contains. Users can also add a new post to the thread.
 
 #Installation
-##Install necessary Technologies (node npm go)
+##Install the necessary technologies: 
 
 Download and install the latest version of Go: https://golang.org/dl/
 
@@ -31,7 +31,7 @@ Download node from here: https://nodejs.org/en/download/
 
 NodeJS V 6.9.1 LTS or greater.
 
-##Get the project folder with source code
+##Get the project folder with source code:
 
 Either download zip or git clone the repository using the https url
 
@@ -68,7 +68,7 @@ npm install -g lite-server
 
 npm install -g typescript
 
-##Compile and Run Go Server 
+##Compile and Run Go Server:
 Navigate to bin directory in Project directory:
 build main.go into bin from src/main
 
@@ -86,9 +86,6 @@ E.g.	windows main.exe
 In your browser navigate to localhost:8080
 
 Webpage should now load from Go server
-
-#Tutorial
-tutorial on how to use webapp here
 
 #Technologies
 
@@ -165,14 +162,17 @@ type Post struct {
 
 ##Front End
 ###Angular 2
-Angular 2 here
+Angular 2 is the latest version of the Angular framework released in 2016. Angular is an open source JavaScript framework to build web applications in HTML and JavaScript. Angular 2 uses Typescript to add type security to Javascript.
+
+We decided to use Angular 2 because its powerful templates to fast rendering, data management, HTTP services, form handling and routing made it ideal for developing a single page web application.
 
 ###Typescript
-Typescript here
+Typescript is a typed superset of Javascript that compiles to plain Javascript. It works in any browser and on any operating system. We used typescript in our project as it is a major component of Angular 2 and it was a good opportunity to learn Typescript.
 
 ##Api and Front-end server
 ###Go
-Golang here
+Go is a free and open source programming language created at Google in 2007 by Robert Griesemer, Rob Pike, and Ken Thompson. It was designed to resolve common criticisms of other languages while maintaining their positive characteristics.
+We use Go as our API server and to host Angular 2
 
 #Testing
 To ensure the quality of our software we used test driven development. Every API call was tested after it was designed and implemented.The tool we used to test was Postman:
@@ -180,8 +180,6 @@ https://www.getpostman.com/
 
 ##Postman
 Postman is an API tool that allows you to build debug and test API's faster.Postman lets you create and send any HTTP requests using its request builder, Write your own test cases to validate response data and response times.
-
-//screenshot here?
 
 #Security
 ###User Authentication
@@ -197,6 +195,10 @@ If manual routes are typed into the address bar while a user is not logged in, t
 If manual routes are typed into the address bar, that are not valid, the user is redirected to the homepage.
 
 #Deployment
+###Local
+We deployed and tested the project on both Linux and Windows.
+
+###Azure
 We deployed and tested the project on ubuntu server 16.04 LTS.
 
 #Project Management
