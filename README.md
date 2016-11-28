@@ -8,16 +8,16 @@ Our original idea was to create a forum for sharing and editing code snipping an
 
 #Features
 ###Login:
-This page handles user authentication. Users enter their login information. Angular passes this information to the Go server. The Go server checks user information on couchDb and passes the result back to Angular. If successful the user will be redirected to their dashboard.
+This page handles user authentication. Users enter their login information. Angular passes this information to the Go server. The Go server checks user information on CouchDb and passes the result back to Angular. If successful the user will be redirected to their dashboard.
 
 ###Signup:
-This page handles user registration. User enters their details. Angular passes this information to the Go server. The Go server checks if the users information is already stored on couchDb. If not a new user is created and Angular redirects the user to the Login Page.
+This page handles user registration. User enters their details. Angular passes this information to the Go server. The Go server checks if the users information is already stored on CouchDb. If not a new user is created and Angular redirects the user to the Login Page.
 
 ###User Dashboard:
 This page is a dashboard that is unique to each user. Its displays all the threads that the user has created on the server.
 
 ###Thread Page:
-This page displays all of the threads posted to the server. Threads are clickable and redirects to see all the posts replying to the threads.The page also contains a button that opens a form that allows users to add a new post to the forum.
+This page displays all of the threads posted to the server. Threads are clickable and redirects to see all the posts replying to the threads. The page also contains a button that opens a form that allows users to add a new post to the forum.
 
 ###Posts Page:
 This page displays all of the posts a given thread contains. Users can also add a new post to the thread.
@@ -39,19 +39,19 @@ URL: https://github.com/Go-project-HQ/Go-Project.git
 
 ##Set your go path: 
 
-####How to for linux
+####How to for Linux
 type: export GOPATH=$HOME/path/to/project
 
 ####How to for Windows
 type: set GOPATH=c:\path\to\project
 
-##Install necessary dependancies:
+##Install necessary dependencies:
 
 With GOPATH set, in a terminal or CMD with Git enabled, run:
 go get github.com/rhinoman/couchdb-go
 
 ##Setup Angular 2
-You need to install node_modules for the anulgar 2 app and compile the typescript.
+You need to install node_modules for the Angular 2 app and compile the Typescript.
 
 Navigate to bin/angular folder in project folder:
 
@@ -82,7 +82,7 @@ E.g.	windows main.exe
 
 (Now server is running)
 
-##Use WebApp
+##Use Web App
 In your browser navigate to localhost:8080
 
 Webpage should now load from Go server
@@ -91,7 +91,7 @@ Webpage should now load from Go server
 
 ##Database
 
-Using couchDB's update handler we created a design document with a javascript update function to insert posts into an array of posts in a document in couchDB.
+Using CouchDB's update handler we created a design document with a Javascript update function to insert posts into an array of posts in a document in CouchDB.
 Used information from the couchDB documentation to achieve this.
 Found here: https://wiki.apache.org/couchdb/Document_Update_Handlers
 
@@ -138,7 +138,7 @@ An Example POST URL is as follows:
 
 https://couchdb-e195fb.smileupps.com/posts/_design/post/_update/addPost/a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b
 
-URL Componet | Explanation 
+URL Component | Explanation 
 ------------ | -----------
 smileupps.com | The domain name
 posts         | The name of the database in CouchDB
@@ -175,16 +175,16 @@ Go is a free and open source programming language created at Google in 2007 by R
 We use Go as our API server and to host Angular 2
 
 #Testing
-To ensure the quality of our software we used test driven development. Every API call was tested after it was designed and implemented.The tool we used to test was Postman:
+To ensure the quality of our software we used test driven development. Every API call was tested after it was designed and implemented. The tool we used to test was Postman:
 https://www.getpostman.com/
 
 ##Postman
-Postman is an API tool that allows you to build debug and test API's faster.Postman lets you create and send any HTTP requests using its request builder, Write your own test cases to validate response data and response times.
+Postman is an API tool that allows you to build debug and test API's faster. Postman lets you create and send any HTTP requests using its request builder, Write your own test cases to validate response data and response times.
 
 #Security
 ###User Authentication
 User authentication is handled by CouchDB using Session Cookies.
-Once a user is logged in, they recieve a session cookie from CouchDB, which creates the session once passed the user's login details.
+Once a user is logged in, they receive a session cookie from CouchDB, which creates the session once passed the user's login details.
 
 Any API calls to the Go server, other then new user creation, must have a session cookie.
 The Go server then uses the session cookie for authenticating calls to CouchDB.
@@ -199,7 +199,7 @@ If manual routes are typed into the address bar, that are not valid, the user is
 We deployed and tested the project on both Linux and Windows.
 
 ###Azure
-We deployed and tested the project on ubuntu server 16.04 LTS.
+We deployed and tested the project on Ubuntu server 16.04 LTS.
 
 #Project Management
-We used slack (https://slack.com/is) for managing our team communications and we used Github for managing our source control and issue tracking.
+We used slack (https://slack.com/is) for managing our team communications and we used GitHub for managing our source control and issue tracking.
