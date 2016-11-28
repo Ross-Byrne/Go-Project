@@ -1,4 +1,5 @@
 //adapted from http://jasonwatmore.com/post/2016/09/29/angular-2-user-registration-and-login-example-tutorial
+// System imports
 import { Injectable, OnInit } from '@angular/core';
 import { Http, Response, RequestOptions, Headers, Request, RequestMethod } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
@@ -13,9 +14,7 @@ import { SessionCookie } from '../classes/session-cookie/session-cookie';
 export class AuthenticationService implements OnInit {
 
     private extractData(res: Response) {
-
         let body = res.json();
-        //console.log(body);
         return body || { };
     }
 
@@ -24,12 +23,10 @@ export class AuthenticationService implements OnInit {
     private headers = new Headers({'Content-Type': 'application/json'});
 
     // local development urls
-
-   private loginUrl = 'http://localhost:8080/api/login';
+    private loginUrl = 'http://localhost:8080/api/login';
     private logoutUrl = 'http://localhost:8080/api/logout';
 
     // production urls
-
     // private loginUrl = 'http://goproject.ukwest.cloudapp.azure.com:8080/api/login';
     // private logoutUrl = 'http://goproject.ukwest.cloudapp.azure.com:8080/api/logout';
 
@@ -92,7 +89,6 @@ export class AuthenticationService implements OnInit {
 
     } // login()
 
-    
     // log the current user out
     logout() {
         
@@ -104,8 +100,6 @@ export class AuthenticationService implements OnInit {
 
         // get the current logged in user
         user = JSON.parse(localStorage.getItem("user"));
-
-       // console.log(user);
 
         // if already logged out
         if(user == null){
@@ -124,4 +118,4 @@ export class AuthenticationService implements OnInit {
                 .toPromise()
                 .catch();
     } // logout()
-}
+}//end authentication.service

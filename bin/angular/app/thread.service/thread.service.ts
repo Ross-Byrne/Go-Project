@@ -1,3 +1,4 @@
+// System imports
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions, Headers, Request, RequestMethod} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
@@ -12,12 +13,10 @@ export class ThreadService {
     constructor(private http: Http) { }
 
     // local development urls
-
     private saveThreadURL = 'http://localhost:8080/api/saveThread';  // URL to save a thread in go
     private getThreadURL = 'http://localhost:8080/api/getThreads';  // URL to get a threads from go
 
     // production urls
-    
     // private saveThreadURL = 'http://goproject.ukwest.cloudapp.azure.com:8080/api/saveThread';  // URL to save a thread in go
     // private getThreadURL = 'http://goproject.ukwest.cloudapp.azure.com:8080/api/getThreads';  // URL to get a threads from go
 
