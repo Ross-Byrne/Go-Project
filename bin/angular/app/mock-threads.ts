@@ -1,5 +1,6 @@
 import { Thread } from './classes/thread/thread';
 
+//for testing during developments
 export const THREADS: Thread[] = [
     {Id: "1",  ThreadPostId:"1",   Author: 'Mr. Nice',    Title: 'Thread Title 1',      Tags: ['Angular 2',"Go","Javascript","Typescript"],     Body:'this is my thread'},
     {Id: "2",  ThreadPostId:"2",   Author: 'Narco',       Title: 'Thread Title 2',      Tags: ['Angular 2',"Go","Javascript","Typescript"],     Body:'this is my thread'},

@@ -38,8 +38,7 @@ export class SignUpComponent {
                 // stop loading
                 this.loading = false;
 
-
-                console.log("User Created!");
+                //console.log("User Created!");
 
                 // go to login page
                 this.router.navigate(['/login']);
@@ -50,7 +49,7 @@ export class SignUpComponent {
                 this.loading = false;
 
                 // handle error
-                console.log("Error, Username taken!");
+                //console.log("Error, Username taken!");
 
                 // show error message
                 this.message = "Error! Username Already Taken."
@@ -63,10 +62,10 @@ export class SignUpComponent {
             this.loading = false;
 
             // handled incorrect login details
-            console.log("Error occured! Not signed up!");
+            //console.log("Error occured! Not signed up!");
 
             // show error message
             this.message = "Error occured! Not signed up!"
         });
     }
-}
+}//end sign-up.component

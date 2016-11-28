@@ -5,11 +5,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router }       from '@angular/router';
 
 import { AuthenticationService } from '../auth.service/authentication.service';
-
-
 import { SessionCookie } from '../classes/session-cookie/session-cookie';
 import { User } from '../classes/user/user';
-
 
 @Component({
   moduleId: module.id,
@@ -40,7 +37,8 @@ export class LoginComponent implements OnInit {
         this.loading = true;
         var loggedinuser: User = new User();
 
-        this.authenticationService.login(this.model.username, this.model.password) // log the user in
+        // log the user in
+        this.authenticationService.login(this.model.username, this.model.password) 
         .then(user => loggedinuser = user) // set the user object
         .then(() => { // hand the user object
 
@@ -85,4 +83,4 @@ export class LoginComponent implements OnInit {
             this.message = "Error Logging in.";
         });
     } // login() 
-}
+}//end login.component
