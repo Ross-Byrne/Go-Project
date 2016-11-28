@@ -92,7 +92,7 @@ var chttp = http.NewServeMux()
 
 func main() {
 
-	
+
 
 	// handle for serving resource
 	chttp.Handle("/", http.FileServer(http.Dir("./angular")))
@@ -122,10 +122,10 @@ func main() {
 	http.HandleFunc("/api/logout", logoutHandler)
 
 	// give the user feedback
-	fmt.Println("Listening on port 8080")
+	fmt.Println("Listening on port 80")
 
 	// listen on port and handle connections
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":80", nil)
 
 } // main()
 
