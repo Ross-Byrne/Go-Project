@@ -8,15 +8,19 @@ Our original idea was to create a forum for sharing and editing code snipping an
 
 #Features
 ##Login:
-This page handles user authentication. Users enter their login information. Angular passes this information to the Go server. The Go server checks user information on couchDb and passes the result back to Angular.
+This page handles user authentication. Users enter their login information. Angular passes this information to the Go server. The Go server checks user information on couchDb and passes the result back to Angular. If successful the user will be redirected to their dashboard.
+
 ##Signup
-..
+This page handles user registration. User enters their details. Angular passes this information to the Go server. The Go server checks if the users information is already stored on couchDb. If not a new user is created and Angular redirects the user to the Login Page.
+
 ##User Dashboard
-..
+This page is a dashboard that is unique to each user. Its displays all the threads that the user has created on the server.
+
 ##Thread Page
-..
+This page displays all of the threads posted to the server. Threads are clickable and redirects to see all the posts replying to the threads.The page also contains a button that opens a form that allows users to add a new post to the forum.
+
 ##Posts Page
-..
+This page displays all of the posts a given thread contains. Users can also add a new post to the thread.
 
 #Installation
 How to install here
