@@ -24,6 +24,7 @@ This page displays all of the posts a given thread contains. Users can also add 
 
 #Installation
 Install necessary Technologies (node npm go)
+Download node from here: https://nodejs.org/en/download/
 
 Possibly install(npm install -g concurrently npm install -g lite-servernnpm install -g typescript)
 
