@@ -33,7 +33,7 @@ var SignUpComponent = (function () {
             if (worked === true) {
                 // stop loading
                 _this.loading = false;
-                console.log("User Created!");
+                //console.log("User Created!");
                 // go to login page
                 _this.router.navigate(['/login']);
             }
@@ -41,7 +41,7 @@ var SignUpComponent = (function () {
                 // stop loading
                 _this.loading = false;
                 // handle error
-                console.log("Error, Username taken!");
+                //console.log("Error, Username taken!");
                 // show error message
                 _this.message = "Error! Username Already Taken.";
             } // if
@@ -49,7 +49,7 @@ var SignUpComponent = (function () {
             // stop loading
             _this.loading = false;
             // handled incorrect login details
-            console.log("Error occured! Not signed up!");
+            //console.log("Error occured! Not signed up!");
             // show error message
             _this.message = "Error occured! Not signed up!";
         });
@@ -64,5 +64,5 @@ var SignUpComponent = (function () {
     ], SignUpComponent);
     return SignUpComponent;
 }());
-exports.SignUpComponent = SignUpComponent;
+exports.SignUpComponent = SignUpComponent; //end sign-up.component
 //# sourceMappingURL=sign-up.component.js.map

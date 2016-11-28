@@ -34,7 +34,8 @@ var LoginComponent = (function () {
         var _this = this;
         this.loading = true;
         var loggedinuser = new user_1.User();
-        this.authenticationService.login(this.model.username, this.model.password) // log the user in
+        // log the user in
+        this.authenticationService.login(this.model.username, this.model.password)
             .then(function (user) { return loggedinuser = user; }) // set the user object
             .then(function () {
             // check if the cookie is valid
@@ -75,5 +76,5 @@ var LoginComponent = (function () {
     ], LoginComponent);
     return LoginComponent;
 }());
-exports.LoginComponent = LoginComponent;
+exports.LoginComponent = LoginComponent; //end login.component
 //# sourceMappingURL=login.component.js.map
