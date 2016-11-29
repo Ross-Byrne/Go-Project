@@ -205,6 +205,14 @@ Typescript is a typed superset of Javascript that compiles to plain Javascript. 
 Go is a free and open source programming language created at Google in 2007 by Robert Griesemer, Rob Pike, and Ken Thompson. It was designed to resolve common criticisms of other languages while maintaining their positive characteristics.
 We use Go as our API server and to host Angular 2
 
+We wrote our Go webserver using the default net/http package and a third party package for connecting to CouchDB
+
+CouchDB Go Package: https://github.com/rhinoman/couchdb-go<br>
+CouchDB Go package can be installed with go command:
+```
+go get github.com/rhinoman/couchdb-go
+```
+
 #Testing
 To ensure the quality of our software we used test driven development. Every API call was tested after it was designed and implemented. The tool we used to test was Postman:
 https://www.getpostman.com/
@@ -226,10 +234,16 @@ If manual routes are typed into the address bar while a user is not logged in, t
 If manual routes are typed into the address bar, that are not valid, the user is redirected to the homepage.
 
 #Deployment
-###Local
+##Local
 We deployed and tested the project on both Linux and Windows.
 
-###Azure
+####Linux Version
+Ubuntu 16.04 LTS
+
+####Windows Version
+Windows 10
+
+##Azure
 We deployed and tested the project on Ubuntu server 16.04 LTS.
 
 #Project Management
