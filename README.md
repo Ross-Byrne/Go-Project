@@ -55,7 +55,7 @@ function (doc, req) {
     // parses a json post object that was posted to couchDB 
     var post = JSON.parse(req.body); 
     
-    // if the post object as parsed correctly
+    // if the post object is parsed correctly
     if(post != null){ 
       
         // add the post object into the array of posts
@@ -93,11 +93,10 @@ Post Struct in Go:
 
 ```go
 type Post struct {
-	Id int
-	ThreadId int
-	Body string
-	AuthorId string
-	AuthorName string
+   Id           string
+   ThreadPostId string
+   Body         string
+   AuthorName   string
 }
 ```
 
