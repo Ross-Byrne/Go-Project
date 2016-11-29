@@ -25,8 +25,7 @@ This page displays all of the posts a given thread contains. Users can also add 
 #Installation
 ##Install the necessary technologies: 
 
-Download and install the latest version of Go: https://golang.org/dl/
-
+Download and install the latest version of Go: https://golang.org/dl/<br>
 Download node from here: https://nodejs.org/en/download/
 
 NodeJS V 6.9.1 LTS or greater is required.
@@ -115,9 +114,17 @@ Webpage should now load from Go server
 #Technologies
 
 ##Database
+###CouchDB
+CouchDB is a NoSQL Document database. Couch is simple to use and has great user management functionality.
+For ease of use, we decided to use Smileupps to host our CouchDB instance.
+
+More information on both CouchDB and Smileupps can be found below:
+
+CouchBD: https://couchdb.apache.org/<br>
+Smileupps: https://www.smileupps.com/ 
 
 Using CouchDB's update handler we created a design document with a Javascript update function to insert posts into an array of posts in a document in CouchDB.
-Used information from the couchDB documentation to achieve this.
+We used information from the couchDB documentation to achieve this.
 Found here: https://wiki.apache.org/couchdb/Document_Update_Handlers
 
 The design document resides in the posts database where the posts from threads are stored.
