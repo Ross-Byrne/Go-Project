@@ -48,7 +48,9 @@ type: set GOPATH=c:\path\to\project
 ##Install necessary dependencies:
 
 With GOPATH set, in a terminal or CMD with Git enabled, run:
+```
 go get github.com/rhinoman/couchdb-go
+```
 
 ##Setup Angular 2
 You need to install node_modules for the Angular 2 app and compile the Typescript.
@@ -57,41 +59,50 @@ Navigate to bin/angular folder in project folder:
 
 ####If on Windows, run the following commands in NodeJS cmd
 
-To install the required packages
+#####To install the required packages Run:
+```
+npm install
+```
+#####To compile the Typescript Run:
+```
+npm start
+```
 
-run: npm install
-
-To compile the Typescript
-
-run: npm start
+Compiling the Typescript will run the Angular app in the browser in development mode. Close this window as it is being served on the wrong port.
 
 In very small number of cases on Windows, command "npm start" fails. If this happens, you need to manually install the following npm packages:
 
+```
 npm install -g concurrently
-
+```
+```
 npm install -g lite-server 
-
+```
+```
 npm install -g typescript
+```
 
 ##Compile and Run Go Server:
-Navigate to bin directory in Project directory:
+####Navigate to bin directory in Project directory:
 
-build main.go into bin from src/main
+Build main.go into bin from src/main.
 
-Run the following command from bin dir:
+#####Run the following command from bin directory:
 
+```
 go build ../src/main/main.go
+```
 
-run compiled binary file called main in the bin directory	
+#####Run the compiled binary file called main in the bin directory.
 
-####Windows:
-
-run: main.exe
-
-####Linux:
-
-run: ./main
-
+####On Windows Run:
+```
+main.exe
+```
+####On Linux Run:
+```
+./main
+```
 (Now server is running)
 
 ##Use Web App
