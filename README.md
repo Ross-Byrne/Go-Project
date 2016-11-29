@@ -55,10 +55,15 @@ You need to install node_modules for the Angular 2 app and compile the Typescrip
 
 Navigate to bin/angular folder in project folder:
 
-If on Windows, run the following commands in NodeJS cmd
+####If on Windows, run the following commands in NodeJS cmd
 
-run - npm install
-run - npm start to compile code
+To install the required packages
+
+run: npm install
+
+To compile the Typescript
+
+run: npm start
 
 In very small number of cases on Windows, command "npm start" fails. If this happens, you need to manually install the following npm packages:
 
@@ -70,15 +75,22 @@ npm install -g typescript
 
 ##Compile and Run Go Server:
 Navigate to bin directory in Project directory:
+
 build main.go into bin from src/main
 
 Run the following command from bin dir:
 
 go build ../src/main/main.go
 
-run compiled binary file called main	
-E.g.	windows main.exe
-	linux ./main
+run compiled binary file called main in the bin directory	
+
+####Windows:
+
+run: main.exe
+
+####Linux:
+
+run: ./main
 
 (Now server is running)
 
