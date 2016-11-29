@@ -235,7 +235,7 @@ If manual routes are typed into the address bar, that are not valid, the user is
 
 #Deployment
 ##Local
-We deployed and tested the project on both Linux and Windows.
+We deployed and tested the project on both Linux and Windows operating systems.
 
 ####Linux Version
 Ubuntu 16.04 LTS
@@ -245,6 +245,9 @@ Windows 10
 
 ##Azure
 We deployed and tested the project on Ubuntu server 16.04 LTS.
+
+#Development
+The project was both developed and tested on Windows 10 and Ubuntu 16.04 LTS
 
 #Project Management
 We used slack (https://slack.com/is) for managing our team communications and we used GitHub for managing our source control and issue tracking.
