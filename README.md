@@ -29,7 +29,7 @@ Download and install the latest version of Go: https://golang.org/dl/
 
 Download node from here: https://nodejs.org/en/download/
 
-NodeJS V 6.9.1 LTS or greater.
+NodeJS V 6.9.1 LTS or greater is required.
 
 ##Get the project folder with source code:
 
@@ -39,12 +39,14 @@ URL: https://github.com/Go-project-HQ/Go-Project.git
 
 ##Set your go path: 
 
-####How to for Linux
-type: export GOPATH=$HOME/path/to/project
-
-####How to for Windows
-type: set GOPATH=c:\path\to\project
-
+####For Linux Run:
+```
+export GOPATH=$HOME/path/to/project
+```
+####For Windows Run:
+```
+set GOPATH=c:\path\to\project
+```
 ##Install necessary dependencies:
 
 With GOPATH set, in a terminal or CMD with Git enabled, run:
