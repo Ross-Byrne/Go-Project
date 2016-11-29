@@ -200,7 +200,7 @@ We decided to use Angular 2 because its powerful templates to fast rendering, da
 ###Typescript
 Typescript is a typed superset of Javascript that compiles to plain Javascript. It works in any browser and on any operating system. We used typescript in our project as it is a major component of Angular 2 and it was a good opportunity to learn Typescript.
 
-##Api and Front-end server
+##Api and Server
 ###Go
 Go is a free and open source programming language created at Google in 2007 by Robert Griesemer, Rob Pike, and Ken Thompson. It was designed to resolve common criticisms of other languages while maintaining their positive characteristics.
 We use Go as our API server and to host Angular 2
