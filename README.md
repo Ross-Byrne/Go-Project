@@ -195,7 +195,13 @@ type Post struct {
 ###Angular 2
 Angular 2 is the latest version of the Angular framework released in 2016. Angular is an open source JavaScript framework to build web applications in HTML and JavaScript. Angular 2 uses Typescript to add type security to Javascript.
 
-We decided to use Angular 2 because its powerful templates to fast rendering, data management, HTTP services, form handling and routing made it ideal for developing a single page web application.
+We decided to use Angular 2 because of its powerful templates, partials, fast rendering, data management, HTTP services, form handling and routing. This made it ideal for developing a robust single page web application.
+
+For CCS styling we elected to use Bootstrap 3. This is because of its ease of use and fast design times.<br>
+
+####Links:
+Angular 2: https://angular.io/<br>
+Bootstrap: http://getbootstrap.com/
 
 ###Typescript
 Typescript is a typed superset of Javascript that compiles to plain Javascript. It works in any browser and on any operating system. We used typescript in our project as it is a major component of Angular 2 and it was a good opportunity to learn Typescript.
