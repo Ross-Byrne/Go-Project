@@ -1,6 +1,8 @@
 # Go-Project
 4th year emerging technologies project using Go, CouchDb and Angular 2. 
 
+Check out the Wiki here: https://github.com/Go-project-HQ/Go-Project/wiki
+
 #Introduction
 The goal of this project was to create a single page web application using a go back-end server for our emerging technologies module. We decided to use Angular 2 as our Front end as it is new and this was a good opportunity to learn it. We decided to use CouchDb as our database because of its powerful user management. This includes user authenication and creation as well as session management. 
 
