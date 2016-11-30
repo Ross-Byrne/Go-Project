@@ -28,7 +28,8 @@ This page displays all of the posts a given thread contains. Users can also add 
 Download and install the latest version of Go: https://golang.org/dl/<br>
 Download node from here: https://nodejs.org/en/download/
 
-NodeJS V 6.9.1 LTS or greater is required.
+NodeJS V 6.9.1 LTS or greater is required.<br>
+Git is also required for cloning and getting packages in Go.
 
 ##Get the project folder with source code:
 
@@ -94,7 +95,7 @@ Build main.go into bin from src/main.
 go build ../src/main/main.go
 ```
 
-#####Run the compiled binary file called main in the bin directory.
+#####Run the compiled binary file called main in the bin directory:
 
 ####On Windows Run:
 ```
