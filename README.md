@@ -211,7 +211,7 @@ Bootstrap: http://getbootstrap.com/
 Typescript is a typed superset of Javascript that compiles to plain Javascript. It works in any browser and on any operating system. We used typescript in our project as it is a major component of Angular 2 and it was a good opportunity to learn Typescript.
 
 ##Api and Server
-###Go
+###Go Server
 Go is a free and open source programming language created at Google in 2007 by Robert Griesemer, Rob Pike, and Ken Thompson. It was designed to resolve common criticisms of other languages while maintaining their positive characteristics.
 We use Go as our API server and to host Angular 2
 
@@ -222,6 +222,20 @@ CouchDB Go package can be installed with go command:
 ```
 go get github.com/rhinoman/couchdb-go
 ```
+###Go API
+There is a list of API calls that our Angular front end makes to the server. All work related to the database in done on the Go server and the results are passed back to the frontend. This loosely coupled design will allow use to change the database without touching the Angular 2 frontend application.
+
+####List of API calls that can be made to the server:
+API URL | HTTP Method | Request Data | Response Data 
+------------ | ----------- | ----------- | -----------
+"/" | GET | None. | index.html and all required resources. This includes the whole angular 2 app.
+"/api/savePost" | POST | Post Object and Session Cookie Object. | ThreadPost object that includes all posts.
+"/api/getThreadPosts" | POST | Object with ThreadPost ID and Session Cookie. | ThreadPost object that includes all posts.
+"/api/saveThread" | POST | Thread object and Session Cookie. | The thread object that was saved.
+"/api/getThreads" | POST | Session Cookie object. | Array of all threads.
+"/api/createUser" | POST | Object with username and password. | None.
+"/api/login" | POST | Object with username and password. | Session Cookie object.
+"/api/logout" | POST | Session Cookie object. | None.
 
 #Testing
 To ensure the quality of our software we used test driven development. Every API call was tested after it was designed and implemented. The tool we used to test was Postman:
