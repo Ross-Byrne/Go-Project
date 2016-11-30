@@ -246,6 +246,17 @@ https://www.getpostman.com/
 ##Postman
 Postman is an API tool that allows you to build debug and test API's faster. Postman lets you create and send any HTTP requests using its request builder, Write your own test cases to validate response data and response times.
 
+##Users
+We have created many test users to simulate activity on the forum. An example of one of our test users can be found below.
+
+#####Username:
+```
+testUser
+```
+#####Password:
+```
+1234
+```
 #Security
 ###User Authentication
 User authentication is handled by CouchDB using Session Cookies.
