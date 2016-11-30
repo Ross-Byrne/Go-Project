@@ -124,6 +124,9 @@ More information on both CouchDB and Smileupps can be found below:
 CouchBD: https://couchdb.apache.org/<br>
 Smileupps: https://www.smileupps.com/ 
 
+As our Smileupps account is a trial account, it will expire on the 23/12/2016.<br>
+Once this happens, connecting to the database will no longer be possible. You will have to replace the urls on the Go server to point at your own instance of CouchDB.
+
 Using CouchDB's update handler we created a design document with a Javascript update function to insert posts into an array of posts in a document in CouchDB.
 We used information from the couchDB documentation to achieve this.
 Found here: https://wiki.apache.org/couchdb/Document_Update_Handlers
@@ -169,7 +172,7 @@ How the post url would be laid out
 
 An Example POST URL is as follows:
 
-https://couchdb-e195fb.smileupps.com/posts/_design/post/_update/addPost/a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b
+https://couchdb-a21442.smileupps.com/posts/_design/post/_update/addPost/a6df9fd5-3aaa-4cb8-b08f-b4daa83d406b
 
 URL Component | Explanation 
 ------------ | -----------
@@ -252,6 +255,8 @@ Windows 10
 
 ##Azure
 We deployed and tested the project on Ubuntu server 16.04 LTS.
+
+Setting up the Ubuntu Server on Azure involved creating a Virtual Machine and installing the operating system. We then had to open some endpoints on the VM in Azure. These included port 443 for https and port 8080 for the Go Server. When setting up the installation of Ubuntu Server, we SSH'd into the server, updated it and installed the required dependencies, such as NodeJS, NPM, Go and Git. We were then able to clone the project, run the Go Server and connect to it remotely.
 
 #Development
 The project was both developed and tested on Windows 10 and Ubuntu 16.04 LTS
