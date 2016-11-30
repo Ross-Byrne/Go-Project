@@ -124,7 +124,7 @@ More information on both CouchDB and Smileupps can be found below:
 CouchBD: https://couchdb.apache.org/<br>
 Smileupps: https://www.smileupps.com/ 
 
-As our Smileupps account is a trial account, it will expire on the 23/12/2016.<br>
+#####As our Smileupps account is a trial account, it will expire on the 23/12/2016.
 Once this happens, connecting to the database will no longer be possible. You will have to replace the urls on the Go server to point at your own instance of CouchDB.
 
 Using CouchDB's update handler we created a design document with a Javascript update function to insert posts into an array of posts in a document in CouchDB.
